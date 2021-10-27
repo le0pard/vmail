@@ -1,0 +1,22 @@
+<div class="track-controls-and-info">
+  <button class="track-play-button" aria-label="Play podcast audio" data-audio-url="<%= article.data.audio_url %>" data-title="<%= article.title %>" data-image="<%= article.data.main_image %>" data-link="<%= url_for(article) %>">
+    <%= svg_sprite 'play' %>
+  </button>
+  <div class="track-details-info">
+    <div class="track-details-info__item">
+      <%= article.data.duration %> (<%= number_to_human_size(article.data.audio_size) %>),
+      <%- link_to article.data.audio_url, target: '_blank', rel: 'noopener noreferrer', class: 'track-details-info__item' do -%>
+        Скачать,
+      <%- end -%>
+      <%- if article.data.key?(:audio_aac_url) %>
+        <%- link_to article.data.audio_aac_url, target: '_blank', rel: 'noopener noreferrer', class: 'track-details-info__item' do -%>
+          AAC
+        <%- end -%>
+      <%- elsif article.data.key?(:audio_mirror_url) -%>
+        <%- link_to article.data.audio_mirror_url, target: '_blank', rel: 'noopener noreferrer', class: 'track-details-info__item' do -%>
+          Зеркало
+        <%- end -%>
+      <%- end -%>
+    </div>
+  </div>
+</div>

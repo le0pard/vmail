@@ -1,0 +1,17 @@
+<ul>
+  <li class="<%= current_link_class("index.html") %>">
+    <%= link_to 'Главная', '/' %>
+  </li>
+  <li class="<%= current_link_class("posts/categories/podcasts.html") %>">
+    <%= link_to 'Подкасты', tag_path("podcasts") %>
+  </li>
+  <li>
+    <%= link_to 'RSS AAC', '/rss-aac.xml' %>
+  </li>
+  <li>
+    <%= link_to 'RSS Архив', '/archive.xml' %>
+  </li>
+  <li class="<%= current_link_class("about.html") %>">
+    <%= link_to 'О нас', '/about.html' %>
+  </li>
+</ul>

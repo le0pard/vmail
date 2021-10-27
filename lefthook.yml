@@ -1,0 +1,12 @@
+pre-commit:
+  parallel: true
+  commands:
+    rubocop:
+      glob: '*.{rb,rake}'
+      run: bundle exec rubocop -c ./.rubocop.yml {staged_files}
+    eslint:
+      glob: '*.{js,jsx}'
+      run: ./node_modules/.bin/eslint {staged_files}
+    bundle-check:
+      glob: '{Gemfile,Gemfile.lock,*.gemspec}'
+      run: bundle check

@@ -1,0 +1,31 @@
+.subscribe
+  max-width: 960px
+  margin: 0 auto
+  padding: 0.77rem 1.11rem
+  display: grid
+  grid-gap: 0
+  grid-template-columns: minmax(150px, 1fr) 90px 135px
+  .link
+    display: inline-block
+    padding: 0.38rem 0 0.11rem 0
+    width: 2.22rem
+    text-align: center
+    background: #d26748
+    color: #fff
+    border-radius: 50%
+    margin-right: 0.27rem
+    transition: background .3s ease
+    &:hover
+      background: darken(#d26748, 15%)
+      .svg-icon
+        fill: #a4f5f1
+    .svg-icon
+      width: 1.4rem
+      height: 1.4rem
+      fill: #fff
+
+@media screen and (max-width: 768px)
+  .subscribe
+    grid-template-columns: 0 repeat(auto-fit, minmax(100px, 1fr))
+    .subscribe-right
+      text-align: right

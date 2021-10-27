@@ -1,0 +1,22 @@
+<div data-controller="navigation">
+  <div class="left-side">
+    <a href="#" class="menu-toggle" aria-label="Toggle mobile menu link" data-action="click->navigation#toggle">
+      <%= svg_sprite 'menu' %>
+    </a>
+    <ul class="navigation" data-navigation-target="itemsList">
+      <li class="name <%= current_link_class("index.html") %>"><%= link_to 'Главная', '/' %></li>
+      <li class="<%= current_link_class("about.html") %>"><%= link_to 'О нас', '/about.html' %></li>
+      <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+    </ul>
+  </div>
+  <div class="right-side">
+    <ul class="navigation" data-navigation-target="itemsList">
+      <li class="<%= current_link_class("posts/categories/podcasts.html") %>">
+        <%= link_to 'Подкасты', tag_path("podcasts") %>
+      </li>
+      <li>
+        <%= link_to 'Скринкасты', "https://www.youtube.com/rwpod" %>
+      </li>
+    </ul>
+  </div>
+</div>

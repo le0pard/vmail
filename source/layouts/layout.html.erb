@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:fb="http://ogp.me/ns/fb#">
+<head>
+    <meta charset="utf-8" />
+    <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><![endif]-->
+    <title><% if content_for?(:title) %><%= yield_content(:title).blank? ? default_title_helper : "#{yield_content(:title)} | #{default_title_helper}" %><% else %><%= current_page.data.title ? "#{current_page.data.title} | #{default_title_helper}" : default_title_helper %><% end %></title>
+    <meta name="keywords" content="<%= default_keywords_helper %>">
+    <meta name="description" content="<%= default_description_helper %>">
+    <meta name="theme-color" content="#e2dbcb" />
+    <!-- Set the viewport width to device width for mobile -->
+    <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1" />
+
+    <link type="text/plain" rel="author" href="/humans.txt" />
+
+    <!-- For third-generation iPad with high-resolution Retina display: -->
+    <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152-precomposed.png" />
+    <!-- For third-generation iPad with high-resolution Retina display: -->
+    <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144-precomposed.png" />
+    <!-- For iPhone with high-resolution Retina display: -->
+    <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114-precomposed.png" />
+    <!-- For first- and second-generation iPad: -->
+    <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76-precomposed.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72-precomposed.png" />
+    <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60-precomposed.png" />
+    <!-- For non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+    <link rel="apple-touch-icon" href="/images/favicons/apple-touch-icon-precomposed.png" />
+    <!-- favicon -->
+    <link rel="shortcut icon" href="/images/favicons/favicon.png" />
+    <link rel="icon" type="image/ico" href="/favicon.ico" />
+
+    <!-- rss -->
+    <link href="<%= full_url('/rss.xml') %>" rel="alternate" title="<%=h default_title_helper %>" type="application/rss+xml" />
+
+    <link rel="canonical" href="<%= full_url(current_page.url) %>" />
+    <% if is_blog_article? %>
+      <meta property="og:type" content="article" />
+      <meta property="og:title" content="<%= current_article.title %>" />
+      <meta property="og:url" content="<%= full_url(current_article.url) %>" />
+      <meta property="article:published_time" content="<%= current_article.date.iso8601(3) %>" />
+      <meta property="article:modified_time" content="<%= current_article.date.iso8601(3) %>" />
+      <meta property="og:site_name" content="RWpod" />
+      <% if current_article.data.main_image %>
+        <meta property="og:image" content="<%= full_url(current_article.data.main_image) %>" />
+      <% end %>
+      <meta property="og:image:width" content="600" />
+      <meta property="og:image:height" content="600" />
+      <meta name="twitter:creator" content="@rwpod" />
+      <meta name="twitter:site" content="@rwpod" />
+      <meta name="twitter:text:title" content="<%= current_article.title %>" />
+      <% if current_article.data.main_image %>
+        <meta name="twitter:image" content="<%= full_url(current_article.data.main_image) %>" />
+      <% end %>
+      <meta name="twitter:card" content="summary_large_image" />
+      <% if current_article.data.audio_url %>
+        <meta property="og:audio" content="<%= current_article.data.audio_url %>">
+        <meta property="og:audio:type" content="<%= current_article.data.audio_format %>">
+      <% end %>
+      <meta name="turbo-cache-control" content="no-cache" />
+    <% end %>
+    <!-- GA BEGIN -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YCVPPMMQMB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-YCVPPMMQMB');
+    </script>
+    <!-- GA END -->
+
+    <%= stylesheet_pack_tag "app" %>
+    <%= javascript_pack_tag "app" %>
+</head>
+<body>
+
+  <div class="wrapper">
+    <% if content_for?(:subscribe_panel) %>
+      <%= yield_content :subscribe_panel %>
+    <% else %>
+      <%= partial "partials/subscribe_box" %>
+    <% end %>
+    <header class="header">
+      <% link_to('/', class: 'logo') do %>
+        <%= image_tag('logo.svg', alt: default_title_helper, title: default_title_helper) %>
+      <% end %>
+      <%= partial "partials/header_bar" %>
+    </header>
+    <div class="body">
+      <% if is_blog_article? %>
+        <%= partial "partials/blog_article", locals: { article: current_article, yield_obj: yield } %>
+      <% else %>
+        <%= yield %>
+      <% end %>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container row pam">
+      <div class="col1of4">
+        <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">
+          <img alt="Creative Commons License" style="border-width:0" src="https://licensebuttons.net/l/by-nc-nd/4.0/80x15.png" width="80" height="15" loading="lazy" />
+        </a>
+      </div>
+      <div class="col3of4">
+        <%= partial "partials/footer_links" %>
+      </div>
+    </div>
+  </footer>
+
+  <%= partial "partials/footer_audio_player" %>
+  <%= partial "partials/sw_notification" %>
+
+  <%= svg_sprite_icons %>
+</body>
+</html>

@@ -1,0 +1,76 @@
+.navigation
+  z-index: 100
+  list-style: none
+  margin: 0
+  li
+    display: inline-block
+    padding: 0 15px
+    min-height: 36px
+  a
+    color: #4f4436
+    text-transform: uppercase
+    &:hover
+      color: #333
+
+.navigation .active a
+  color: #a53719
+  font-weight: 500
+
+.menu-toggle
+  display: none
+  font-size: 1.5rem
+  margin-left: 40px
+
+@media screen and (max-width: 768px)
+  .navigation
+    display: none
+    top: 68px
+    left: 25px
+    position: absolute
+    background: #fff
+    width: 200px
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15)
+    li
+      display: block
+      padding: 0 5px
+    a
+      display: block
+      padding: 8px 15px
+      border-radius: 2px
+      transition: background .3s ease
+      &:hover
+        background: #f4f2ec
+    .left-side &
+      padding-top: 5px
+      border-radius: 2px 2px 0 0
+      &:before, &:after
+        content: ""
+        position: absolute
+        bottom: 100%
+        left: 20px
+        border: solid transparent
+        height: 0
+        width: 0
+        pointer-events: none
+      &:before
+        margin-right: -2px
+        border-color: rgba(212,212,212, 0)
+        border-bottom-color: #ddd
+        border-width: 8px
+      &:after
+        border-color: rgba(255, 255, 255, 0)
+        border-bottom-color: #ffffff
+        border-width: 6px
+    .right-side &
+      top: 145px
+      padding-bottom: 5px
+      border-radius: 0 0 2px 2px
+
+  .menu-toggle
+    display: inline-block
+
+@media screen and (max-width: 600px)
+  .navigation
+    top: 48px
+    .right-side &
+      top: 125px

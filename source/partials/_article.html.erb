@@ -1,0 +1,76 @@
+<%- article_img = article.data.main_image -%>
+<%- article_img_size = 134 -%>
+<div class="header row">
+  <div class="left"><%= truncated_article_title(article) %></div>
+  <div class="right"><small><%= article_date(article) %></small></div>
+</div>
+<div class="content">
+  <div class="row">
+    <div class="col1of4 prs">
+      <% if article_img %>
+        <%= image_tag "#{article_img}?width=#{article_img_size}&height=#{article_img_size}",
+            srcset: [
+              "#{article_img}?width=#{article_img_size}&height=#{article_img_size}",
+              "#{article_img}?width=#{(article_img_size * 1.5).round}&height=#{(article_img_size * 1.5).round} 1.5x",
+              "#{article_img}?width=#{article_img_size * 2}&height=#{article_img_size * 2} 2x"
+            ].join(","),
+            alt: article.title,
+            title: article.title,
+            loading: 'lazy',
+            width: article_img_size,
+            height: article_img_size %>
+      <% end %>
+    </div>
+    <div class="col3of4">
+      <h1 class="mbs">
+        <%= link_to article.title, article %>
+      </h1>
+      <%= partial 'partials/audio_info', locals: { article: article } %>
+    </div>
+  </div>
+  <hr />
+  <div class="row">
+    <%= defined?(yield_obj) ? yield_obj : article.summary %>
+  </div>
+</div>
+<div class="footer pam">
+  <hr />
+  <%= link_to "0 Comments", full_url("#{article.url}#disqus_thread") %>
+</div>
+<!-- for google -->
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "NewsArticle",
+  "@id": <%= full_url(article.url).inspect %>,
+  "url": <%= full_url(article.url).inspect %>,
+  "mainEntityOfPage": <%= full_url(article.url).inspect %>,
+  "headline": <%= truncate(article.title, length: 100).inspect %>,
+  "alternativeHeadline": <%= truncated_article_title(article).inspect %>,
+  "image": {
+    "@type": "ImageObject",
+    "url": <%= "#{default_big_image_helper}".inspect %>,
+    "height": 2048,
+    "width": 2048
+  },
+  "author": {
+    "@type": "Person",
+    "name": "RWpod team"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "RWpod",
+    "logo": {
+      "@type": "ImageObject",
+      "url": <%= full_url('/images/schema_logo.png').inspect %>,
+      "width": 600,
+      "height": 60
+    }
+  },
+  <% if article.data.audio_url %>
+  "audio": <%= article.data.audio_url.inspect %>,
+  <% end %>
+  "datePublished": <%= article.date.strftime('%FT%T').inspect %>,
+  "dateModified": <%= article.date.strftime('%FT%T').inspect %>
+}
+</script>

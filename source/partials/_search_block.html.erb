@@ -1,0 +1,22 @@
+<div data-controller="search">
+  <button class="button mbs mrs search-box-button" aria-label="Search on website" data-action="click->search#openSearch">
+    <%= svg_sprite 'search', class: 'sidebar-button-icon' %> Поиск
+  </button>
+
+  <div class="search-box-container" data-search-target="container" data-action="mousedown->search#closeOutsideSearch touchstart->search#closeOutsideSearch">
+    <div class="search-box-container--content">
+      <div class="search-box-container--form">
+        <form data-action="submit->search#doSearch">
+          <div class="search-box-container--form-wrapper">
+            <input type="text" autocomplete="off" dir="ltr" spellcheck="false" class="search-box-container--input" placeholder="Поиск..." data-search-target="input" data-action="keydown->search#closeOnEscape" />
+            <button type="button" aria-label="Close search on website" class="search-box-container--button" data-action="click->search#closeSearch">
+              <%= svg_sprite 'close' %>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div class="search-box-container--results" data-search-target="results"></div>
+    </div>
+  </div>
+</div>

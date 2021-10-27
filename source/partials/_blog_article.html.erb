@@ -1,0 +1,13 @@
+<div class="row mbl">
+  <div class="mainbar prm">
+    <div class="article">
+      <%= partial "partials/article", locals: { article: article, yield_obj: yield_obj } %>
+      <div class="pam">
+        <%= partial "partials/article_comments" %>
+      </div>
+    </div>
+  </div>
+  <div class="sidebar">
+    <%= partial "partials/sidebar" %>
+  </div>
+</div>

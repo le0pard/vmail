@@ -1,0 +1,110 @@
+html, body
+  height: 100%
+
+body
+  background: url('~backgrounds/main_bg.png')
+
+.wrapper
+  min-height: 100%
+  height: auto !important
+  height: 100%
+  margin: 0 auto -60px
+
+header.header
+  position: relative
+  background: #e2dbcb
+  height: 98px
+  margin-bottom: 60px
+  .left-side, .right-side
+    padding: 36px 0
+    width: 37%
+  .left-side
+    float: left
+    .navigation
+      float: right
+  .right-side
+    float: right
+    .navigation
+      float: left
+  a.logo img
+    width: 258px
+    height: 195px
+
+.container
+  max-width: 960px
+  margin: 0 auto
+
+.logo
+  position: absolute
+  margin-left: -132px
+  left: 50%
+  top: -49px
+
+.body
+  max-width: 960px
+  padding: 20px
+  margin: 0 auto
+  &:after
+    content: ''
+    display: block
+    height: 64px
+
+.mainbar
+  box-sizing: border-box
+  float: left
+  width: 66.6666%
+
+.sidebar
+  box-sizing: border-box
+  float: left
+  width: 33.3333%
+
+.sidebar .sidebar-button-icon
+  vertical-align: middle
+  padding-bottom: 4px
+
+#disqus_thread
+  min-height: 100px
+
+footer.footer
+  background: #087c78
+  color: #fff
+  height: 64px
+  font-size: 0.9rem
+  ul
+    list-style: none
+    margin: 0
+    float: right
+    li
+      display: inline-block
+      margin-left: 15px
+    a
+      color: #fff
+@media screen and (max-width: 940px)
+  header.header .left-side,
+  header.header .right-side
+    width: 34%
+
+@media screen and (max-width: 768px)
+  .mainbar
+    width: 100%
+    padding: 0
+  .sidebar
+    display: none
+  footer.footer
+    ul
+      display: none
+    .col1of2
+      width: 100%
+
+@media screen and (max-width: 600px)
+  header.header
+    height: 49px
+    a.logo
+      top: -24px
+      margin-left: -66px
+      img
+        width: 129px
+        height: 97px
+    .left-side, .right-side
+      padding: 13px 0

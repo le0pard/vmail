@@ -1,0 +1,46 @@
+<%# encoding: utf-8 %>
+---
+pageable: false
+title: "О нас"
+---
+
+<div class="author mbl">
+  <div class="photo">
+    <picture>
+      <source
+        srcset="/images/about/alexey.jpg.webp, /images/about/alexey@2x.jpg.webp 2x"
+        type="image/webp">
+      <source
+        srcset="/images/about/alexey.jpg, /images/about/alexey@2x.jpg 2x"
+        type="image/jpeg">
+      <!-- fallback for browsers that don't support picture -->
+      <%= image_tag "/images/about/alexey.jpg", alt: "Алексей Васильев", title: "Алексей Васильев", loading: 'lazy', srcset: "/images/about/alexey.jpg, /images/about/alexey@2x.jpg 2x" %>
+    </picture>
+  </div>
+  <div class="bio">
+    <h1 class="mbm">Алексей Васильев</h1>
+    <div class="contacts">
+      <a href="https://twitter.com/leopard_me" target="_blank" rel="noopener noreferrer" aria-label="Follow me at twitter"><%= svg_sprite 'twitter' %></a>
+      <a href="https://github.com/le0pard" target="_blank" rel="noopener noreferrer" aria-label="Check my github"><%= svg_sprite 'github' %></a>
+      <a href="http://www.linkedin.com/in/le0pard" target="_blank" rel="noopener noreferrer" aria-label="Check my linkedin"><%= svg_sprite 'linkedin' %></a>
+      <a href="http://www.facebook.com/leopard.not.a" target="_blank" rel="noopener noreferrer" aria-label="Follow me at facebook"><%= svg_sprite 'facebook' %></a>
+    </div>
+    <p>Инженер-программист.</p>
+    <p>Алексей является автором открытого учебного пособия по <a href="http://postgresql.leopard.in.ua">PostgreSQL на русском языке</a> и по <a href="http://chef.leopard.in.ua">Chef на английском языке</a>. Активный докладчик в различных IT конференциях.</p>
+  </div>
+</div>
+
+<!--
+<div class="author inverse mbl">
+  <div class="bio">
+    <h1 class="mbm"></h1>
+    <div class="contacts">
+
+    </div>
+    <p></p>
+  </div>
+  <div class="photo">
+
+  </div>
+</div>
+-->

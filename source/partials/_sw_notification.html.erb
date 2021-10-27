@@ -1,0 +1,14 @@
+<div id="swNotification" class="sw-notification" data-controller="service-worker" style="justify-content: flex-start; align-items: flex-end;" data-turbo-permanent>
+  <div class="sw-notification__toast sw-notification__hidden sw-notification__toast--dismissible sw-notification__toast--upper sw-notification__toast--success" data-service-worker-target="toast">
+    <div class="sw-notification__wrapper">
+      <div class="sw-notification__icon">
+        <i class="sw-notification__icon--success"></i>
+      </div>
+      <div class="sw-notification__message" data-action="click->service-worker#reloadPage">New version available. Click to update</div>
+      <div class="sw-notification__dismiss">
+        <button class="sw-notification__dismiss-btn" aria-label="Close update notification" data-action="click->service-worker#dismiss"></button>
+      </div>
+    </div>
+    <div class="sw-notification__ripple"></div>
+  </div>
+</div>
