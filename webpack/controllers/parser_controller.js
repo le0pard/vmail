@@ -13,11 +13,9 @@ export default class extends Controller {
 
     const go = new window.Go()
     const WASM_URL = '/parser.wasm'
-    let wasm;
-    window.WebAssembly.instantiateStreaming(fetch(WASM_URL), go.importObject).then(function (obj) {
-      wasm = obj.instance;
-      go.run(wasm);
-    }).then(() => window.VMail('<html></html>')).then((message) => console.log('Message', message));
+    window.WebAssembly.instantiateStreaming(fetch(WASM_URL), go.importObject).then((obj) => {
+      go.run(obj.instance)
+    }).then(() => window.VMail('<html></html>')).then((message) => console.log('Message', message))
   }
 
   disconnect() {
