@@ -7,7 +7,7 @@ namespace :wasm do
   task :compile do |_t, _args|
     wasm_dir = File.expand_path('../../wasm', __dir__)
     out_file = File.expand_path('../../source/parser.wasm', __dir__)
-    command_with_args = Shellwords.split('build -ldflags="-s -w" -o')
+    command_args = Shellwords.split('-ldflags="-s -w"')
 
     system(
       {
@@ -15,7 +15,9 @@ namespace :wasm do
         'GOARCH' => 'wasm'
       },
       'go',
-      *command_with_args,
+      'build',
+      *command_args,
+      '-o',
       out_file,
       unsetenv_others: false,
       exception: true,

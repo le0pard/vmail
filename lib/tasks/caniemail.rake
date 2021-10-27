@@ -5,7 +5,7 @@
 namespace :caniemail do
   desc 'Generate JSON doc from caniemail data'
   task :generate do |_t, _args|
-
+    # TODO
     puts 'Work done'
   end
 end
