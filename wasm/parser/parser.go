@@ -347,7 +347,7 @@ func (prs *ParserEngine) processHtmlToken(htmlTokenizer *html.Tokenizer, token h
 			// }
 		} else {
 			// store tag with no attributes
-			log.Print(
+			log.Printf(
 				"%v %v %v\n",
 				token.Data,
 				[]html.Attribute{
@@ -391,7 +391,7 @@ func (prs *ParserEngine) processHtmlToken(htmlTokenizer *html.Tokenizer, token h
 			prs.styleTagLine = 0
 		}
 	case html.SelfClosingTagToken:
-		log.Print("%v %v %v\n", token.Data, token.Attr, tagLine)
+		log.Printf("%v %v %v\n", token.Data, token.Attr, tagLine)
 		// err := prs.storeHtmlAttribute(token.Data, token.Attr, tagLine)
 		// if err != nil {
 		// 	return err
@@ -401,7 +401,7 @@ func (prs *ParserEngine) processHtmlToken(htmlTokenizer *html.Tokenizer, token h
 	return nil
 }
 
-func (prs *ParserEngine) ReportFromHTML(document []byte) error {
+func (prs *ParserEngine) Report(document []byte) error {
 	var (
 		err             error
 		htmlTokenizer   *html.Tokenizer
@@ -435,4 +435,18 @@ func (prs *ParserEngine) ReportFromHTML(document []byte) error {
 	}
 
 	return nil
+}
+
+func ReportFromHTML(document []byte) (string, error) {
+	parser, err := InitParser()
+	if err != nil {
+		return "", err
+	}
+
+	err = parser.Report(document)
+	if err != nil {
+		return "", err
+	}
+
+	return "", nil
 }

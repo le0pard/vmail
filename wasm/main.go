@@ -5,6 +5,8 @@ import (
 	"errors"
 	"fmt"
 	"syscall/js"
+
+	"github.com/le0pard/vmail/wasm/parser"
 )
 
 // Main function: it sets up our Wasm application
@@ -41,13 +43,7 @@ func VMail() js.Func {
 			// Now that we have a way to return the response to JS, spawn a goroutine
 			// This way, we don't block the event loop and avoid a deadlock
 			go func() {
-				parser, err := InitParser()
-				if err != nil {
-					rejectWithError(reject, "Error to init parser")
-					return
-				}
-
-				err = parser.ReportFromHTML([]byte(htmlBody))
+				report, err := parser.ReportFromHTML([]byte(htmlBody))
 				if err != nil {
 					rejectWithError(reject, "Error to parser HTML")
 					return
@@ -55,7 +51,7 @@ func VMail() js.Func {
 
 				// Resolve the Promise, passing anything back to JavaScript
 				// This is done by invoking the "resolve" function passed to the handler
-				resolve.Invoke(fmt.Sprintf("result: %s", htmlBody))
+				resolve.Invoke(fmt.Sprintf("result: %s - %s", htmlBody, report))
 			}()
 
 			// The handler of a Promise doesn't return any value
