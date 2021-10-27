@@ -14,7 +14,8 @@ cleanupOutdatedCaches()
 const cachedFiles = self.__WB_MANIFEST
 
 precacheAndRoute([
-  ...cachedFiles
+  ...cachedFiles,
+  {url: '/parser.wasm', revision: 'v1'}
 ], {
   ignoreURLParametersMatching: [/.*/],
   cleanUrls: false

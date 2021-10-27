@@ -2,48 +2,19 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+"use strict";
+
 (() => {
-	// Map multiple JavaScript environments to a single common API,
-	// preferring web standards over Node.js API.
-	//
-	// Environments considered:
-	// - Browsers
-	// - Node.js
-	// - Electron
-	// - Parcel
-	// - Webpack
-
-	if (typeof global !== "undefined") {
-		// global already exists
-	} else if (typeof window !== "undefined") {
-		window.global = window;
-	} else if (typeof self !== "undefined") {
-		self.global = self;
-	} else {
-		throw new Error("cannot export Go (neither global, window nor self is defined)");
-	}
-
-	if (!global.require && typeof require !== "undefined") {
-		global.require = require;
-	}
-
-	if (!global.fs && global.require) {
-		const fs = require("fs");
-		if (typeof fs === "object" && fs !== null && Object.keys(fs).length !== 0) {
-			global.fs = fs;
-		}
-	}
-
 	const enosys = () => {
 		const err = new Error("not implemented");
 		err.code = "ENOSYS";
 		return err;
 	};
 
-	if (!global.fs) {
+	if (!globalThis.fs) {
 		let outputBuf = "";
-		global.fs = {
-			constants: { O_WRONLY: -1, O_RDWR: -1, O_CREAT: -1, O_TRUNC: -1, O_APPEND: -1, O_EXCL: -1 }, // unused
+		globalThis.fs = {
+			constants: {O_WRONLY: -1, O_RDWR: -1, O_CREAT: -1, O_TRUNC: -1, O_APPEND: -1, O_EXCL: -1}, // unused
 			writeSync(fd, buf) {
 				outputBuf += decoder.decode(buf);
 				const nl = outputBuf.lastIndexOf("\n");
@@ -61,88 +32,67 @@
 				const n = this.writeSync(fd, buf);
 				callback(null, n);
 			},
-			chmod(path, mode, callback) { callback(enosys()); },
-			chown(path, uid, gid, callback) { callback(enosys()); },
-			close(fd, callback) { callback(enosys()); },
-			fchmod(fd, mode, callback) { callback(enosys()); },
-			fchown(fd, uid, gid, callback) { callback(enosys()); },
-			fstat(fd, callback) { callback(enosys()); },
-			fsync(fd, callback) { callback(null); },
-			ftruncate(fd, length, callback) { callback(enosys()); },
-			lchown(path, uid, gid, callback) { callback(enosys()); },
-			link(path, link, callback) { callback(enosys()); },
-			lstat(path, callback) { callback(enosys()); },
-			mkdir(path, perm, callback) { callback(enosys()); },
-			open(path, flags, mode, callback) { callback(enosys()); },
-			read(fd, buffer, offset, length, position, callback) { callback(enosys()); },
-			readdir(path, callback) { callback(enosys()); },
-			readlink(path, callback) { callback(enosys()); },
-			rename(from, to, callback) { callback(enosys()); },
-			rmdir(path, callback) { callback(enosys()); },
-			stat(path, callback) { callback(enosys()); },
-			symlink(path, link, callback) { callback(enosys()); },
-			truncate(path, length, callback) { callback(enosys()); },
-			unlink(path, callback) { callback(enosys()); },
-			utimes(path, atime, mtime, callback) { callback(enosys()); },
+			chmod(path, mode, callback) {callback(enosys());},
+			chown(path, uid, gid, callback) {callback(enosys());},
+			close(fd, callback) {callback(enosys());},
+			fchmod(fd, mode, callback) {callback(enosys());},
+			fchown(fd, uid, gid, callback) {callback(enosys());},
+			fstat(fd, callback) {callback(enosys());},
+			fsync(fd, callback) {callback(null);},
+			ftruncate(fd, length, callback) {callback(enosys());},
+			lchown(path, uid, gid, callback) {callback(enosys());},
+			link(path, link, callback) {callback(enosys());},
+			lstat(path, callback) {callback(enosys());},
+			mkdir(path, perm, callback) {callback(enosys());},
+			open(path, flags, mode, callback) {callback(enosys());},
+			read(fd, buffer, offset, length, position, callback) {callback(enosys());},
+			readdir(path, callback) {callback(enosys());},
+			readlink(path, callback) {callback(enosys());},
+			rename(from, to, callback) {callback(enosys());},
+			rmdir(path, callback) {callback(enosys());},
+			stat(path, callback) {callback(enosys());},
+			symlink(path, link, callback) {callback(enosys());},
+			truncate(path, length, callback) {callback(enosys());},
+			unlink(path, callback) {callback(enosys());},
+			utimes(path, atime, mtime, callback) {callback(enosys());},
 		};
 	}
 
-	if (!global.process) {
-		global.process = {
-			getuid() { return -1; },
-			getgid() { return -1; },
-			geteuid() { return -1; },
-			getegid() { return -1; },
-			getgroups() { throw enosys(); },
+	if (!globalThis.process) {
+		globalThis.process = {
+			getuid() {return -1;},
+			getgid() {return -1;},
+			geteuid() {return -1;},
+			getegid() {return -1;},
+			getgroups() {throw enosys();},
 			pid: -1,
 			ppid: -1,
-			umask() { throw enosys(); },
-			cwd() { throw enosys(); },
-			chdir() { throw enosys(); },
+			umask() {throw enosys();},
+			cwd() {throw enosys();},
+			chdir() {throw enosys();},
 		}
 	}
 
-	if (!global.crypto && global.require) {
-		const nodeCrypto = require("crypto");
-		global.crypto = {
-			getRandomValues(b) {
-				nodeCrypto.randomFillSync(b);
-			},
-		};
-	}
-	if (!global.crypto) {
-		throw new Error("global.crypto is not available, polyfill required (getRandomValues only)");
+	if (!globalThis.crypto) {
+		throw new Error("globalThis.crypto is not available, polyfill required (crypto.getRandomValues only)");
 	}
 
-	if (!global.performance) {
-		global.performance = {
-			now() {
-				const [sec, nsec] = process.hrtime();
-				return sec * 1000 + nsec / 1000000;
-			},
-		};
+	if (!globalThis.performance) {
+		throw new Error("globalThis.performance is not available, polyfill required (performance.now only)");
 	}
 
-	if (!global.TextEncoder && global.require) {
-		global.TextEncoder = require("util").TextEncoder;
-	}
-	if (!global.TextEncoder) {
-		throw new Error("global.TextEncoder is not available, polyfill required");
+	if (!globalThis.TextEncoder) {
+		throw new Error("globalThis.TextEncoder is not available, polyfill required");
 	}
 
-	if (!global.TextDecoder && global.require) {
-		global.TextDecoder = require("util").TextDecoder;
+	if (!globalThis.TextDecoder) {
+		throw new Error("globalThis.TextDecoder is not available, polyfill required");
 	}
-	if (!global.TextDecoder) {
-		throw new Error("global.TextDecoder is not available, polyfill required");
-	}
-
-	// End of polyfills for common API.
 
 	const encoder = new TextEncoder("utf-8");
 	const decoder = new TextDecoder("utf-8");
 
-	global.Go = class {
+	globalThis.Go = class {
 		constructor() {
 			this.argv = ["js"];
 			this.env = {};
@@ -517,7 +467,7 @@
 				null,
 				true,
 				false,
-				global,
+				globalThis,
 				this,
 			];
 			this._goRefCounts = new Array(this._values.length).fill(Infinity); // number of references that Go has to a JS value, indexed by reference id
@@ -526,7 +476,7 @@
 				[null, 2],
 				[true, 3],
 				[false, 4],
-				[global, 5],
+				[globalThis, 5],
 				[this, 6],
 			]);
 			this._idPool = [];   // unused ids that have been garbage collected
@@ -569,9 +519,9 @@
 
 			// The linker guarantees global data starts from at least wasmMinDataAddr.
 			// Keep in sync with cmd/link/internal/ld/data.go:wasmMinDataAddr.
-			const wasmMinDataAddr = 4096 + 4096;
+			const wasmMinDataAddr = 4096 + 8192;
 			if (offset >= wasmMinDataAddr) {
-				throw new Error("command line too long");
+				throw new Error("total length of command line and environment variables exceeds limit");
 			}
 
 			this._inst.exports.run(argc, argv);
@@ -594,43 +544,11 @@
 		_makeFuncWrapper(id) {
 			const go = this;
 			return function () {
-				const event = { id: id, this: this, args: arguments };
+				const event = {id: id, this: this, args: arguments};
 				go._pendingEvent = event;
 				go._resume();
 				return event.result;
 			};
 		}
-	}
-
-	if (
-		typeof module !== "undefined" &&
-		global.require &&
-		global.require.main === module &&
-		global.process &&
-		global.process.versions &&
-		!global.process.versions.electron
-	) {
-		if (process.argv.length < 3) {
-			console.error("usage: go_js_wasm_exec [wasm binary] [arguments]");
-			process.exit(1);
-		}
-
-		const go = new Go();
-		go.argv = process.argv.slice(2);
-		go.env = Object.assign({ TMPDIR: require("os").tmpdir() }, process.env);
-		go.exit = process.exit;
-		WebAssembly.instantiate(fs.readFileSync(process.argv[2]), go.importObject).then((result) => {
-			process.on("exit", (code) => { // Node.js exits if no event handler is pending
-				if (code === 0 && !go.exited) {
-					// deadlock, make Go print error and stack traces
-					go._pendingEvent = { id: 0 };
-					go._resume();
-				}
-			});
-			return go.run(result.instance);
-		}).catch((err) => {
-			console.error(err);
-			process.exit(1);
-		});
 	}
 })();
