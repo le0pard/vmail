@@ -1,4 +1,4 @@
-package main
+package parser
 
 import (
 	"bytes"
@@ -17,7 +17,7 @@ import (
 )
 
 //go:embed rules.json
-var emailRules []byte
+var emailRulesJSON []byte
 
 const (
 	WHITESPACE           = " \t\r\n\f"
@@ -98,7 +98,7 @@ func (prs *ParserEngine) ruleCssInTag(scanner *css.Scanner) error {
 	for {
 		token := scanner.Next()
 		if token.Type == css.TokenEOF || token.Type == css.TokenError {
-			log.Printf("%v %v %v\n", propName, propVal, propLine)
+			log.Printf("TagStyleProperties: %v %v %v\n", propName, propVal, propLine)
 			// prs.storeTagStyleProperties(propName, propVal, propLine) // store last parts, if collected
 			return nil
 		}
@@ -113,7 +113,7 @@ func (prs *ParserEngine) ruleCssInTag(scanner *css.Scanner) error {
 			case ":":
 				isCollectPropVal = true
 			case ";":
-				log.Printf("%v %v %v\n", propName, propVal, propLine)
+				log.Printf("TagStyleProperties: %v %v %v\n", propName, propVal, propLine)
 				// prs.storeTagStyleProperties(propName, propVal, propLine)
 				// reset for new prop
 				isCollectPropVal = false
@@ -121,7 +121,7 @@ func (prs *ParserEngine) ruleCssInTag(scanner *css.Scanner) error {
 				propVal = ""
 				propLine = 0
 			case "}":
-				log.Printf("%v %v %v\n", propName, propVal, propLine)
+				log.Printf("TagStyleProperties: %v %v %v\n", propName, propVal, propLine)
 				// prs.storeTagStyleProperties(propName, propVal, propLine)
 				return nil
 			}
@@ -182,7 +182,7 @@ func (prs *ParserEngine) processCssInTag(scanner *css.Scanner) error {
 				atKeywordName = token.Value
 				atKeywordLine = line
 			default: // at-rule block, like "@charset", "@import", "@namespace"
-				log.Printf("%v %v %v\n", token.Value, "", line)
+				log.Printf("AtRuleCSSStatement: %v %v %v\n", token.Value, "", line)
 				// err := prs.storeAtRuleCSSStatement(token.Value, "", line)
 				// if err != nil {
 				// 	return err
@@ -206,7 +206,7 @@ func (prs *ParserEngine) processCssInTag(scanner *css.Scanner) error {
 			case ":":
 				if len(atKeywordName) == 0 {
 					if isPseudoClass && len(pseudoClassName) > 0 {
-						log.Printf("%v %v\n", pseudoClassName, pseudoClassLine)
+						log.Printf("CSSPseudoClass: %v %v\n", pseudoClassName, pseudoClassLine)
 						// err := prs.storeCSSPseudoClass(pseudoClassName, pseudoClassLine)
 						// if err != nil {
 						// 	return err
@@ -224,7 +224,7 @@ func (prs *ParserEngine) processCssInTag(scanner *css.Scanner) error {
 				}
 			case ",", ".":
 				if isPseudoClass && len(pseudoClassName) > 0 {
-					log.Printf("%v %v\n", pseudoClassName, pseudoClassLine)
+					log.Printf("CSSPseudoClass: %v %v\n", pseudoClassName, pseudoClassLine)
 					// err := prs.storeCSSPseudoClass(pseudoClassName, pseudoClassLine)
 					// if err != nil {
 					// 	return err
@@ -240,7 +240,7 @@ func (prs *ParserEngine) processCssInTag(scanner *css.Scanner) error {
 				cssSelector += token.Value
 			case "{":
 				if len(atKeywordName) == 0 && isPseudoClass && len(pseudoClassName) > 0 {
-					log.Printf("%v %v\n", pseudoClassName, pseudoClassLine)
+					log.Printf("CSSPseudoClass: %v %v\n", pseudoClassName, pseudoClassLine)
 					// err := prs.storeCSSPseudoClass(pseudoClassName, pseudoClassLine)
 					// if err != nil {
 					// 	return err
@@ -251,7 +251,7 @@ func (prs *ParserEngine) processCssInTag(scanner *css.Scanner) error {
 				isPseudoClass = false
 
 				if len(atKeywordName) == 0 && len(cssSelector) > 0 {
-					log.Printf("%v %v\n", cssSelector, cssSelectorLine)
+					log.Printf("CSS SELECTOR: %v %v\n", cssSelector, cssSelectorLine)
 					// err := prs.processCssSelector(cssSelector, cssSelectorLine)
 					// if err != nil {
 					// 	return err
@@ -261,7 +261,7 @@ func (prs *ParserEngine) processCssInTag(scanner *css.Scanner) error {
 				}
 
 				if len(atKeywordName) > 0 {
-					log.Printf("%v %v %v\n", atKeywordName, atKeywordVal, atKeywordLine)
+					log.Printf("AtRuleCSSStatement: %v %v %v\n", atKeywordName, atKeywordVal, atKeywordLine)
 					// err := prs.storeAtRuleCSSStatement(atKeywordName, atKeywordVal, atKeywordLine)
 					// if err != nil {
 					// 	return err
@@ -340,7 +340,7 @@ func (prs *ParserEngine) processHtmlToken(htmlTokenizer *html.Tokenizer, token h
 			prs.styleTagLine = tagLine
 		}
 		if len(token.Attr) > 0 {
-			log.Printf("%v %v %v\n", token.Data, token.Attr, tagLine)
+			log.Printf("HTML TAG: %v %v %v\n", token.Data, token.Attr, tagLine)
 			// err := prs.storeHtmlAttribute(token.Data, token.Attr, tagLine)
 			// if err != nil {
 			// 	return err
@@ -348,7 +348,7 @@ func (prs *ParserEngine) processHtmlToken(htmlTokenizer *html.Tokenizer, token h
 		} else {
 			// store tag with no attributes
 			log.Printf(
-				"%v %v %v\n",
+				"HTML TAG: %v %v %v\n",
 				token.Data,
 				[]html.Attribute{
 					{
@@ -391,7 +391,7 @@ func (prs *ParserEngine) processHtmlToken(htmlTokenizer *html.Tokenizer, token h
 			prs.styleTagLine = 0
 		}
 	case html.SelfClosingTagToken:
-		log.Printf("%v %v %v\n", token.Data, token.Attr, tagLine)
+		log.Printf("HTML TAG: %v %v %v\n", token.Data, token.Attr, tagLine)
 		// err := prs.storeHtmlAttribute(token.Data, token.Attr, tagLine)
 		// if err != nil {
 		// 	return err
@@ -435,4 +435,23 @@ func (prs *ParserEngine) Report(document []byte) error {
 	}
 
 	return nil
+}
+
+func init() {
+	// parse rules.json here
+	log.Printf("INIT")
+}
+
+func ReportFromHTML(document []byte) (string, error) {
+	parser, err := InitParser()
+	if err != nil {
+		return "", err
+	}
+
+	err = parser.Report(document)
+	if err != nil {
+		return "", err
+	}
+
+	return "result", nil
 }
