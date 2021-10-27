@@ -16,8 +16,6 @@ end
 
 Time.zone = 'Kyiv'
 
-# robots
-proxy '/robots.txt', '/robots.txt', layout: false, ignore: true
 # Static pages
 proxy '/about.html', '/static_pages/about.html', ignore: true
 
