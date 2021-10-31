@@ -142,7 +142,8 @@ func (prs *ParserEngine) processCssInStyleTag(inlineStyle string, htmlTagPositio
 	for {
 		gt, _, data := p.Next()
 
-		log.Printf("[checkTagInlinedStyle]: %v - %v - %v - %v\n", gt, string(data), p.Values(), htmlTagPosition+getLineByOffset(p.Offset())-1)
+		line := htmlTagPosition + getLineByOffset(p.Offset()) - 1
+		log.Printf("[checkTagInlinedStyle]: %v - %v - %v - %v\n", gt, string(data), p.Values(), line)
 
 		if gt == css.ErrorGrammar {
 			return
@@ -154,25 +155,25 @@ func (prs *ParserEngine) processCssInStyleTag(inlineStyle string, htmlTagPositio
 			for _, val := range p.Values() {
 				propVal += string(val.Data)
 			}
-			log.Printf("[CSS At RULE]: %v - %v - %v - %v\n", gt, string(data), propVal, htmlTagPosition+getLineByOffset(p.Offset())-1)
+			log.Printf("[CSS At RULE]: %v - %v - %v - %v\n", gt, string(data), propVal, line)
 		case css.BeginAtRuleGrammar:
 			propVal := ""
 			for _, val := range p.Values() {
 				propVal += string(val.Data)
 			}
-			log.Printf("[CSS At RULE]: %v - %v - %v - %v\n", gt, string(data), propVal, htmlTagPosition+getLineByOffset(p.Offset())-1)
+			log.Printf("[CSS At RULE]: %v - %v - %v - %v\n", gt, string(data), propVal, line)
 		case css.BeginRulesetGrammar:
 			propVal := ""
 			for _, val := range p.Values() {
 				propVal += string(val.Data)
 			}
-			log.Printf("[CSS SELECTOR]: %v - %v - %v\n", gt, propVal, htmlTagPosition+getLineByOffset(p.Offset())-1)
+			log.Printf("[CSS SELECTOR]: %v - %v - %v\n", gt, propVal, line)
 		case css.DeclarationGrammar:
 			propVal := ""
 			for _, val := range p.Values() {
 				propVal += string(val.Data)
 			}
-			prs.checkCssPropertyStyle(string(data), propVal, htmlTagPosition+getLineByOffset(p.Offset())-1)
+			prs.checkCssPropertyStyle(string(data), propVal, line)
 		}
 	}
 }
