@@ -11,8 +11,7 @@ const loadWasmParser = memoize(async () => {
 
 const testHTML = `<html>
 <body>
-<audio />
-<audio />
+<audio /><audio />
 <audio />
 <button type="submit">Submit</button>
 <button type="reset">Reset</button>
