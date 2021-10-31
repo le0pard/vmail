@@ -149,6 +149,18 @@ func (prs *ParserEngine) processCssInStyleTag(inlineStyle string, htmlTagPositio
 		}
 
 		switch gt {
+		case css.AtRuleGrammar:
+			propVal := ""
+			for _, val := range p.Values() {
+				propVal += string(val.Data)
+			}
+			log.Printf("[CSS At RULE]: %v - %v - %v - %v\n", gt, string(data), propVal, htmlTagPosition+getLineByOffset(p.Offset())-1)
+		case css.BeginAtRuleGrammar:
+			propVal := ""
+			for _, val := range p.Values() {
+				propVal += string(val.Data)
+			}
+			log.Printf("[CSS At RULE]: %v - %v - %v - %v\n", gt, string(data), propVal, htmlTagPosition+getLineByOffset(p.Offset())-1)
 		case css.BeginRulesetGrammar:
 			propVal := ""
 			for _, val := range p.Values() {
