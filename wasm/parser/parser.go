@@ -111,6 +111,20 @@ func InitParser() (*ParserEngine, error) {
 	}, nil
 }
 
+func (prs *ParserEngine) checkCssPropertyStyle(propertyKey, propertyVal string, position int) {
+	propertyKey = strings.ToLower(strings.Trim(propertyKey, WHITESPACE))
+	propertyVal = strings.ToLower(strings.Trim(propertyVal, WHITESPACE))
+
+	if cssKeyData, ok := rulesDB.CssProperties[propertyKey]; ok {
+		if cssValData, ok := cssKeyData[""]; ok {
+			prs.saveToReportCssProperty(propertyKey, "", position, cssValData)
+		}
+		if cssValData, ok := cssKeyData[propertyVal]; ok {
+			prs.saveToReportCssProperty(propertyKey, propertyVal, position, cssValData)
+		}
+	}
+}
+
 func (prs *ParserEngine) processCssInStyleTag(inlineStyle string, htmlTagPosition int) {
 	var (
 		bytesToLine []int
@@ -221,20 +235,6 @@ func (prs *ParserEngine) saveToReportCssProperty(propertyKey, propertyVal string
 			rootData := make(map[string]map[string]CssPropertyReport)
 			rootData[propertyKey] = rData
 			prs.pr.CssProperties = rootData
-		}
-	}
-}
-
-func (prs *ParserEngine) checkCssPropertyStyle(propertyKey, propertyVal string, position int) {
-	propertyKey = strings.ToLower(strings.Trim(propertyKey, WHITESPACE))
-	propertyVal = strings.ToLower(strings.Trim(propertyVal, WHITESPACE))
-
-	if cssKeyData, ok := rulesDB.CssProperties[propertyKey]; ok {
-		if cssValData, ok := cssKeyData[""]; ok {
-			prs.saveToReportCssProperty(propertyKey, "", position, cssValData)
-		}
-		if cssValData, ok := cssKeyData[propertyVal]; ok {
-			prs.saveToReportCssProperty(propertyKey, propertyVal, position, cssValData)
 		}
 	}
 }
