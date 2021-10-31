@@ -11,6 +11,68 @@ const loadWasmParser = memoize(async () => {
 
 const testHTML = `<html>
 <body>
+<style>
+  :root{--bs-blue:#0d6efd;--bs-indigo:#6610f2;--bs-purple:#6f42c1;--bs-pink:#d63384;}
+
+  @charset 'utf-8';
+
+  .button {
+    margin: 0;
+    text-transform: lowercase;
+  }
+
+  .button:hover {
+    margin: 0;
+    text-transform: lowercase;
+  }
+
+  .button:hover > a {
+    margin: 0;
+    text-transform: lowercase;
+  }
+
+  .button:hover, .btn:hover {
+    margin: 0;
+    text-transform: lowercase;
+  }
+
+  a:active {
+    color: red;
+  }
+
+  @media (min-width: 760px) {
+    .button-super {
+      margin: 0 100px;
+      text-transform: lowercase;
+    }
+
+    #someUniqEl {
+      display: flex;
+    }
+  }
+
+  .g-4,.gx-4{--bs-gutter-x:1.5rem}.g-4,.gy-4{--bs-gutter-y:1.5rem}.g-5,.gx-5{--bs-gutter-x:3rem}.g-5,.gy-5{--bs-gutter-y:3rem}@media (min-width:576px){.col-sm{flex:1 0 0%}
+  .modal-backdrop{position:fixed;top:0;left:0;z-index:1050;width:100vw;height:100vh;background-color:#000}.modal-backdrop.fade{opacity:0}
+  .row>*{flex-shrink:0;width:100%;max-width:100%;padding-right:calc(var(--bs-gutter-x) * .5);padding-left:calc(var(--bs-gutter-x) * .5);margin-top:var(--bs-gutter-y)}.col{flex:1 0 0%}
+
+  @page {
+    margin: 1cm;
+  }
+
+  @page :first {
+    margin: 2cm;
+  }
+
+  @keyframes slidein {
+    from {
+      transform: translateX(0%);
+    }
+
+    to {
+      transform: translateX(100%);
+    }
+  }
+</style>
 <audio /><audio />
 <audio />
 <button type="submit">Submit</button>

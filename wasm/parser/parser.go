@@ -110,23 +110,39 @@ func InitParser() (*ParserEngine, error) {
 	}, nil
 }
 
-func (prs *ParserEngine) ruleCssInTag(scanner *css.Scanner) error {
+func (prs *ParserEngine) parseCssProps(scanner *css.Scanner, htmlTagPosition int) {
 	var (
-		isCollectPropVal bool   = false
-		propName         string = ""
-		propVal          string = ""
-		propLine         int    = 0
+		isCollectPropVal bool     = false
+		propName         []string = []string{}
+		propVal          []string = []string{}
+		propLine         int      = 0
 	)
+
+	processCssProps := func() {
+		if len(propName) > 0 {
+			log.Printf("[CSS PROPS]: %v %v %v\n", propName, propVal, propLine)
+		}
+	}
+
+	collectValues := func(token *css.Token) {
+		if isCollectPropVal {
+			propVal = append(propVal, token.Value)
+		} else {
+			if len(propName) == 0 {
+				propLine = htmlTagPosition + token.Line - 1 // initial line for prop
+			}
+			propName = append(propName, token.Value)
+		}
+	}
 
 	for {
 		token := scanner.Next()
 		if token.Type == css.TokenEOF || token.Type == css.TokenError {
-			log.Printf("TagStyleProperties: %v %v %v\n", propName, propVal, propLine)
-			// prs.storeTagStyleProperties(propName, propVal, propLine) // store last parts, if collected
-			return nil
+			processCssProps()
+			return
 		}
 
-		// log.Printf("[processCssInTag] %s (line: %d, column: %d): %v (doc line: %d)", token.Type, token.Line, token.Column, token.Value, prs.styleTagLine+token.Line-1)
+		// log.Printf("[parseCssProps] %s: %v (line: %d, column: %d) (doc line: %d)", token.Type, token.Value, token.Line, token.Column, htmlTagPosition+token.Line-1)
 
 		switch token.Type {
 		case css.TokenCDO, css.TokenCDC, css.TokenComment, css.TokenS:
@@ -136,200 +152,136 @@ func (prs *ParserEngine) ruleCssInTag(scanner *css.Scanner) error {
 			case ":":
 				isCollectPropVal = true
 			case ";":
-				log.Printf("TagStyleProperties: %v %v %v\n", propName, propVal, propLine)
-				// prs.storeTagStyleProperties(propName, propVal, propLine)
+				processCssProps()
 				// reset for new prop
 				isCollectPropVal = false
-				propName = ""
-				propVal = ""
+				propName = []string{}
+				propVal = []string{}
 				propLine = 0
 			case "}":
-				log.Printf("TagStyleProperties: %v %v %v\n", propName, propVal, propLine)
-				// prs.storeTagStyleProperties(propName, propVal, propLine)
-				return nil
+				processCssProps()
+				return
+			default:
+				collectValues(token)
 			}
 		default:
-			if isCollectPropVal {
-				if len(propVal) == 0 {
-					propVal = token.Value
-				} else {
-					propVal += fmt.Sprintf(" %s", token.Value)
-				}
-			} else {
-				if len(propName) == 0 {
-					propLine = prs.styleTagLine + token.Line - 1 // initial line for prop
-					propName = token.Value
-				} else {
-					propName += fmt.Sprintf(" %s", token.Value)
-				}
-
-			}
+			collectValues(token)
 		}
 	}
 }
 
-func (prs *ParserEngine) processCssInTag(scanner *css.Scanner) error {
+func (prs *ParserEngine) processCssInStyleTag(scanner *css.Scanner, htmlTagPosition int, isNested bool) {
 	var (
-		atKeywordName string = ""
-		atKeywordVal  string = ""
-		atKeywordLine int    = 0
-
-		isPseudoClass   bool   = false
-		pseudoClassName string = ""
-		pseudoClassLine int    = 0
-
-		cssSelector     string = ""
-		cssSelectorLine int    = 0
+		isNestedAtRule     bool     = false
+		isAtPropsRule      bool     = false
+		isAtRule           bool     = false
+		atRuleName         string   = ""
+		atRuleValue        []string = []string{}
+		atRuleLine         int      = 0
+		cssSelector        []string = []string{}
+		cssSelectorLine    int      = 0
+		curlyBracesCounter int      = 0
 	)
+
+	collectAtRuleValues := func(token *css.Token) {
+		if isNestedAtRule || isAtRule || isAtPropsRule {
+			val := strings.Trim(token.Value, WHITESPACE)
+			if len(val) > 0 {
+				atRuleValue = append(atRuleValue, val)
+			}
+		}
+	}
+
+	collectSelectorValues := func(token *css.Token) {
+		if !(isNestedAtRule || isAtRule || isAtPropsRule) {
+			if len(cssSelector) == 0 {
+				cssSelectorLine = htmlTagPosition + token.Line - 1
+			}
+			val := strings.Trim(token.Value, WHITESPACE)
+			if len(val) > 0 {
+				cssSelector = append(cssSelector, val)
+			}
+		}
+	}
+
+	resetAtRules := func() {
+		isNestedAtRule = false
+		isAtPropsRule = false
+		isAtRule = false
+		atRuleName = ""
+		atRuleValue = []string{}
+		atRuleLine = 0
+	}
+
+	resetSelectorValues := func() {
+		cssSelector = []string{}
+		cssSelectorLine = 0
+	}
 
 	for {
 		token := scanner.Next()
-		if token.Type == css.TokenEOF || token.Type == css.TokenError {
-			return nil
-		}
 
-		// log.Printf("[processCssInTag] %s (line: %d, column: %d): %v (doc line: %d)", token.Type, token.Line, token.Column, token.Value, prs.styleTagLine+token.Line-1)
+		log.Printf("[processCssInStyleTag] %s: %v (line: %d, column: %d) (doc line: %d) (curlyBracesCounter: %d, %v)", token.Type, token.Value, token.Line, token.Column, htmlTagPosition+token.Line-1, curlyBracesCounter, isNested)
+
+		if token.Type == css.TokenEOF || token.Type == css.TokenError {
+			return
+		}
 
 		switch token.Type {
 		case css.TokenCDO, css.TokenCDC, css.TokenComment, css.TokenS:
-			if token.Type == css.TokenS && len(cssSelector) > 0 {
-				cssSelector += token.Value
+			if token.Type == css.TokenS {
+				collectAtRuleValues(token)
+				collectSelectorValues(token)
 			}
-
-			break // continue loop
+			break
 		case css.TokenAtKeyword:
-			line := prs.styleTagLine + token.Line - 1
-
 			switch token.Value {
+			case "@charset", "@import", "@namespace ": // regular at-rules
+				isAtRule = true
 			case "@media", "@supports", "@document", "@keyframes", "@-webkit-keyframes", "@font-feature-values": // nested at-rules
-				atKeywordName = token.Value
-				atKeywordLine = line
-			default: // at-rule block, like "@charset", "@import", "@namespace"
-				log.Printf("AtRuleCSSStatement: %v %v %v\n", token.Value, "", line)
-				// err := prs.storeAtRuleCSSStatement(token.Value, "", line)
-				// if err != nil {
-				// 	return err
-				// }
-				atKeywordName = ""
-				atKeywordLine = 0
+				isNestedAtRule = true
+			default:
+				isAtPropsRule = true
 			}
-			atKeywordVal = ""
-			cssSelector = ""
-			cssSelectorLine = 0
+			atRuleName = token.Value
+			atRuleValue = []string{}
+			atRuleLine = htmlTagPosition + token.Line - 1
 		case css.TokenChar:
 			switch token.Value {
-			case "}": // it is not required, it is more for failsafe
-				atKeywordName = ""
-				atKeywordVal = ""
-				atKeywordLine = 0
-				pseudoClassName = ""
-				pseudoClassLine = 0
-				cssSelector = ""
-				cssSelectorLine = 0
-			case ":":
-				if len(atKeywordName) == 0 {
-					if isPseudoClass && len(pseudoClassName) > 0 {
-						log.Printf("CSSPseudoClass: %v %v\n", pseudoClassName, pseudoClassLine)
-						// err := prs.storeCSSPseudoClass(pseudoClassName, pseudoClassLine)
-						// if err != nil {
-						// 	return err
-						// }
-
-						pseudoClassName = ""
-						pseudoClassLine = 0
-					}
-					isPseudoClass = true
-
-					if len(cssSelector) == 0 {
-						cssSelectorLine = prs.styleTagLine + token.Line - 1
-					}
-					cssSelector += token.Value
+			case "}":
+				curlyBracesCounter -= 1
+				if isNested && curlyBracesCounter < 0 {
+					return // finished with nested block parsing
 				}
-			case ",", ".":
-				if isPseudoClass && len(pseudoClassName) > 0 {
-					log.Printf("CSSPseudoClass: %v %v\n", pseudoClassName, pseudoClassLine)
-					// err := prs.storeCSSPseudoClass(pseudoClassName, pseudoClassLine)
-					// if err != nil {
-					// 	return err
-					// }
-					pseudoClassName = ""
-					pseudoClassLine = 0
-				}
-				isPseudoClass = false
-
-				if len(cssSelector) == 0 {
-					cssSelectorLine = prs.styleTagLine + token.Line - 1
-				}
-				cssSelector += token.Value
+				resetAtRules()
+				resetSelectorValues()
 			case "{":
-				if len(atKeywordName) == 0 && isPseudoClass && len(pseudoClassName) > 0 {
-					log.Printf("CSSPseudoClass: %v %v\n", pseudoClassName, pseudoClassLine)
-					// err := prs.storeCSSPseudoClass(pseudoClassName, pseudoClassLine)
-					// if err != nil {
-					// 	return err
-					// }
-					pseudoClassName = ""
-					pseudoClassLine = 0
-				}
-				isPseudoClass = false
-
-				if len(atKeywordName) == 0 && len(cssSelector) > 0 {
-					log.Printf("CSS SELECTOR: %v %v\n", cssSelector, cssSelectorLine)
-					// err := prs.processCssSelector(cssSelector, cssSelectorLine)
-					// if err != nil {
-					// 	return err
-					// }
-					cssSelector = ""
-					cssSelectorLine = 0
-				}
-
-				if len(atKeywordName) > 0 {
-					log.Printf("AtRuleCSSStatement: %v %v %v\n", atKeywordName, atKeywordVal, atKeywordLine)
-					// err := prs.storeAtRuleCSSStatement(atKeywordName, atKeywordVal, atKeywordLine)
-					// if err != nil {
-					// 	return err
-					// }
-					err := prs.processCssInTag(scanner)
-					if err != nil {
-						return err
-					}
-					atKeywordName = ""
-					atKeywordVal = ""
-					atKeywordLine = 0
+				curlyBracesCounter += 1
+				if isNestedAtRule {
+					log.Printf("[NESTED AT RULE]: %v %v %v\n", atRuleName, atRuleValue, atRuleLine)
+					prs.processCssInStyleTag(scanner, htmlTagPosition, true)
+					resetAtRules()
+				} else if isAtPropsRule {
+					log.Printf("[PROPS AT RULE]: %v %v %v\n", atRuleName, atRuleValue, atRuleLine)
+					// parse css props
+					prs.parseCssProps(scanner, htmlTagPosition)
+					resetAtRules()
 				} else {
-					err := prs.ruleCssInTag(scanner)
-					if err != nil {
-						return err
-					}
+					log.Printf("[CSS SELECTOR]: %v %v\n", cssSelector, cssSelectorLine)
+					// parse css props
+					prs.parseCssProps(scanner, htmlTagPosition)
+				}
+			case ";":
+				if isAtRule {
+					log.Printf("[AT RULE]: %v %v %v\n", atRuleName, atRuleValue, atRuleLine)
+					resetAtRules()
 				}
 			default:
-				if len(cssSelector) == 0 {
-					cssSelectorLine = prs.styleTagLine + token.Line - 1
-				}
-				cssSelector += token.Value
+				collectSelectorValues(token)
 			}
 		default:
-			if len(atKeywordName) > 0 {
-				if len(atKeywordVal) == 0 {
-					atKeywordVal = token.Value
-				} else {
-					atKeywordVal += fmt.Sprintf(" %s", token.Value)
-				}
-			} else {
-				if len(cssSelector) == 0 {
-					cssSelectorLine = prs.styleTagLine + token.Line - 1
-				}
-				cssSelector += token.Value
-			}
-
-			if isPseudoClass {
-				if len(pseudoClassName) == 0 {
-					pseudoClassName = token.Value
-					pseudoClassLine = prs.styleTagLine + token.Line - 1
-				} else {
-					pseudoClassName += fmt.Sprintf(" %s", token.Value)
-				}
-			}
+			collectAtRuleValues(token)
+			collectSelectorValues(token)
 		}
 	}
 }
@@ -381,6 +333,20 @@ func (prs *ParserEngine) saveToReportCssProperty(propertyKey, propertyVal string
 	}
 }
 
+func (prs *ParserEngine) checkCssPropertyStyle(propertyKey, propertyVal string, position int) {
+	propertyKey = strings.ToLower(strings.Trim(propertyKey, WHITESPACE))
+	propertyVal = strings.ToLower(strings.Trim(propertyVal, WHITESPACE))
+
+	if cssKeyData, ok := rulesDB.CssProperties[propertyKey]; ok {
+		if cssValData, ok := cssKeyData[""]; ok {
+			prs.saveToReportCssProperty(propertyKey, "", position, cssValData)
+		}
+		if cssValData, ok := cssKeyData[propertyVal]; ok {
+			prs.saveToReportCssProperty(propertyKey, propertyVal, position, cssValData)
+		}
+	}
+}
+
 func (prs *ParserEngine) checkTagInlinedStyle(inlineStyle string, position int) {
 	cssProperties := strings.Split(inlineStyle, ";")
 
@@ -391,17 +357,7 @@ func (prs *ParserEngine) checkTagInlinedStyle(inlineStyle string, position int) 
 
 		propertyKeyVal := strings.Split(strings.Trim(cssProperty, WHITESPACE), ":")
 		if len(propertyKeyVal) == 2 {
-			propertyKey := strings.ToLower(strings.Trim(propertyKeyVal[0], WHITESPACE))
-			propertyVal := strings.ToLower(strings.Trim(propertyKeyVal[1], WHITESPACE))
-
-			if cssKeyData, ok := rulesDB.CssProperties[propertyKey]; ok {
-				if cssValData, ok := cssKeyData[""]; ok {
-					prs.saveToReportCssProperty(propertyKey, "", position, cssValData)
-				}
-				if cssValData, ok := cssKeyData[propertyVal]; ok {
-					prs.saveToReportCssProperty(propertyKey, propertyVal, position, cssValData)
-				}
-			}
+			prs.checkCssPropertyStyle(propertyKeyVal[0], propertyKeyVal[1], position)
 		}
 	}
 }
@@ -494,7 +450,7 @@ func (prs *ParserEngine) checkHtmlTags(tagName string, attrs []html.Attribute, p
 	}
 }
 
-func (prs *ParserEngine) processHtmlToken(htmlTokenizer *html.Tokenizer, token html.Token, tagLine int) error {
+func (prs *ParserEngine) processHtmlToken(htmlTokenizer *html.Tokenizer, token html.Token, tagLine int) {
 	switch token.Type {
 	case html.TextToken:
 		if prs.isStyleTagOpen {
@@ -512,23 +468,22 @@ func (prs *ParserEngine) processHtmlToken(htmlTokenizer *html.Tokenizer, token h
 		switch token.DataAtom {
 		case a.Style:
 			if prs.isStyleTagOpen && len(prs.styleTagContent) > 0 {
-				scanner := css.New(prs.styleTagContent)
-				err := prs.processCssInTag(scanner)
-				if err != nil {
-					// Ignore or should report?
-				}
+				prs.wg.Add(1)
+				go func(content string, line int) {
+					defer prs.wg.Done()
+					scanner := css.New(content)
+					prs.processCssInStyleTag(scanner, line, false)
+				}(prs.styleTagContent, prs.styleTagLine)
+				// reset style tag storage
+				prs.isStyleTagOpen = false
+				prs.styleTagContent = ""
+				prs.styleTagLine = 0
 			}
-			// reset style tag storage
-			prs.isStyleTagOpen = false
-			prs.styleTagContent = ""
-			prs.styleTagLine = 0
 		}
 	case html.SelfClosingTagToken:
 		// process html tag
 		prs.checkHtmlTags(token.Data, token.Attr, tagLine)
 	}
-
-	return nil
 }
 
 func (prs ParserEngine) getLineFromOffset(tagLine, offset int) int {
@@ -588,13 +543,12 @@ func (prs *ParserEngine) Report(document []byte) (*ParseReport, error) {
 		}
 
 		tagLine = prs.getLineFromOffset(tagLine, htmlBytesOffset)
-		err := prs.processHtmlToken(htmlTokenizer, tt, tagLine)
-		if err != nil {
-			return nil, err
-		}
+		prs.processHtmlToken(htmlTokenizer, tt, tagLine)
 
 		htmlBytesOffset += len(htmlTokenizer.Raw())
 	}
+
+	prs.wg.Wait() // wait all jobs
 
 	return &prs.pr, nil
 }
