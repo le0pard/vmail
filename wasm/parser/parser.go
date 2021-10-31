@@ -58,7 +58,8 @@ var (
 // json config structs begin
 
 type CaniuseDB struct {
-	HtmlTags map[string]map[string]interface{} `json:"html_tags"`
+	HtmlTags      map[string]map[string]interface{} `json:"html_tags"`
+	CssProperties map[string]map[string]interface{} `json:"css_properties"`
 }
 
 var rulesDB CaniuseDB
@@ -73,8 +74,15 @@ type HTMLTagReport struct {
 	MoreLines bool         `json:"more_lines"`
 }
 
+type CssPropertyReport struct {
+	Rules     interface{}  `json:"rules"`
+	Lines     map[int]bool `json:"lines"`
+	MoreLines bool         `json:"more_lines"`
+}
+
 type ParseReport struct {
-	HtmlTags map[string]map[string]HTMLTagReport `json:"html_tags"`
+	HtmlTags      map[string]map[string]HTMLTagReport     `json:"html_tags"`
+	CssProperties map[string]map[string]CssPropertyReport `json:"css_properties"`
 }
 
 // result structure end
@@ -326,6 +334,78 @@ func (prs *ParserEngine) processCssInTag(scanner *css.Scanner) error {
 	}
 }
 
+func makeInitialCssPropertyReport(position int, ruleCssPropData interface{}) CssPropertyReport {
+	lines := make(map[int]bool)
+	lines[position] = true
+
+	return CssPropertyReport{
+		Rules:     ruleCssPropData,
+		Lines:     lines,
+		MoreLines: false,
+	}
+}
+
+func (prs *ParserEngine) saveToReportCssProperty(propertyKey, propertyVal string, position int, ruleCssPropData interface{}) {
+	prs.mx.Lock()
+	defer prs.mx.Unlock()
+
+	if prKeyData, ok := prs.pr.CssProperties[propertyKey]; ok {
+		if prValData, ok := prKeyData[propertyVal]; ok {
+			if len(prValData.Lines) < LIMIT_REPORT_LINES {
+				prValData.Lines[position] = true
+			} else {
+				prValData.MoreLines = true
+			}
+			prKeyData[propertyVal] = prValData
+			prs.pr.CssProperties[propertyKey] = prKeyData
+		} else {
+			if len(prs.pr.CssProperties[propertyKey]) > 0 {
+				prs.pr.CssProperties[propertyKey][propertyVal] = makeInitialCssPropertyReport(position, ruleCssPropData)
+			} else {
+				rootData := make(map[string]CssPropertyReport)
+				rootData[propertyVal] = makeInitialCssPropertyReport(position, ruleCssPropData)
+				prs.pr.CssProperties[propertyKey] = rootData
+			}
+		}
+	} else {
+		rData := make(map[string]CssPropertyReport)
+		rData[propertyVal] = makeInitialCssPropertyReport(position, ruleCssPropData)
+
+		if len(prs.pr.CssProperties) > 0 {
+			prs.pr.CssProperties[propertyKey] = rData
+		} else {
+			rootData := make(map[string]map[string]CssPropertyReport)
+			rootData[propertyKey] = rData
+			prs.pr.CssProperties = rootData
+		}
+	}
+}
+
+func (prs *ParserEngine) checkTagInlinedStyle(inlineStyle string, position int) {
+	cssProperties := strings.Split(inlineStyle, ";")
+
+	for _, cssProperty := range cssProperties {
+		if len(cssProperty) == 0 {
+			continue
+		}
+
+		propertyKeyVal := strings.Split(strings.Trim(cssProperty, WHITESPACE), ":")
+		if len(propertyKeyVal) == 2 {
+			propertyKey := strings.ToLower(strings.Trim(propertyKeyVal[0], WHITESPACE))
+			propertyVal := strings.ToLower(strings.Trim(propertyKeyVal[1], WHITESPACE))
+
+			if cssKeyData, ok := rulesDB.CssProperties[propertyKey]; ok {
+				if cssValData, ok := cssKeyData[""]; ok {
+					prs.saveToReportCssProperty(propertyKey, "", position, cssValData)
+				}
+				if cssValData, ok := cssKeyData[propertyVal]; ok {
+					prs.saveToReportCssProperty(propertyKey, propertyVal, position, cssValData)
+				}
+			}
+		}
+	}
+}
+
 func makeInitialHtmlTagReport(position int, ruleTagAttrData interface{}) HTMLTagReport {
 	lines := make(map[int]bool)
 	lines[position] = true
@@ -373,9 +453,9 @@ func (prs *ParserEngine) saveToReportHtmlTag(tagName, tagAttr string, position i
 	}
 }
 
-func (prs *ParserEngine) checkHtmlTags(tagName string, attrs []html.Attribute, position int) error {
+func (prs *ParserEngine) checkHtmlTags(tagName string, attrs []html.Attribute, position int) {
 	if len(tagName) == 0 {
-		return nil
+		return
 	}
 
 	tagName = strings.ToLower(tagName)
@@ -398,14 +478,20 @@ func (prs *ParserEngine) checkHtmlTags(tagName string, attrs []html.Attribute, p
 			}
 
 			if attrKey == "style" {
-				// prs.storeInlinedStyleProperties(tx, tag, attrKey, attrVal, position)
+				prs.checkTagInlinedStyle(attrVal, position)
+			}
+		}
+	} else {
+		// check inline style for valid elements too
+		for _, att := range attrs {
+			attrKey := strings.ToLower(att.Key)
+			attrVal := strings.ToLower(att.Val)
+
+			if attrKey == "style" {
+				prs.checkTagInlinedStyle(attrVal, position)
 			}
 		}
 	}
-
-	log.Printf("checkHtmlTags: %v %v %v\n", tagName, attrs, position)
-
-	return nil
 }
 
 func (prs *ParserEngine) processHtmlToken(htmlTokenizer *html.Tokenizer, token html.Token, tagLine int) error {
@@ -421,11 +507,7 @@ func (prs *ParserEngine) processHtmlToken(htmlTokenizer *html.Tokenizer, token h
 			prs.styleTagLine = tagLine
 		}
 		// process html tag
-		err := prs.checkHtmlTags(token.Data, token.Attr, tagLine)
-		if err != nil {
-			return err
-		}
-
+		prs.checkHtmlTags(token.Data, token.Attr, tagLine)
 	case html.EndTagToken:
 		switch token.DataAtom {
 		case a.Style:
@@ -443,10 +525,7 @@ func (prs *ParserEngine) processHtmlToken(htmlTokenizer *html.Tokenizer, token h
 		}
 	case html.SelfClosingTagToken:
 		// process html tag
-		err := prs.checkHtmlTags(token.Data, token.Attr, tagLine)
-		if err != nil {
-			return err
-		}
+		prs.checkHtmlTags(token.Data, token.Attr, tagLine)
 	}
 
 	return nil

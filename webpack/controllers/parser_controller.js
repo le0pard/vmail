@@ -17,6 +17,7 @@ const testHTML = `<html>
 <button type="reset">Reset</button>
 <button type="reset11">Reset111</button>
 <button type="submit">Submit 2</button>
+<div style="margin: 0; text-transform: lowercase;">Text</div>
 </body>
 </html>
 `

@@ -4,6 +4,7 @@ package main
 import (
 	"errors"
 	"sort"
+	"sync"
 	"syscall/js"
 
 	"github.com/le0pard/vmail/wasm/parser"
@@ -29,36 +30,86 @@ func rejectWithError(reject js.Value, message string) {
 }
 
 func normalizeReportForPromise(report *parser.ParseReport) map[string]interface{} {
+	var (
+		wg sync.WaitGroup
+		mx sync.RWMutex
+	)
+
 	newReport := make(map[string]interface{})
 
 	if len(report.HtmlTags) > 0 {
-		tagReports := make(map[string]interface{})
-		for k1, v1 := range report.HtmlTags {
-			tagAttributeReports := make(map[string]interface{})
-			for k2, v2 := range v1 {
-				// hash to slice
-				lines := make([]int, 0, len(v2.Lines))
-				for line, _ := range v2.Lines {
-					lines = append(lines, line)
-				}
-				// sort slice with positions
-				sort.Ints(lines)
+		wg.Add(1)
 
-				linesObj := make([]interface{}, len(lines))
-				for i, line := range lines {
-					linesObj[i] = line
-				}
+		go func() {
+			defer wg.Done()
+			tagReports := make(map[string]interface{})
+			for k1, v1 := range report.HtmlTags {
+				tagAttributeReports := make(map[string]interface{})
+				for k2, v2 := range v1 {
+					// hash to slice
+					lines := make([]int, 0, len(v2.Lines))
+					for line, _ := range v2.Lines {
+						lines = append(lines, line)
+					}
+					// sort slice with positions
+					sort.Ints(lines)
 
-				tagAttributeReports[k2] = map[string]interface{}{
-					"rules":      v2.Rules,
-					"lines":      linesObj,
-					"more_lines": v2.MoreLines,
+					linesObj := make([]interface{}, len(lines))
+					for i, line := range lines {
+						linesObj[i] = line
+					}
+
+					tagAttributeReports[k2] = map[string]interface{}{
+						"rules":      v2.Rules,
+						"lines":      linesObj,
+						"more_lines": v2.MoreLines,
+					}
 				}
+				tagReports[k1] = tagAttributeReports
 			}
-			tagReports[k1] = tagAttributeReports
-		}
-		newReport["html_tags"] = tagReports
+			mx.Lock()
+			defer mx.Unlock()
+			newReport["html_tags"] = tagReports
+		}()
 	}
+
+	if len(report.CssProperties) > 0 {
+		wg.Add(1)
+
+		go func() {
+			defer wg.Done()
+			cssPropertyReports := make(map[string]interface{})
+			for k1, v1 := range report.CssProperties {
+				cssValReports := make(map[string]interface{})
+				for k2, v2 := range v1 {
+					// hash to slice
+					lines := make([]int, 0, len(v2.Lines))
+					for line, _ := range v2.Lines {
+						lines = append(lines, line)
+					}
+					// sort slice with positions
+					sort.Ints(lines)
+
+					linesObj := make([]interface{}, len(lines))
+					for i, line := range lines {
+						linesObj[i] = line
+					}
+
+					cssValReports[k2] = map[string]interface{}{
+						"rules":      v2.Rules,
+						"lines":      linesObj,
+						"more_lines": v2.MoreLines,
+					}
+				}
+				cssPropertyReports[k1] = cssValReports
+			}
+			mx.Lock()
+			defer mx.Unlock()
+			newReport["css_properties"] = cssPropertyReports
+		}()
+	}
+
+	wg.Wait()
 
 	return newReport
 }
