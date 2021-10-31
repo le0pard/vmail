@@ -2,8 +2,8 @@ package main
 
 // Import the package to access the Wasm environment
 import (
-	"encoding/json"
 	"errors"
+	"sort"
 	"syscall/js"
 
 	"github.com/le0pard/vmail/wasm/parser"
@@ -28,6 +28,41 @@ func rejectWithError(reject js.Value, message string) {
 	reject.Invoke(errorObject)
 }
 
+func normalizeReportForPromise(report *parser.ParseReport) map[string]interface{} {
+	newReport := make(map[string]interface{})
+
+	if len(report.HtmlTags) > 0 {
+		tagReports := make(map[string]interface{})
+		for k1, v1 := range report.HtmlTags {
+			tagAttributeReports := make(map[string]interface{})
+			for k2, v2 := range v1 {
+				// hash to slice
+				lines := make([]int, 0, len(v2.Lines))
+				for line, _ := range v2.Lines {
+					lines = append(lines, line)
+				}
+				// sort slice with positions
+				sort.Ints(lines)
+
+				linesObj := make([]interface{}, len(lines))
+				for i, line := range lines {
+					linesObj[i] = line
+				}
+
+				tagAttributeReports[k2] = map[string]interface{}{
+					"rules":      v2.Rules,
+					"lines":      linesObj,
+					"more_lines": v2.MoreLines,
+				}
+			}
+			tagReports[k1] = tagAttributeReports
+		}
+		newReport["html_tags"] = tagReports
+	}
+
+	return newReport
+}
+
 // VMail returns a JavaScript function
 func VMail() js.Func {
 	return js.FuncOf(func(this js.Value, args []js.Value) interface{} {
@@ -49,15 +84,9 @@ func VMail() js.Func {
 					return
 				}
 
-				reportStr, err := json.Marshal(report)
-				if err != nil {
-					rejectWithError(reject, "Error to dump JSON")
-					return
-				}
-
 				// Resolve the Promise, passing anything back to JavaScript
 				// This is done by invoking the "resolve" function passed to the handler
-				resolve.Invoke(string(reportStr))
+				resolve.Invoke(normalizeReportForPromise(report))
 			}()
 
 			// The handler of a Promise doesn't return any value

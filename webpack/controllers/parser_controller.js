@@ -37,7 +37,7 @@ export default class extends Controller {
     }).then((message) => {
       endTime = performance.now()
       console.log(`Call to VMail took ${endTime - startTime} milliseconds`)
-      console.log(JSON.parse(message))
+      console.log(message)
     })
     // document.addEventListener('turbo:before-cache', this.cleanupNavigationForTurboCache)
     // this.navigationMedia.addEventListener('change', this.onNavigationMediaChange)

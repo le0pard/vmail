@@ -6,3 +6,5 @@ require (
 	github.com/gorilla/css v1.0.0
 	golang.org/x/net v0.0.0-20211020060615-d418f374d309
 )
+
+require golang.org/x/tools v0.1.7 // indirect

@@ -23,8 +23,6 @@ var caniuseJSON []byte
 
 const (
 	WHITESPACE            = " \t\r\n\f"
-	CSS_SCOPE_STYLE_ATTR  = "style_attribute"
-	CSS_SCOPE_STYLE_TAG   = "style_tag"
 	LIMIT_REPORT_LINES    = 30
 	TWO_KEYS_MERGE_FORMAT = "%s||%s"
 )
@@ -59,14 +57,8 @@ var (
 
 // json config structs begin
 
-type CaniuseDBHTMLTag struct {
-	Notes map[string]string                         `json:"notes"`
-	Stats map[string]map[string]map[string][]string `json:"stats"`
-	Url   string                                    `json:"url"`
-}
-
 type CaniuseDB struct {
-	HtmlTags map[string]map[string]CaniuseDBHTMLTag `json:"html_tags"`
+	HtmlTags map[string]map[string]interface{} `json:"html_tags"`
 }
 
 var rulesDB CaniuseDB
@@ -76,9 +68,9 @@ var rulesDB CaniuseDB
 // result structure begin
 
 type HTMLTagReport struct {
-	Rules     CaniuseDBHTMLTag `json:"rules"`
-	Lines     map[int]int      `json:"lines"`
-	MoreLines bool             `json:"more_lines"`
+	Rules     interface{}  `json:"rules"`
+	Lines     map[int]bool `json:"lines"`
+	MoreLines bool         `json:"more_lines"`
 }
 
 type ParseReport struct {
@@ -334,9 +326,9 @@ func (prs *ParserEngine) processCssInTag(scanner *css.Scanner) error {
 	}
 }
 
-func makeInitialHtmlTagReport(position int, ruleTagAttrData CaniuseDBHTMLTag) HTMLTagReport {
-	lines := make(map[int]int)
-	lines[position] = 1
+func makeInitialHtmlTagReport(position int, ruleTagAttrData interface{}) HTMLTagReport {
+	lines := make(map[int]bool)
+	lines[position] = true
 
 	return HTMLTagReport{
 		Rules:     ruleTagAttrData,
@@ -345,14 +337,14 @@ func makeInitialHtmlTagReport(position int, ruleTagAttrData CaniuseDBHTMLTag) HT
 	}
 }
 
-func (prs *ParserEngine) saveToReportHtmlTag(tagName, tagAttr string, position int, ruleTagAttrData CaniuseDBHTMLTag) {
+func (prs *ParserEngine) saveToReportHtmlTag(tagName, tagAttr string, position int, ruleTagAttrData interface{}) {
 	prs.mx.Lock()
 	defer prs.mx.Unlock()
 
 	if tagData, ok := prs.pr.HtmlTags[tagName]; ok {
 		if tagAttrData, ok := tagData[tagAttr]; ok {
 			if len(tagAttrData.Lines) < LIMIT_REPORT_LINES {
-				tagAttrData.Lines[position] = 1
+				tagAttrData.Lines[position] = true
 			} else {
 				tagAttrData.MoreLines = true
 			}
