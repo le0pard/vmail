@@ -29,7 +29,16 @@ export default class extends Controller {
   }
 
   connect() {
-    loadWasmParser().then(() => window.VMail(testHTML)).then((message) => console.log('Message', JSON.parse(message)))
+    let startTime, endTime
+
+    loadWasmParser().then(() => {
+      startTime = performance.now()
+      return window.VMail(testHTML)
+    }).then((message) => {
+      endTime = performance.now()
+      console.log(`Call to VMail took ${endTime - startTime} milliseconds`)
+      console.log(JSON.parse(message))
+    })
     // document.addEventListener('turbo:before-cache', this.cleanupNavigationForTurboCache)
     // this.navigationMedia.addEventListener('change', this.onNavigationMediaChange)
     // window.VMail('<html></html>').then((message) => console.log('Message', message)).catch((e) => console.log('Error', e))

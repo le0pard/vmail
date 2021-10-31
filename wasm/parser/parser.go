@@ -334,7 +334,7 @@ func (prs *ParserEngine) processCssInTag(scanner *css.Scanner) error {
 	}
 }
 
-func makeInitialHtmlReport(position int, ruleTagAttrData CaniuseDBHTMLTag) HTMLTagReport {
+func makeInitialHtmlTagReport(position int, ruleTagAttrData CaniuseDBHTMLTag) HTMLTagReport {
 	lines := make(map[int]int)
 	lines[position] = 1
 
@@ -360,16 +360,16 @@ func (prs *ParserEngine) saveToReportHtmlTag(tagName, tagAttr string, position i
 			prs.pr.HtmlTags[tagName] = tagData
 		} else {
 			if len(prs.pr.HtmlTags[tagName]) > 0 {
-				prs.pr.HtmlTags[tagName][tagAttr] = makeInitialHtmlReport(position, ruleTagAttrData)
+				prs.pr.HtmlTags[tagName][tagAttr] = makeInitialHtmlTagReport(position, ruleTagAttrData)
 			} else {
 				rootData := make(map[string]HTMLTagReport)
-				rootData[tagAttr] = makeInitialHtmlReport(position, ruleTagAttrData)
+				rootData[tagAttr] = makeInitialHtmlTagReport(position, ruleTagAttrData)
 				prs.pr.HtmlTags[tagName] = rootData
 			}
 		}
 	} else {
 		rData := make(map[string]HTMLTagReport)
-		rData[tagAttr] = makeInitialHtmlReport(position, ruleTagAttrData)
+		rData[tagAttr] = makeInitialHtmlTagReport(position, ruleTagAttrData)
 
 		if len(prs.pr.HtmlTags) > 0 {
 			prs.pr.HtmlTags[tagName] = rData
