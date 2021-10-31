@@ -9,6 +9,19 @@ const loadWasmParser = memoize(async () => {
   return instance
 })
 
+const testHTML = `<html>
+<body>
+<audio />
+<audio />
+<audio />
+<button type="submit">Submit</button>
+<button type="reset">Reset</button>
+<button type="reset11">Reset111</button>
+<button type="submit">Submit 2</button>
+</body>
+</html>
+`
+
 export default class extends Controller {
   initialize() {
     // this.navigationMedia = window.matchMedia('(max-width: 768px)')
@@ -17,7 +30,7 @@ export default class extends Controller {
   }
 
   connect() {
-    loadWasmParser().then(() => window.VMail('<html></html>')).then((message) => console.log('Message', message))
+    loadWasmParser().then(() => window.VMail(testHTML)).then((message) => console.log('Message', JSON.parse(message)))
     // document.addEventListener('turbo:before-cache', this.cleanupNavigationForTurboCache)
     // this.navigationMedia.addEventListener('change', this.onNavigationMediaChange)
     // window.VMail('<html></html>').then((message) => console.log('Message', message)).catch((e) => console.log('Error', e))

@@ -2,8 +2,8 @@ package main
 
 // Import the package to access the Wasm environment
 import (
+	"encoding/json"
 	"errors"
-	"fmt"
 	"syscall/js"
 
 	"github.com/le0pard/vmail/wasm/parser"
@@ -49,9 +49,15 @@ func VMail() js.Func {
 					return
 				}
 
+				reportStr, err := json.Marshal(report)
+				if err != nil {
+					rejectWithError(reject, "Error to dump JSON")
+					return
+				}
+
 				// Resolve the Promise, passing anything back to JavaScript
 				// This is done by invoking the "resolve" function passed to the handler
-				resolve.Invoke(fmt.Sprintf("result: %s - %s", htmlBody, report))
+				resolve.Invoke(string(reportStr))
 			}()
 
 			// The handler of a Promise doesn't return any value

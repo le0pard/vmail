@@ -1,0 +1,258 @@
+{
+  "html_tags": {
+    "audio": {
+      "": {
+        "notes": {
+          "1": "Does not play.",
+          "2": "The `src` attribute is transformed into `proton-src`.",
+          "3": "The `<audio>` element is supported but can not be played.",
+          "4": "The `<audio>` element is supported, but the video can not play due to a strict Content Security Policy.",
+          "5": "Not supported. The `<audio>` element and all its content is removed.",
+          "6": "Not supported. The `src` attribute is replaced by `data-src`."
+        },
+        "stats": {
+          "gmail": {
+            "desktop-webmail": {
+              "2020-04": ["n"]
+            },
+            "ios": {
+              "2020-04": ["n"]
+            },
+            "android": {
+              "2020-04": ["n"]
+            },
+            "mobile-webmail": {
+              "2020-04": ["n"]
+            }
+          },
+          "orange": {
+            "desktop-webmail": {
+              "2021-03": ["n"]
+            },
+            "ios": {
+              "2020-04": ["n", "3"]
+            }
+          },
+          "outlook": {
+            "windows": {
+              "2007": ["n"],
+              "2010": ["n"],
+              "2013": ["n"],
+              "2016": ["n"],
+              "2019": ["n"]
+            },
+            "windows-mail": {
+              "2020-04": ["n"]
+            },
+            "macos": {
+              "2016": ["y", "1"],
+              "2019": ["n"]
+            },
+            "outlook-com": {
+              "2020-04": ["n"],
+              "2021-05": ["n", "4"]
+            },
+            "ios": {
+              "2020-04": ["n"],
+              "2021-05": ["n", "4"]
+            },
+            "android": {
+              "2020-04": ["n"],
+              "2021-05": ["n", "4"]
+            }
+          },
+          "aol": {
+            "desktop-webmail": {
+              "2020-04": ["n"]
+            },
+            "ios": {
+              "2020-04": ["n"]
+            },
+            "android": {
+              "2020-04": ["n"]
+            }
+          },
+          "yahoo": {
+            "desktop-webmail": {
+              "2020-04": ["n"]
+            },
+            "ios": {
+              "2020-04": ["n"]
+            },
+            "android": {
+              "2020-04": ["n"]
+            }
+          },
+          "protonmail": {
+            "desktop-webmail": {
+              "2020-04": ["n", "2"]
+            },
+            "ios": {
+              "2020-04": ["n"]
+            },
+            "android": {
+              "2020-04": ["n"]
+            }
+          },
+          "hey": {
+            "desktop-webmail": {
+              "2020-06": ["n"]
+            }
+          },
+          "mail-ru": {
+            "desktop-webmail": {
+              "2020-10": ["n"]
+            }
+          },
+          "fastmail": {
+            "desktop-webmail": {
+              "2021-07": ["n", "5"]
+            }
+          },
+          "laposte": {
+            "desktop-webmail": {
+              "2021-08": ["n", "6"]
+            }
+          }
+        },
+        "url": "https://www.caniemail.com/features/html-audio/"
+      }
+    },
+    "button": {
+      "type||reset": {
+        "notes": {
+          "1": "Partial. Not supported with non Gmail accounts.",
+          "2": "Buggy. Interacting with the element submits the form it belongs in.",
+          "3": "Partial. The element is present but is not interactive."
+        },
+        "stats": {
+          "gmail": {
+            "ios": {
+              "2019-09": ["a", "1"]
+            }
+          },
+          "outlook": {
+            "windows": {
+              "2003": ["n"],
+              "2007": ["n"],
+              "2010": ["n"],
+              "2013": ["n"],
+              "2016": ["n"],
+              "2019": ["n"]
+            },
+            "windows-mail": {
+              "2020-01": ["n"]
+            }
+          },
+          "sfr": {
+            "desktop-webmail": {
+              "2020-01": ["a", "3"]
+            }
+          },
+          "thunderbird": {
+            "macos": {
+              "68.4": ["a", "2"]
+            }
+          },
+          "yahoo": {
+            "desktop-webmail": {
+              "2019-09": ["n"]
+            },
+            "ios": {
+              "2019-09": ["n"]
+            },
+            "android": {
+              "2019-09": ["n"]
+            }
+          },
+          "aol": {
+            "desktop-webmail": {
+              "2019-09": ["n"]
+            },
+            "ios": {
+              "2019-09": ["n"]
+            },
+            "android": {
+              "2019-09": ["n"]
+            }
+          },
+          "hey": {
+            "desktop-webmail": {
+              "2020-06": ["n"]
+            }
+          },
+          "mail-ru": {
+            "desktop-webmail": {
+              "2020-10": ["a", "2"]
+            }
+          }
+        },
+        "url": "https://www.caniemail.com/features/html-button-reset/"
+      },
+      "type||submit": {
+        "notes": {
+          "1": "Partial. Not supported with non Gmail accounts.",
+          "2": "Partial. The element is present but is not interactive."
+        },
+        "stats": {
+          "gmail": {
+            "ios": {
+              "2019-09": ["a", "1"]
+            }
+          },
+          "outlook": {
+            "windows": {
+              "2003": ["n"],
+              "2007": ["n"],
+              "2010": ["n"],
+              "2013": ["n"],
+              "2016": ["n"],
+              "2019": ["n"]
+            },
+            "windows-mail": {
+              "2020-01": ["n"]
+            },
+            "macos": {
+              "2011": ["n"],
+              "2016": ["n"],
+              "2019": ["n"]
+            },
+            "ios": {
+              "2019-06": ["n"]
+            }
+          },
+          "sfr": {
+            "desktop-webmail": {
+              "2020-01": ["a", "2"]
+            }
+          },
+          "yahoo": {
+            "ios": {
+              "2019-09": ["n"]
+            }
+          },
+          "protonmail": {
+            "android": {
+              "2020-03": ["n"]
+            }
+          },
+          "hey": {
+            "desktop-webmail": {
+              "2020-06": ["n"]
+            }
+          },
+          "mail-ru": {
+            "desktop-webmail": {
+              "2020-10": ["a", "2"]
+            }
+          }
+        },
+        "url": "https://www.caniemail.com/features/html-button-submit/"
+      }
+    }
+  },
+  "css_properties": {},
+  "at_rule_css_statements": {},
+  "css_pseudo_classes": {},
+  "css_selectors": {}
+}

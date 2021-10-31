@@ -2,11 +2,13 @@ package parser
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io"
 	"log"
 	"regexp"
 	"strings"
+	"sync"
 
 	css "github.com/gorilla/css/scanner"
 
@@ -16,14 +18,15 @@ import (
 	_ "embed"
 )
 
-//go:embed rules.json
-var emailRulesJSON []byte
+//go:embed caniuse.json
+var caniuseJSON []byte
 
 const (
-	WHITESPACE           = " \t\r\n\f"
-	HTML_NO_ATTRIBUTE    = ""
-	CSS_SCOPE_STYLE_ATTR = "style_attribute"
-	CSS_SCOPE_STYLE_TAG  = "style_tag"
+	WHITESPACE            = " \t\r\n\f"
+	CSS_SCOPE_STYLE_ATTR  = "style_attribute"
+	CSS_SCOPE_STYLE_TAG   = "style_tag"
+	LIMIT_REPORT_LINES    = 30
+	TWO_KEYS_MERGE_FORMAT = "%s||%s"
 )
 
 // css selectors
@@ -54,9 +57,45 @@ var (
 	universalSelectorStarRe     = regexp.MustCompile(`\*[^=]`)
 )
 
-type ParserEngine struct {
-	bytesToLine []int
+// json config structs begin
 
+type CaniuseDBHTMLTag struct {
+	Notes map[string]string                         `json:"notes"`
+	Stats map[string]map[string]map[string][]string `json:"stats"`
+	Url   string                                    `json:"url"`
+}
+
+type CaniuseDB struct {
+	HtmlTags map[string]map[string]CaniuseDBHTMLTag `json:"html_tags"`
+}
+
+var rulesDB CaniuseDB
+
+// json config structs end
+
+// result structure begin
+
+type HTMLTagReport struct {
+	Rules     CaniuseDBHTMLTag `json:"rules"`
+	Lines     map[int]int      `json:"lines"`
+	MoreLines bool             `json:"more_lines"`
+}
+
+type ParseReport struct {
+	HtmlTags map[string]map[string]HTMLTagReport `json:"html_tags"`
+}
+
+// result structure end
+
+type ParserEngine struct {
+	// array for bytes -> lines
+	bytesToLine []int
+	// group for parallel processing
+	wg sync.WaitGroup
+	// lock for report
+	mx sync.RWMutex
+	// report itself
+	pr ParseReport
 	// parse time states
 	isStyleTagOpen  bool
 	styleTagContent string
@@ -69,22 +108,6 @@ func InitParser() (*ParserEngine, error) {
 		isStyleTagOpen:  false,
 		styleTagContent: "",
 	}, nil
-}
-
-func calulateNewlineBytePos(document []byte) []int {
-	var (
-		bytesToLine []int
-		cursorPos   int = 0
-	)
-
-	lines := bytes.Split(document, []byte("\n"))
-
-	for _, line := range lines {
-		bytesToLine = append(bytesToLine, cursorPos)
-		cursorPos += len(line) + 1 // "\n" provide additional byte
-	}
-
-	return bytesToLine
 }
 
 func (prs *ParserEngine) ruleCssInTag(scanner *css.Scanner) error {
@@ -311,20 +334,86 @@ func (prs *ParserEngine) processCssInTag(scanner *css.Scanner) error {
 	}
 }
 
-func (prs ParserEngine) getLineFromOffset(tagLine, offset int) int {
-	// binary search used before, but looks like it waste of time - we can just "follow" bytes offset
-	// return sort.Search(len(prs.bytesToLine), func(i int) bool { return prs.bytesToLine[i] > offset })
-	for {
-		if len(prs.bytesToLine) <= tagLine {
-			return tagLine
-		}
+func makeInitialHtmlReport(position int, ruleTagAttrData CaniuseDBHTMLTag) HTMLTagReport {
+	lines := make(map[int]int)
+	lines[position] = 1
 
-		if prs.bytesToLine[tagLine] > offset {
-			return tagLine
-		}
-
-		tagLine += 1
+	return HTMLTagReport{
+		Rules:     ruleTagAttrData,
+		Lines:     lines,
+		MoreLines: false,
 	}
+}
+
+func (prs *ParserEngine) saveToReportHtmlTag(tagName, tagAttr string, position int, ruleTagAttrData CaniuseDBHTMLTag) {
+	prs.mx.Lock()
+	defer prs.mx.Unlock()
+
+	if tagData, ok := prs.pr.HtmlTags[tagName]; ok {
+		if tagAttrData, ok := tagData[tagAttr]; ok {
+			if len(tagAttrData.Lines) < LIMIT_REPORT_LINES {
+				tagAttrData.Lines[position] = 1
+			} else {
+				tagAttrData.MoreLines = true
+			}
+			tagData[tagAttr] = tagAttrData
+			prs.pr.HtmlTags[tagName] = tagData
+		} else {
+			if len(prs.pr.HtmlTags[tagName]) > 0 {
+				prs.pr.HtmlTags[tagName][tagAttr] = makeInitialHtmlReport(position, ruleTagAttrData)
+			} else {
+				rootData := make(map[string]HTMLTagReport)
+				rootData[tagAttr] = makeInitialHtmlReport(position, ruleTagAttrData)
+				prs.pr.HtmlTags[tagName] = rootData
+			}
+		}
+	} else {
+		rData := make(map[string]HTMLTagReport)
+		rData[tagAttr] = makeInitialHtmlReport(position, ruleTagAttrData)
+
+		if len(prs.pr.HtmlTags) > 0 {
+			prs.pr.HtmlTags[tagName] = rData
+		} else {
+			rootData := make(map[string]map[string]HTMLTagReport)
+			rootData[tagName] = rData
+			prs.pr.HtmlTags = rootData
+		}
+	}
+}
+
+func (prs *ParserEngine) checkHtmlTags(tagName string, attrs []html.Attribute, position int) error {
+	if len(tagName) == 0 {
+		return nil
+	}
+
+	tagName = strings.ToLower(tagName)
+
+	if ruleTagData, ok := rulesDB.HtmlTags[tagName]; ok {
+		if ruleTagAttrData, ok := ruleTagData[""]; ok {
+			prs.saveToReportHtmlTag(tagName, "", position, ruleTagAttrData)
+		}
+		for _, att := range attrs {
+			attrKey := strings.ToLower(att.Key)
+			attrVal := strings.ToLower(att.Val)
+
+			if ruleTagAttrData, ok := ruleTagData[attrKey]; ok {
+				prs.saveToReportHtmlTag(tagName, attrKey, position, ruleTagAttrData)
+			}
+
+			attrWithVal := fmt.Sprintf(TWO_KEYS_MERGE_FORMAT, attrKey, attrVal)
+			if ruleTagAttrData, ok := ruleTagData[attrWithVal]; ok {
+				prs.saveToReportHtmlTag(tagName, attrWithVal, position, ruleTagAttrData)
+			}
+
+			if attrKey == "style" {
+				// prs.storeInlinedStyleProperties(tx, tag, attrKey, attrVal, position)
+			}
+		}
+	}
+
+	log.Printf("checkHtmlTags: %v %v %v\n", tagName, attrs, position)
+
+	return nil
 }
 
 func (prs *ParserEngine) processHtmlToken(htmlTokenizer *html.Tokenizer, token html.Token, tagLine int) error {
@@ -339,40 +428,10 @@ func (prs *ParserEngine) processHtmlToken(htmlTokenizer *html.Tokenizer, token h
 			prs.isStyleTagOpen = true
 			prs.styleTagLine = tagLine
 		}
-		if len(token.Attr) > 0 {
-			log.Printf("HTML TAG: %v %v %v\n", token.Data, token.Attr, tagLine)
-			// err := prs.storeHtmlAttribute(token.Data, token.Attr, tagLine)
-			// if err != nil {
-			// 	return err
-			// }
-		} else {
-			// store tag with no attributes
-			log.Printf(
-				"HTML TAG: %v %v %v\n",
-				token.Data,
-				[]html.Attribute{
-					{
-						Namespace: "",
-						Key:       HTML_NO_ATTRIBUTE,
-						Val:       HTML_NO_ATTRIBUTE,
-					},
-				},
-				tagLine,
-			)
-			// err := prs.storeHtmlAttribute(
-			// 	token.Data,
-			// 	[]html.Attribute{
-			// 		{
-			// 			Namespace: "",
-			// 			Key:       HTML_NO_ATTRIBUTE,
-			// 			Val:       HTML_NO_ATTRIBUTE,
-			// 		},
-			// 	},
-			// 	tagLine,
-			// )
-			// if err != nil {
-			// 	return err
-			// }
+		// process html tag
+		err := prs.checkHtmlTags(token.Data, token.Attr, tagLine)
+		if err != nil {
+			return err
 		}
 
 	case html.EndTagToken:
@@ -391,17 +450,49 @@ func (prs *ParserEngine) processHtmlToken(htmlTokenizer *html.Tokenizer, token h
 			prs.styleTagLine = 0
 		}
 	case html.SelfClosingTagToken:
-		log.Printf("HTML TAG: %v %v %v\n", token.Data, token.Attr, tagLine)
-		// err := prs.storeHtmlAttribute(token.Data, token.Attr, tagLine)
-		// if err != nil {
-		// 	return err
-		// }
+		// process html tag
+		err := prs.checkHtmlTags(token.Data, token.Attr, tagLine)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
 }
 
-func (prs *ParserEngine) Report(document []byte) error {
+func (prs ParserEngine) getLineFromOffset(tagLine, offset int) int {
+	// binary search used before, but looks like it waste of time - we can just "follow" bytes offset
+	// return sort.Search(len(prs.bytesToLine), func(i int) bool { return prs.bytesToLine[i] > offset })
+	for {
+		if len(prs.bytesToLine) <= tagLine {
+			return tagLine
+		}
+
+		if prs.bytesToLine[tagLine] > offset {
+			return tagLine
+		}
+
+		tagLine += 1
+	}
+}
+
+func (prs *ParserEngine) calulateNewlineBytePos(document []byte) {
+	var (
+		bytesToLine []int
+		cursorPos   int = 0
+	)
+
+	lines := bytes.Split(document, []byte("\n"))
+
+	for _, line := range lines {
+		bytesToLine = append(bytesToLine, cursorPos)
+		cursorPos += len(line) + 1 // "\n" provide additional byte
+	}
+
+	prs.bytesToLine = bytesToLine
+}
+
+func (prs *ParserEngine) Report(document []byte) (*ParseReport, error) {
 	var (
 		err             error
 		htmlTokenizer   *html.Tokenizer
@@ -409,7 +500,7 @@ func (prs *ParserEngine) Report(document []byte) error {
 		tagLine         int = 0
 	)
 
-	prs.bytesToLine = calulateNewlineBytePos(document)
+	prs.calulateNewlineBytePos(document)
 
 	htmlTokenizer = html.NewTokenizer(bytes.NewReader(document))
 	for err != io.EOF {
@@ -421,37 +512,39 @@ func (prs *ParserEngine) Report(document []byte) error {
 		if tt.Type == html.ErrorToken {
 			err = htmlTokenizer.Err()
 			if err != nil && err != io.EOF {
-				return err
+				return nil, err
 			}
 		}
 
 		tagLine = prs.getLineFromOffset(tagLine, htmlBytesOffset)
 		err := prs.processHtmlToken(htmlTokenizer, tt, tagLine)
 		if err != nil {
-			return err
+			return nil, err
 		}
 
 		htmlBytesOffset += len(htmlTokenizer.Raw())
 	}
 
-	return nil
+	return &prs.pr, nil
 }
 
 func init() {
-	// parse rules.json here
-	log.Printf("INIT")
+	// parse caniuse.json here
+	if err := json.Unmarshal(caniuseJSON, &rulesDB); err != nil {
+		panic(err)
+	}
 }
 
-func ReportFromHTML(document []byte) (string, error) {
+func ReportFromHTML(document []byte) (*ParseReport, error) {
 	parser, err := InitParser()
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	err = parser.Report(document)
+	report, err := parser.Report(document)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	return "result", nil
+	return report, nil
 }
