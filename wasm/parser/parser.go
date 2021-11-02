@@ -6,12 +6,14 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"net/url"
+	"path/filepath"
 	"regexp"
 	"strings"
 	"sync"
 
-	css "github.com/le0pard/vmail/wasm/parser/css" // patched for offset
 	parse "github.com/tdewolff/parse/v2"
+	css "github.com/tdewolff/parse/v2/css"
 
 	"golang.org/x/net/html"
 	a "golang.org/x/net/html/atom"
@@ -32,35 +34,38 @@ const (
 type CssSelectorType int
 
 const (
-	ADJACENT_SIBLING_COMBINATOR_TYPE CssSelectorType = iota
-	CHAINING_SELECTORS_TYPE
-	CHILD_COMBINATOR_TYPE
-	CLASS_SELECTOR_TYPE
-	DESCENDANT_COMBINATOR_TYPE
-	GENERAL_SIBLING_COMBINATOR_TYPE
-	GROUPING_SELECTORS_TYPE
-	ID_SELECTOR_TYPE
-	TYPE_SELECTOR_TYPE
-	UNIVERSAL_SELECTOR_STAR_TYPE
+	ADJACENT_SIBLING_COMBINATOR_TYPE CssSelectorType = iota // The adjacent sibling combinator (`h1 + p`) allows to target an element that is directly after another.
+	ATTRIBUTE_SELECTOR_TYPE                                 // The attribute selector (`[attr]`) targets elements with this specific attribute.
+	CHAINING_SELECTORS_TYPE                                 // Chaining selectors (`.foo.bar`) allows to apply styles to elements matching all the corresponding selectors.
+	CHILD_COMBINATOR_TYPE                                   // The child combinator is represented by a superior sign (`>`) between two selectors and matches the second selector if it is a direct child of the first selector.
+	CLASS_SELECTOR_TYPE                                     // The class selector (`.className`) allows to apply styles to a group of elements with the corresponding `class` attribute.
+	DESCENDANT_COMBINATOR_TYPE                              // The descendant combinator is represented by a space (` `) between two selectors and matches the second selector if it has ancestor matching the first selector.
+	GENERAL_SIBLING_COMBINATOR_TYPE                         // The general sibling combinator (`img ~ p`) allows to target any element that after another (directly or indirectly).
+	GROUPING_SELECTORS_TYPE                                 // Grouping selectors (`.foo, .bar`) allows to apply the same styles to the different corresponding elements.
+	ID_SELECTOR_TYPE                                        // The ID selector (`#id`) allows to apply styles to an element with the corresponding `id` attribute.
+	TYPE_SELECTOR_TYPE                                      // Type selector or element selectors allow to apply styles by HTML element names.
+	UNIVERSAL_SELECTOR_STAR_TYPE                            // The universal selector (`*`) allows to apply styles to every elements.
 )
 
 var (
-	// css selectors types
-	adjacentSiblingCombinatorRe = regexp.MustCompile(`[\w\s-]\+\s?[#\.\w-]`)
-	chainingSelectorsRe         = regexp.MustCompile(`([\w-])(\.|#)([\w-])`)
-	childCombinatorRe           = regexp.MustCompile(`[\w\s-]>\s?[#\.\w-]`)
-	descendantCombinatorRe      = regexp.MustCompile(`[\w\s-] \s?[#\.\w-]`)
-	generalSiblingCombinatorRe  = regexp.MustCompile(`[\w\s-]~\s?[#\.\w-]`)
-	idSelectorRe                = regexp.MustCompile(`#\w\+`)
-	typeSelectorRe              = regexp.MustCompile(`(^|[\s\+~>])[\w-]`)
-	universalSelectorStarRe     = regexp.MustCompile(`\*[^=]`)
+	numbersRe = regexp.MustCompile(`\d`)
+	cssUrlRe  = regexp.MustCompile(`url\(['"\s]?(.*?)['"\s]?\)`)
 )
+
+func (d CssSelectorType) String() string {
+	return []string{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"}[d]
+}
 
 // json config structs begin
 
 type CaniuseDB struct {
-	HtmlTags      map[string]map[string]interface{} `json:"html_tags"`
-	CssProperties map[string]map[string]interface{} `json:"css_properties"`
+	HtmlTags           map[string]map[string]interface{} `json:"html_tags"`
+	CssProperties      map[string]map[string]interface{} `json:"css_properties"`
+	CssSelectorTypes   map[string]interface{}            `json:"css_selector_types"`
+	CssDimentions      map[string]interface{}            `json:"css_dimentions"`
+	CssFunctions       map[string]interface{}            `json:"css_functions"`
+	CssPseudoSelectors map[string]interface{}            `json:"css_pseudo_selectors"`
+	ImgFormats         map[string]interface{}            `json:"img_formats"`
 }
 
 var rulesDB CaniuseDB
@@ -81,9 +86,44 @@ type CssPropertyReport struct {
 	MoreLines bool         `json:"more_lines"`
 }
 
+type CssSelectorTypeReport struct {
+	Rules     interface{}  `json:"rules"`
+	Lines     map[int]bool `json:"lines"`
+	MoreLines bool         `json:"more_lines"`
+}
+
+type CssDimentionsReport struct {
+	Rules     interface{}  `json:"rules"`
+	Lines     map[int]bool `json:"lines"`
+	MoreLines bool         `json:"more_lines"`
+}
+
+type CssFunctionsReport struct {
+	Rules     interface{}  `json:"rules"`
+	Lines     map[int]bool `json:"lines"`
+	MoreLines bool         `json:"more_lines"`
+}
+
+type CssPseudoSelectorsReport struct {
+	Rules     interface{}  `json:"rules"`
+	Lines     map[int]bool `json:"lines"`
+	MoreLines bool         `json:"more_lines"`
+}
+
+type ImgFormatsReport struct {
+	Rules     interface{}  `json:"rules"`
+	Lines     map[int]bool `json:"lines"`
+	MoreLines bool         `json:"more_lines"`
+}
+
 type ParseReport struct {
-	HtmlTags      map[string]map[string]HTMLTagReport     `json:"html_tags"`
-	CssProperties map[string]map[string]CssPropertyReport `json:"css_properties"`
+	HtmlTags           map[string]map[string]HTMLTagReport     `json:"html_tags"`
+	CssProperties      map[string]map[string]CssPropertyReport `json:"css_properties"`
+	CssSelectorTypes   map[string]CssSelectorTypeReport        `json:"css_selector_types"`
+	CssDimentions      map[string]CssDimentionsReport          `json:"css_dimentions"`
+	CssFunctions       map[string]CssFunctionsReport           `json:"css_functions"`
+	CssPseudoSelectors map[string]CssPseudoSelectorsReport     `json:"css_pseudo_selectors"`
+	ImgFormats         map[string]ImgFormatsReport             `json:"img_formats"`
 }
 
 // result structure end
@@ -111,6 +151,216 @@ func InitParser() (*ParserEngine, error) {
 	}, nil
 }
 
+func makeInitialImgFormatsReport(position int, ruleCssSelectorData interface{}) ImgFormatsReport {
+	lines := make(map[int]bool)
+	lines[position] = true
+
+	return ImgFormatsReport{
+		Rules:     ruleCssSelectorData,
+		Lines:     lines,
+		MoreLines: false,
+	}
+}
+
+func (prs *ParserEngine) saveToReportImgFormats(psSelectorValue string, position int, ruleCssPropData interface{}) {
+	prs.mx.Lock()
+	defer prs.mx.Unlock()
+
+	if prKeyData, ok := prs.pr.ImgFormats[psSelectorValue]; ok {
+		if len(prKeyData.Lines) < LIMIT_REPORT_LINES {
+			prKeyData.Lines[position] = true
+		} else {
+			prKeyData.MoreLines = true
+		}
+		prs.pr.ImgFormats[psSelectorValue] = prKeyData
+	} else {
+		if len(prs.pr.ImgFormats) > 0 {
+			prs.pr.ImgFormats[psSelectorValue] = makeInitialImgFormatsReport(position, ruleCssPropData)
+		} else {
+			rootData := make(map[string]ImgFormatsReport)
+			rootData[psSelectorValue] = makeInitialImgFormatsReport(position, ruleCssPropData)
+			prs.pr.ImgFormats = rootData
+		}
+	}
+}
+
+func (prs *ParserEngine) checkImgFormat(imgUrl string, position int) {
+	imgUrl = strings.ToLower(strings.Trim(imgUrl, WHITESPACE))
+
+	if cssUrlRe.MatchString(imgUrl) {
+		imgUrl = cssUrlRe.FindStringSubmatch(imgUrl)[1] // parse url from "url(img.path)"
+	}
+
+	urlData, err := url.Parse(imgUrl)
+	if err != nil {
+		return
+	}
+
+	format := strings.Replace(filepath.Ext(urlData.Path), ".", "", 1) // remove dot from extension
+	if imgFormatsData, ok := rulesDB.ImgFormats[format]; ok {
+		prs.saveToReportImgFormats(format, position, imgFormatsData)
+	}
+}
+
+func makeInitialCssPseudoSelectorsReport(position int, ruleCssSelectorData interface{}) CssPseudoSelectorsReport {
+	lines := make(map[int]bool)
+	lines[position] = true
+
+	return CssPseudoSelectorsReport{
+		Rules:     ruleCssSelectorData,
+		Lines:     lines,
+		MoreLines: false,
+	}
+}
+
+func (prs *ParserEngine) saveToReportCssPseudoSelectors(psSelectorValue string, position int, ruleCssPropData interface{}) {
+	prs.mx.Lock()
+	defer prs.mx.Unlock()
+
+	if prKeyData, ok := prs.pr.CssPseudoSelectors[psSelectorValue]; ok {
+		if len(prKeyData.Lines) < LIMIT_REPORT_LINES {
+			prKeyData.Lines[position] = true
+		} else {
+			prKeyData.MoreLines = true
+		}
+		prs.pr.CssPseudoSelectors[psSelectorValue] = prKeyData
+	} else {
+		if len(prs.pr.CssPseudoSelectors) > 0 {
+			prs.pr.CssPseudoSelectors[psSelectorValue] = makeInitialCssPseudoSelectorsReport(position, ruleCssPropData)
+		} else {
+			rootData := make(map[string]CssPseudoSelectorsReport)
+			rootData[psSelectorValue] = makeInitialCssPseudoSelectorsReport(position, ruleCssPropData)
+			prs.pr.CssPseudoSelectors = rootData
+		}
+	}
+}
+
+func (prs *ParserEngine) checkCssPseudoSelector(psSelectorValue string, position int) {
+	psSelectorValue = strings.ToLower(strings.Trim(psSelectorValue, WHITESPACE))
+	if cssFunctionsData, ok := rulesDB.CssPseudoSelectors[psSelectorValue]; ok {
+		prs.saveToReportCssPseudoSelectors(psSelectorValue, position, cssFunctionsData)
+	}
+}
+
+func makeInitialCssFunctionsReport(position int, ruleCssSelectorData interface{}) CssFunctionsReport {
+	lines := make(map[int]bool)
+	lines[position] = true
+
+	return CssFunctionsReport{
+		Rules:     ruleCssSelectorData,
+		Lines:     lines,
+		MoreLines: false,
+	}
+}
+
+func (prs *ParserEngine) saveToReportCssFunctions(functionValue string, position int, ruleCssPropData interface{}) {
+	prs.mx.Lock()
+	defer prs.mx.Unlock()
+
+	if prKeyData, ok := prs.pr.CssFunctions[functionValue]; ok {
+		if len(prKeyData.Lines) < LIMIT_REPORT_LINES {
+			prKeyData.Lines[position] = true
+		} else {
+			prKeyData.MoreLines = true
+		}
+		prs.pr.CssFunctions[functionValue] = prKeyData
+	} else {
+		if len(prs.pr.CssFunctions) > 0 {
+			prs.pr.CssFunctions[functionValue] = makeInitialCssFunctionsReport(position, ruleCssPropData)
+		} else {
+			rootData := make(map[string]CssFunctionsReport)
+			rootData[functionValue] = makeInitialCssFunctionsReport(position, ruleCssPropData)
+			prs.pr.CssFunctions = rootData
+		}
+	}
+}
+
+func (prs *ParserEngine) checkCssFunction(functionValue string, position int) {
+	functionValue = strings.ToLower(strings.Trim(strings.ReplaceAll(functionValue, "(", ""), WHITESPACE))
+	if cssFunctionsData, ok := rulesDB.CssFunctions[functionValue]; ok {
+		prs.saveToReportCssFunctions(functionValue, position, cssFunctionsData)
+	}
+}
+
+func makeInitialCssDimentionReport(position int, ruleCssSelectorData interface{}) CssDimentionsReport {
+	lines := make(map[int]bool)
+	lines[position] = true
+
+	return CssDimentionsReport{
+		Rules:     ruleCssSelectorData,
+		Lines:     lines,
+		MoreLines: false,
+	}
+}
+
+func (prs *ParserEngine) saveToReportCssDimention(dimentionValue string, position int, ruleCssPropData interface{}) {
+	prs.mx.Lock()
+	defer prs.mx.Unlock()
+
+	if prKeyData, ok := prs.pr.CssDimentions[dimentionValue]; ok {
+		if len(prKeyData.Lines) < LIMIT_REPORT_LINES {
+			prKeyData.Lines[position] = true
+		} else {
+			prKeyData.MoreLines = true
+		}
+		prs.pr.CssDimentions[dimentionValue] = prKeyData
+	} else {
+		if len(prs.pr.CssDimentions) > 0 {
+			prs.pr.CssDimentions[dimentionValue] = makeInitialCssDimentionReport(position, ruleCssPropData)
+		} else {
+			rootData := make(map[string]CssDimentionsReport)
+			rootData[dimentionValue] = makeInitialCssDimentionReport(position, ruleCssPropData)
+			prs.pr.CssDimentions = rootData
+		}
+	}
+}
+
+func (prs *ParserEngine) checkCssDimention(dimentionValue string, position int) {
+	dimentionValue = strings.ToLower(strings.Trim(numbersRe.ReplaceAllString(dimentionValue, ""), WHITESPACE))
+	if cssDimentionsData, ok := rulesDB.CssDimentions[dimentionValue]; ok {
+		prs.saveToReportCssDimention(dimentionValue, position, cssDimentionsData)
+	}
+}
+
+func makeInitialCssSeelctorTypeReport(position int, ruleCssSelectorData interface{}) CssSelectorTypeReport {
+	lines := make(map[int]bool)
+	lines[position] = true
+
+	return CssSelectorTypeReport{
+		Rules:     ruleCssSelectorData,
+		Lines:     lines,
+		MoreLines: false,
+	}
+}
+
+func (prs *ParserEngine) saveToReportCssSelectorType(selectorType CssSelectorType, position int, ruleCssPropData interface{}) {
+	prs.mx.Lock()
+	defer prs.mx.Unlock()
+
+	if prKeyData, ok := prs.pr.CssSelectorTypes[selectorType.String()]; ok {
+		if len(prKeyData.Lines) < LIMIT_REPORT_LINES {
+			prKeyData.Lines[position] = true
+		} else {
+			prKeyData.MoreLines = true
+		}
+		prs.pr.CssSelectorTypes[selectorType.String()] = prKeyData
+	} else {
+		if len(prs.pr.CssSelectorTypes) > 0 {
+			prs.pr.CssSelectorTypes[selectorType.String()] = makeInitialCssSeelctorTypeReport(position, ruleCssPropData)
+		} else {
+			rootData := make(map[string]CssSelectorTypeReport)
+			rootData[selectorType.String()] = makeInitialCssSeelctorTypeReport(position, ruleCssPropData)
+			prs.pr.CssSelectorTypes = rootData
+		}
+	}
+}
+
+func (prs *ParserEngine) checkCssSelectorType(selectorType CssSelectorType, position int) {
+	if cssSelectorTypeData, ok := rulesDB.CssSelectorTypes[selectorType.String()]; ok {
+		prs.saveToReportCssSelectorType(selectorType, position, cssSelectorTypeData)
+	}
+}
+
 func (prs *ParserEngine) checkCssPropertyStyle(propertyKey, propertyVal string, position int) {
 	propertyKey = strings.ToLower(strings.Trim(propertyKey, WHITESPACE))
 	propertyVal = strings.ToLower(strings.Trim(propertyVal, WHITESPACE))
@@ -121,73 +371,6 @@ func (prs *ParserEngine) checkCssPropertyStyle(propertyKey, propertyVal string, 
 		}
 		if cssValData, ok := cssKeyData[propertyVal]; ok {
 			prs.saveToReportCssProperty(propertyKey, propertyVal, position, cssValData)
-		}
-	}
-}
-
-func (prs *ParserEngine) processCssInStyleTag(inlineStyle string, htmlTagPosition int) {
-	var (
-		bytesToLine []int
-		cursorPos   int = 0
-		cssLine     int = 0
-	)
-
-	lines := bytes.Split([]byte(inlineStyle), []byte("\n"))
-	for _, line := range lines {
-		bytesToLine = append(bytesToLine, cursorPos)
-		cursorPos += len(line) + 1 // "\n" provide additional byte
-	}
-
-	getLineByOffset := func(offset int) int {
-		for {
-			if len(bytesToLine) <= cssLine {
-				return cssLine
-			}
-
-			if bytesToLine[cssLine] > offset {
-				return cssLine
-			}
-
-			cssLine += 1
-		}
-	}
-
-	p := css.NewParser(parse.NewInput(bytes.NewBufferString(inlineStyle)), false)
-	for {
-		gt, _, data := p.Next()
-
-		line := htmlTagPosition + getLineByOffset(p.Offset()) - 1
-		log.Printf("[checkTagInlinedStyle]: %v - %v - %v - %v\n", gt, string(data), p.Values(), line)
-
-		if gt == css.ErrorGrammar {
-			return
-		}
-
-		switch gt {
-		case css.AtRuleGrammar:
-			propVal := ""
-			for _, val := range p.Values() {
-				propVal += string(val.Data)
-			}
-			log.Printf("[CSS At RULE]: %v - %v - %v - %v\n", gt, string(data), propVal, line)
-		case css.BeginAtRuleGrammar:
-			propVal := ""
-			for _, val := range p.Values() {
-				propVal += string(val.Data)
-			}
-			log.Printf("[CSS At RULE]: %v - %v - %v - %v\n", gt, string(data), propVal, line)
-		case css.BeginRulesetGrammar:
-			propVal := ""
-			for _, val := range p.Values() {
-				propVal += string(val.Data)
-			}
-			log.Printf("[CSS SELECTOR]: %v - %v - %v\n", gt, propVal, line)
-		case css.DeclarationGrammar:
-			propVal := ""
-			for _, val := range p.Values() {
-				propVal += string(val.Data)
-			}
-			prs.checkCssPropertyStyle(string(data), propVal, line)
 		}
 	}
 }
@@ -239,6 +422,97 @@ func (prs *ParserEngine) saveToReportCssProperty(propertyKey, propertyVal string
 	}
 }
 
+func (prs *ParserEngine) checkCssParsedToken(p *css.Parser, gt css.GrammarType, data []byte, position int) {
+	switch gt {
+	case css.QualifiedRuleGrammar:
+		prs.checkCssSelectorType(GROUPING_SELECTORS_TYPE, position)
+	case css.AtRuleGrammar:
+		propVal := ""
+		for _, val := range p.Values() {
+			propVal += string(val.Data)
+		}
+		log.Printf("[CSS At RULE]: %v - %v - %v - %v\n", gt, string(data), p.Values(), position)
+	case css.BeginAtRuleGrammar:
+		propVal := ""
+		for _, val := range p.Values() {
+			if val.TokenType == css.DimensionToken || val.TokenType == css.PercentageToken {
+				prs.checkCssDimention(string(val.Data), position)
+			}
+			propVal += string(val.Data)
+		}
+		log.Printf("[CSS At RULE]: %v - %v - %v - %v\n", gt, string(data), p.Values(), position)
+	case css.BeginRulesetGrammar:
+		prevTokenType := css.Token{
+			TokenType: css.ErrorToken,
+			Data:      []byte{},
+		}
+
+		chainingSelectorsCount := 0
+		for _, val := range p.Values() {
+			if val.TokenType == css.LeftBracketToken {
+				prs.checkCssSelectorType(ATTRIBUTE_SELECTOR_TYPE, position)
+			}
+			if val.TokenType == css.WhitespaceToken {
+				if chainingSelectorsCount > 1 {
+					prs.checkCssSelectorType(CHAINING_SELECTORS_TYPE, position)
+				}
+				chainingSelectorsCount = 0
+				prs.checkCssSelectorType(DESCENDANT_COMBINATOR_TYPE, position)
+			}
+			if val.TokenType == css.HashToken {
+				prs.checkCssSelectorType(ID_SELECTOR_TYPE, position)
+			}
+
+			if val.TokenType == css.DelimToken {
+				delimVal := strings.ToLower(strings.Trim(string(val.Data), WHITESPACE))
+				if delimVal == "." {
+					chainingSelectorsCount += 1
+				}
+				if delimVal == "*" {
+					prs.checkCssSelectorType(UNIVERSAL_SELECTOR_STAR_TYPE, position)
+				}
+				if delimVal == "~" {
+					prs.checkCssSelectorType(GENERAL_SIBLING_COMBINATOR_TYPE, position)
+				}
+				if delimVal == "+" {
+					prs.checkCssSelectorType(ADJACENT_SIBLING_COMBINATOR_TYPE, position)
+				}
+				if delimVal == ">" {
+					prs.checkCssSelectorType(CHILD_COMBINATOR_TYPE, position)
+				}
+			}
+
+			if prevTokenType.TokenType == css.ColonToken && val.TokenType == css.IdentToken {
+				prs.checkCssPseudoSelector(string(val.Data), position)
+			}
+			prevTokenType = val
+		}
+
+		if chainingSelectorsCount > 1 {
+			prs.checkCssSelectorType(CHAINING_SELECTORS_TYPE, position)
+		}
+	case css.DeclarationGrammar:
+		propVal := ""
+		for _, val := range p.Values() {
+			if val.TokenType == css.DimensionToken || val.TokenType == css.PercentageToken {
+				prs.checkCssDimention(string(val.Data), position)
+			}
+			initialVal := strings.ToLower(strings.Trim(string(val.Data), WHITESPACE))
+			if val.TokenType == css.IdentToken && initialVal == "initial" { // dimention unit "initial"
+				prs.checkCssDimention(initialVal, position)
+			}
+			if val.TokenType == css.FunctionToken {
+				prs.checkCssFunction(string(val.Data), position)
+			}
+			if val.TokenType == css.URLToken {
+				prs.checkImgFormat(string(val.Data), position)
+			}
+			propVal += string(val.Data)
+		}
+		prs.checkCssPropertyStyle(string(data), propVal, position)
+	}
+}
+
 func (prs *ParserEngine) checkTagInlinedStyle(inlineStyle string, position int) {
 	p := css.NewParser(parse.NewInput(bytes.NewBufferString(inlineStyle)), true)
 	for {
@@ -250,14 +524,49 @@ func (prs *ParserEngine) checkTagInlinedStyle(inlineStyle string, position int) 
 			return
 		}
 
-		switch gt {
-		case css.DeclarationGrammar:
-			propVal := ""
-			for _, val := range p.Values() {
-				propVal += string(val.Data)
+		prs.checkCssParsedToken(p, gt, data, position)
+	}
+}
+
+func (prs *ParserEngine) processCssInStyleTag(inlineStyle string, htmlTagPosition int) {
+	var (
+		bytesToLine []int
+		cursorPos   int = 0
+		cssLine     int = 0
+	)
+
+	lines := bytes.Split([]byte(inlineStyle), []byte("\n"))
+	for _, line := range lines {
+		bytesToLine = append(bytesToLine, cursorPos)
+		cursorPos += len(line) + 1 // "\n" provide additional byte
+	}
+
+	getLineByOffset := func(offset int) int {
+		for {
+			if len(bytesToLine) <= cssLine {
+				return cssLine
 			}
-			prs.checkCssPropertyStyle(string(data), propVal, position)
+
+			if bytesToLine[cssLine] > offset {
+				return cssLine
+			}
+
+			cssLine += 1
 		}
+	}
+
+	p := css.NewParser(parse.NewInput(bytes.NewBufferString(inlineStyle)), false)
+	for {
+		gt, _, data := p.Next()
+
+		log.Printf("[checkTagInlinedStyle]: %v - %v - %v\n", gt, string(data), p.Values())
+
+		if gt == css.ErrorGrammar {
+			return
+		}
+
+		position := htmlTagPosition + getLineByOffset(p.Offset()) - 1
+		prs.checkCssParsedToken(p, gt, data, position)
 	}
 }
 
@@ -335,6 +644,10 @@ func (prs *ParserEngine) checkHtmlTags(tagName string, attrs []html.Attribute, p
 			if attrKey == "style" {
 				prs.checkTagInlinedStyle(attrVal, position)
 			}
+
+			if attrKey == "src" {
+				prs.checkImgFormat(attrVal, position)
+			}
 		}
 	} else {
 		// check inline style for valid elements too
@@ -344,6 +657,10 @@ func (prs *ParserEngine) checkHtmlTags(tagName string, attrs []html.Attribute, p
 
 			if attrKey == "style" {
 				prs.checkTagInlinedStyle(attrVal, position)
+			}
+
+			if attrKey == "src" {
+				prs.checkImgFormat(attrVal, position)
 			}
 		}
 	}

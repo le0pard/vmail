@@ -34,20 +34,64 @@ const testHTML = `<html>
   .button:hover, .btn:hover {
     margin: 0;
     text-transform: lowercase;
+    background-image: url("paper.webp");
   }
 
   a:active {
     color: red;
+    background: lightblue url("img_tree.jpg") no-repeat fixed center;
+  }
+
+  .descendant .combinator {
+    margin: 0;
+    text-transform: lowercase;
+    background: lightblue url(img_tree.jpg) no-repeat fixed center;
+  }
+
+  h1 + p {
+    margin: 0;
+    text-transform: lowercase;
+  }
+
+  * {
+    color: green;
+  }
+
+  a {
+    color: red;
+  }
+
+  a[title] {
+    color: purple;
+  }
+
+  a[href="https://example.org"] {
+    color: green;
+  }
+
+  .foo.bar {
+    color: green;
+  }
+
+  h1 ~ p {
+    margin: 0;
+    text-transform: lowercase;
+  }
+
+   h2 p {
+    margin: 0;
+    text-transform: lowercase;
   }
 
   @media (min-width: 760px) {
     .button-super {
-      margin: 0 100px;
+      margin: 0 100vh;
       text-transform: lowercase;
     }
 
     #someUniqEl {
       display: flex;
+      font-size: Initial;
     }
   }
 
@@ -82,6 +126,7 @@ const testHTML = `<html>
 <button type="reset11">Reset111</button>
 <button type="submit">Submit 2</button>
 <div style="margin: 0; text-transform: lowercase; font-size: 12px">Text</div>
+<img src="img.webp" alt="img" />
 </body>
 </html>
 `

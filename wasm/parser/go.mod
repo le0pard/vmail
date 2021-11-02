@@ -3,9 +3,6 @@ module github.com/le0pard/vmail/wasm/parser
 go 1.17
 
 require (
-	github.com/tdewolff/parse/v2 v2.5.22
-	github.com/tdewolff/test v1.0.6
-	golang.org/x/net v0.0.0-20211020060615-d418f374d309
+	github.com/tdewolff/parse/v2 v2.5.23-0.20211101212351-646f46fcfe51
+	golang.org/x/net v0.0.0-20211101193420-4a448f8816b3
 )
-
-replace github.com/le0pard/vmail/wasm/parser/css => ./css

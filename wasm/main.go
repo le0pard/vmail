@@ -109,6 +109,166 @@ func normalizeReportForPromise(report *parser.ParseReport) map[string]interface{
 		}()
 	}
 
+	if len(report.CssSelectorTypes) > 0 {
+		wg.Add(1)
+
+		go func() {
+			defer wg.Done()
+			cssSelectorsTypeReports := make(map[string]interface{})
+			for k1, v1 := range report.CssSelectorTypes {
+				// hash to slice
+				lines := make([]int, 0, len(v1.Lines))
+				for line, _ := range v1.Lines {
+					lines = append(lines, line)
+				}
+				// sort slice with positions
+				sort.Ints(lines)
+
+				linesObj := make([]interface{}, len(lines))
+				for i, line := range lines {
+					linesObj[i] = line
+				}
+
+				cssSelectorsTypeReports[k1] = map[string]interface{}{
+					"rules":      v1.Rules,
+					"lines":      linesObj,
+					"more_lines": v1.MoreLines,
+				}
+			}
+			mx.Lock()
+			defer mx.Unlock()
+			newReport["css_selector_types"] = cssSelectorsTypeReports
+		}()
+	}
+
+	if len(report.CssDimentions) > 0 {
+		wg.Add(1)
+
+		go func() {
+			defer wg.Done()
+			cssDimentionsReports := make(map[string]interface{})
+			for k1, v1 := range report.CssDimentions {
+				// hash to slice
+				lines := make([]int, 0, len(v1.Lines))
+				for line, _ := range v1.Lines {
+					lines = append(lines, line)
+				}
+				// sort slice with positions
+				sort.Ints(lines)
+
+				linesObj := make([]interface{}, len(lines))
+				for i, line := range lines {
+					linesObj[i] = line
+				}
+
+				cssDimentionsReports[k1] = map[string]interface{}{
+					"rules":      v1.Rules,
+					"lines":      linesObj,
+					"more_lines": v1.MoreLines,
+				}
+			}
+			mx.Lock()
+			defer mx.Unlock()
+			newReport["css_dimentions"] = cssDimentionsReports
+		}()
+	}
+
+	if len(report.CssFunctions) > 0 {
+		wg.Add(1)
+
+		go func() {
+			defer wg.Done()
+			cssFunctionsReports := make(map[string]interface{})
+			for k1, v1 := range report.CssFunctions {
+				// hash to slice
+				lines := make([]int, 0, len(v1.Lines))
+				for line, _ := range v1.Lines {
+					lines = append(lines, line)
+				}
+				// sort slice with positions
+				sort.Ints(lines)
+
+				linesObj := make([]interface{}, len(lines))
+				for i, line := range lines {
+					linesObj[i] = line
+				}
+
+				cssFunctionsReports[k1] = map[string]interface{}{
+					"rules":      v1.Rules,
+					"lines":      linesObj,
+					"more_lines": v1.MoreLines,
+				}
+			}
+			mx.Lock()
+			defer mx.Unlock()
+			newReport["css_functions"] = cssFunctionsReports
+		}()
+	}
+
+	if len(report.CssPseudoSelectors) > 0 {
+		wg.Add(1)
+
+		go func() {
+			defer wg.Done()
+			cssPseudoSelectorsReports := make(map[string]interface{})
+			for k1, v1 := range report.CssPseudoSelectors {
+				// hash to slice
+				lines := make([]int, 0, len(v1.Lines))
+				for line, _ := range v1.Lines {
+					lines = append(lines, line)
+				}
+				// sort slice with positions
+				sort.Ints(lines)
+
+				linesObj := make([]interface{}, len(lines))
+				for i, line := range lines {
+					linesObj[i] = line
+				}
+
+				cssPseudoSelectorsReports[k1] = map[string]interface{}{
+					"rules":      v1.Rules,
+					"lines":      linesObj,
+					"more_lines": v1.MoreLines,
+				}
+			}
+			mx.Lock()
+			defer mx.Unlock()
+			newReport["css_pseudo_selectors"] = cssPseudoSelectorsReports
+		}()
+	}
+
+	if len(report.ImgFormats) > 0 {
+		wg.Add(1)
+
+		go func() {
+			defer wg.Done()
+			imgFormatsReports := make(map[string]interface{})
+			for k1, v1 := range report.ImgFormats {
+				// hash to slice
+				lines := make([]int, 0, len(v1.Lines))
+				for line, _ := range v1.Lines {
+					lines = append(lines, line)
+				}
+				// sort slice with positions
+				sort.Ints(lines)
+
+				linesObj := make([]interface{}, len(lines))
+				for i, line := range lines {
+					linesObj[i] = line
+				}
+
+				imgFormatsReports[k1] = map[string]interface{}{
+					"rules":      v1.Rules,
+					"lines":      linesObj,
+					"more_lines": v1.MoreLines,
+				}
+			}
+			mx.Lock()
+			defer mx.Unlock()
+			newReport["img_formats"] = imgFormatsReports
+		}()
+	}
+
 	wg.Wait()
 
 	return newReport
