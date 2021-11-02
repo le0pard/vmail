@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
 	"net/url"
 	"path/filepath"
 	"regexp"
@@ -59,13 +58,14 @@ func (d CssSelectorType) String() string {
 // json config structs begin
 
 type CaniuseDB struct {
-	HtmlTags           map[string]map[string]interface{} `json:"html_tags"`
-	CssProperties      map[string]map[string]interface{} `json:"css_properties"`
-	CssSelectorTypes   map[string]interface{}            `json:"css_selector_types"`
-	CssDimentions      map[string]interface{}            `json:"css_dimentions"`
-	CssFunctions       map[string]interface{}            `json:"css_functions"`
-	CssPseudoSelectors map[string]interface{}            `json:"css_pseudo_selectors"`
-	ImgFormats         map[string]interface{}            `json:"img_formats"`
+	HtmlTags            map[string]map[string]interface{} `json:"html_tags"`
+	CssProperties       map[string]map[string]interface{} `json:"css_properties"`
+	AtRuleCssStatements map[string]map[string]interface{} `json:"at_rule_css_statements"`
+	CssSelectorTypes    map[string]interface{}            `json:"css_selector_types"`
+	CssDimentions       map[string]interface{}            `json:"css_dimentions"`
+	CssFunctions        map[string]interface{}            `json:"css_functions"`
+	CssPseudoSelectors  map[string]interface{}            `json:"css_pseudo_selectors"`
+	ImgFormats          map[string]interface{}            `json:"img_formats"`
 }
 
 var rulesDB CaniuseDB
@@ -81,6 +81,12 @@ type HTMLTagReport struct {
 }
 
 type CssPropertyReport struct {
+	Rules     interface{}  `json:"rules"`
+	Lines     map[int]bool `json:"lines"`
+	MoreLines bool         `json:"more_lines"`
+}
+
+type AtRuleCssStatementsReport struct {
 	Rules     interface{}  `json:"rules"`
 	Lines     map[int]bool `json:"lines"`
 	MoreLines bool         `json:"more_lines"`
@@ -117,13 +123,14 @@ type ImgFormatsReport struct {
 }
 
 type ParseReport struct {
-	HtmlTags           map[string]map[string]HTMLTagReport     `json:"html_tags"`
-	CssProperties      map[string]map[string]CssPropertyReport `json:"css_properties"`
-	CssSelectorTypes   map[string]CssSelectorTypeReport        `json:"css_selector_types"`
-	CssDimentions      map[string]CssDimentionsReport          `json:"css_dimentions"`
-	CssFunctions       map[string]CssFunctionsReport           `json:"css_functions"`
-	CssPseudoSelectors map[string]CssPseudoSelectorsReport     `json:"css_pseudo_selectors"`
-	ImgFormats         map[string]ImgFormatsReport             `json:"img_formats"`
+	HtmlTags            map[string]map[string]HTMLTagReport             `json:"html_tags"`
+	CssProperties       map[string]map[string]CssPropertyReport         `json:"css_properties"`
+	AtRuleCssStatements map[string]map[string]AtRuleCssStatementsReport `json:"at_rule_css_statements"`
+	CssSelectorTypes    map[string]CssSelectorTypeReport                `json:"css_selector_types"`
+	CssDimentions       map[string]CssDimentionsReport                  `json:"css_dimentions"`
+	CssFunctions        map[string]CssFunctionsReport                   `json:"css_functions"`
+	CssPseudoSelectors  map[string]CssPseudoSelectorsReport             `json:"css_pseudo_selectors"`
+	ImgFormats          map[string]ImgFormatsReport                     `json:"img_formats"`
 }
 
 // result structure end
@@ -149,6 +156,64 @@ func InitParser() (*ParserEngine, error) {
 		isStyleTagOpen:  false,
 		styleTagContent: "",
 	}, nil
+}
+
+func makeInitialAtRuleCssStatements(position int, ruleCssPropData interface{}) AtRuleCssStatementsReport {
+	lines := make(map[int]bool)
+	lines[position] = true
+
+	return AtRuleCssStatementsReport{
+		Rules:     ruleCssPropData,
+		Lines:     lines,
+		MoreLines: false,
+	}
+}
+
+func (prs *ParserEngine) saveToReportAtRuleCssStatements(propertyKey, propertyVal string, position int, ruleCssPropData interface{}) {
+	prs.mx.Lock()
+	defer prs.mx.Unlock()
+
+	if prKeyData, ok := prs.pr.AtRuleCssStatements[propertyKey]; ok {
+		if prValData, ok := prKeyData[propertyVal]; ok {
+			if len(prValData.Lines) < LIMIT_REPORT_LINES {
+				prValData.Lines[position] = true
+			} else {
+				prValData.MoreLines = true
+			}
+			prKeyData[propertyVal] = prValData
+			prs.pr.AtRuleCssStatements[propertyKey] = prKeyData
+		} else {
+			if len(prs.pr.AtRuleCssStatements[propertyKey]) > 0 {
+				prs.pr.AtRuleCssStatements[propertyKey][propertyVal] = makeInitialAtRuleCssStatements(position, ruleCssPropData)
+			} else {
+				rootData := make(map[string]AtRuleCssStatementsReport)
+				rootData[propertyVal] = makeInitialAtRuleCssStatements(position, ruleCssPropData)
+				prs.pr.AtRuleCssStatements[propertyKey] = rootData
+			}
+		}
+	} else {
+		rData := make(map[string]AtRuleCssStatementsReport)
+		rData[propertyVal] = makeInitialAtRuleCssStatements(position, ruleCssPropData)
+
+		if len(prs.pr.AtRuleCssStatements) > 0 {
+			prs.pr.AtRuleCssStatements[propertyKey] = rData
+		} else {
+			rootData := make(map[string]map[string]AtRuleCssStatementsReport)
+			rootData[propertyKey] = rData
+			prs.pr.AtRuleCssStatements = rootData
+		}
+	}
+}
+
+func (prs *ParserEngine) checkAtRuleCssStatements(propertyKey, propertyVal string, position int) {
+	propertyKey = strings.ToLower(strings.Trim(propertyKey, WHITESPACE))
+	propertyVal = strings.ToLower(strings.Trim(propertyVal, WHITESPACE))
+
+	if cssKeyData, ok := rulesDB.AtRuleCssStatements[propertyKey]; ok {
+		if cssValData, ok := cssKeyData[propertyVal]; ok {
+			prs.saveToReportAtRuleCssStatements(propertyKey, propertyVal, position, cssValData)
+		}
+	}
 }
 
 func makeInitialImgFormatsReport(position int, ruleCssSelectorData interface{}) ImgFormatsReport {
@@ -427,20 +492,19 @@ func (prs *ParserEngine) checkCssParsedToken(p *css.Parser, gt css.GrammarType, 
 	case css.QualifiedRuleGrammar:
 		prs.checkCssSelectorType(GROUPING_SELECTORS_TYPE, position)
 	case css.AtRuleGrammar:
-		propVal := ""
+		prs.checkAtRuleCssStatements(string(data), "", position)
 		for _, val := range p.Values() {
-			propVal += string(val.Data)
+			prs.checkAtRuleCssStatements(string(data), string(val.Data), position)
 		}
-		log.Printf("[CSS At RULE]: %v - %v - %v - %v\n", gt, string(data), p.Values(), position)
 	case css.BeginAtRuleGrammar:
-		propVal := ""
+		prs.checkAtRuleCssStatements(string(data), "", position)
 		for _, val := range p.Values() {
+			prs.checkAtRuleCssStatements(string(data), string(val.Data), position)
+
 			if val.TokenType == css.DimensionToken || val.TokenType == css.PercentageToken {
 				prs.checkCssDimention(string(val.Data), position)
 			}
-			propVal += string(val.Data)
 		}
-		log.Printf("[CSS At RULE]: %v - %v - %v - %v\n", gt, string(data), p.Values(), position)
 	case css.BeginRulesetGrammar:
 		prevTokenType := css.Token{
 			TokenType: css.ErrorToken,
@@ -559,7 +623,7 @@ func (prs *ParserEngine) processCssInStyleTag(inlineStyle string, htmlTagPositio
 	for {
 		gt, _, data := p.Next()
 
-		log.Printf("[checkTagInlinedStyle]: %v - %v - %v\n", gt, string(data), p.Values())
+		// log.Printf("[checkTagInlinedStyle]: %v - %v - %v\n", gt, string(data), p.Values())
 
 		if gt == css.ErrorGrammar {
 			return

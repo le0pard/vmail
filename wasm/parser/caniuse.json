@@ -987,7 +987,210 @@
       }
     }
   },
-  "at_rule_css_statements": {},
+  "at_rule_css_statements": {
+    "@font-face": {
+      "": {
+        "notes": {
+          "1": "Partial. Only supported through a `<link>` tag.",
+          "2": "Partial. Only supported directly through a `<style>` tag.",
+          "3": "Buggy. Support depends on the version of IE installed.",
+          "4": "Partial. The declaration is supported but distant fonts are ignored.",
+          "5": "Buggy. Elements using a font declared with `@font-face` ignore the font stack and fall back to Times New Roman. Use `mso-generic-font-family` and `mso-font-alt` to control the fallback.",
+          "6": "Not supported. Roboto and Google Sans can be used, but only because they're embedded with the webmail's own styles.",
+          "7": "Not supported. The `@font-face` declaration is kept but the `src` property is removed."
+        },
+        "stats": {
+          "gmail": {
+            "desktop-webmail": {
+              "2019-07": ["n", "6"]
+            },
+            "ios": {
+              "2019-07": ["n"]
+            },
+            "android": {
+              "2019-07": ["n"]
+            },
+            "mobile-webmail": {
+              "2020-02": ["n"]
+            }
+          },
+          "orange": {
+            "desktop-webmail": {
+              "2019-05": ["a", "2"],
+              "2021-03": ["n", "7"]
+            },
+            "android": {
+              "2019-07": ["a", "1"]
+            }
+          },
+          "outlook": {
+            "windows": {
+              "2003": ["a", "3"],
+              "2007": ["a", "4", "5"],
+              "2010": ["a", "4", "5"],
+              "2013": ["a", "4", "5"],
+              "2016": ["a", "4", "5"],
+              "2019": ["a", "4"]
+            },
+            "windows-mail": {
+              "2020-01": ["n"]
+            },
+            "outlook-com": {
+              "2019-07": ["n"]
+            },
+            "ios": {
+              "3.29.0": ["n"]
+            },
+            "android": {
+              "2019-07": ["n"]
+            }
+          },
+          "sfr": {
+            "desktop-webmail": {
+              "2019-07": ["a", "2"]
+            },
+            "ios": {
+              "2019-07": ["n"]
+            },
+            "android": {
+              "2019-07": ["n"]
+            }
+          },
+          "aol": {
+            "desktop-webmail": {
+              "2020-01": ["n"]
+            },
+            "ios": {
+              "2020-01": ["n"]
+            },
+            "android": {
+              "2020-01": ["n"]
+            }
+          },
+          "yahoo": {
+            "desktop-webmail": {
+              "2019-07": ["n"]
+            },
+            "ios": {
+              "2019-07": ["n"]
+            },
+            "android": {
+              "2019-07": ["n"]
+            }
+          },
+          "protonmail": {
+            "desktop-webmail": {
+              "2020-03": ["n"]
+            },
+            "ios": {
+              "2020-03": ["n"]
+            }
+          },
+          "mail-ru": {
+            "desktop-webmail": {
+              "2020-10": ["n"]
+            }
+          },
+          "fastmail": {
+            "desktop-webmail": {
+              "2021-07": ["n"]
+            }
+          },
+          "laposte": {
+            "desktop-webmail": {
+              "2021-08": ["a", "2"]
+            }
+          }
+        }
+      }
+    },
+    "@media": {
+      "orientation": {
+        "notes": {
+          "1": "Buggy. The first rule inside a media query is not prefixed."
+        },
+        "stats": {
+          "gmail": {
+            "mobile-webmail": {
+              "2020-02": ["n"]
+            }
+          },
+          "orange": {
+            "desktop-webmail": {
+              "2019-08": ["y", "1"]
+            },
+            "ios": {
+              "2019-08": ["n"]
+            }
+          },
+          "outlook": {
+            "windows": {
+              "2003": ["n"],
+              "2007": ["n"],
+              "2010": ["n"],
+              "2013": ["n"],
+              "2016": ["n"],
+              "2019": ["n"]
+            },
+            "windows-mail": {
+              "2020-01": ["n"]
+            }
+          },
+          "samsung-email": {
+            "android": {
+              "5.0.10.2": ["n"]
+            }
+          },
+          "sfr": {
+            "ios": {
+              "2019-08": ["n"]
+            },
+            "android": {
+              "2019-08": ["n"]
+            }
+          },
+          "thunderbird": {
+            "macos": {
+              "78.5": ["n"]
+            }
+          },
+          "yahoo": {
+            "desktop-webmail": {
+              "2019-08": ["n"]
+            },
+            "ios": {
+              "2019-08": ["n"]
+            },
+            "android": {
+              "2019-08": ["n"]
+            }
+          },
+          "aol": {
+            "desktop-webmail": {
+              "2019-02": ["n"]
+            },
+            "ios": {
+              "2019-02": ["n"]
+            },
+            "android": {
+              "2019-02": ["n"]
+            }
+          },
+          "protonmail": {
+            "desktop-webmail": {
+              "2020-03": ["n"]
+            },
+            "ios": {
+              "2020-03": ["n"]
+            },
+            "android": {
+              "2020-03": ["n"]
+            }
+          }
+        }
+      }
+    }
+  },
   "img_formats": {
     "webp": {
       "notes": {

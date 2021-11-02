@@ -118,6 +118,24 @@ const testHTML = `<html>
       transform: translateX(100%);
     }
   }
+
+  @media (orientation: landscape) {
+    body {
+      flex-direction: row;
+    }
+  }
+
+  @media (orientation: portrait) {
+    body {
+      flex-direction: column;
+    }
+  }
+
+  @font-face {
+    font-family: "Open Sans";
+    src: url("/fonts/OpenSans-Regular-webfont.woff2") format("woff2"),
+        url("/fonts/OpenSans-Regular-webfont.woff") format("woff");
+  }
 </style>
 <audio /><audio />
 <audio />
