@@ -340,9 +340,9 @@ class CaniuseGenerator
       v.each do |item|
         agg[item[0]] ||= {}
         agg[item[0]][item[1]] = {
-          notes: rule['notes_by_num'],
-          stats: normalize_support(rule['stats']),
-          url: rule['url']
+          notes: rule['notes_by_num'] || [],
+          stats: normalize_support(rule['stats']) ,
+          url: rule['url'] || ''
         }
       end
     end
