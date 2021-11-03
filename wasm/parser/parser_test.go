@@ -8,7 +8,6 @@ import (
 	"testing"
 )
 
-// ReportFromHTMLSimple calls ReportFromHTML with a simple html
 func TestReportFromHTMLSimple(t *testing.T) {
 	html := `<html><body>
 	<div style="background: red"></div>
