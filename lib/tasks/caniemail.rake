@@ -19,7 +19,7 @@ class CaniuseGenerator
     'html-div' => [['div', '']],
     'html-form' => [['form', '']],
     'html-h1-h6' => [['h1', ''], ['h2', ''], ['h3', ''], ['h4', ''], ['h5', ''], ['h6', '']],
-    'html-image-maps' => [['img', 'usemap']],
+    'html-image-maps' => [%w[img usemap]],
     'html-input-checkbox' => [['input', 'type||checkbox']],
     'html-input-hidden' => [['input', 'type||hidden']],
     'html-input-radio' => [['input', 'type||radio']],
@@ -102,9 +102,9 @@ class CaniuseGenerator
     'css-clip-path' => [['clip-path', '']],
     'css-column-count' => [['column-count', '']],
     'css-direction' => [['direction', '']],
-    'css-display-flex' => [['display', 'flex']],
-    'css-display-grid' => [['display', 'grid']],
-    'css-display-none' => [['display', 'none']],
+    'css-display-flex' => [%w[display flex]],
+    'css-display-grid' => [%w[display grid]],
+    'css-display-none' => [%w[display none]],
     'css-filter' => [['filter', '']],
     'css-flex-direction' => [['flex-direction', '']],
     'css-flex-wrap' => [['flex-wrap', '']],
@@ -121,14 +121,16 @@ class CaniuseGenerator
     'css-list-style-position' => [['list-style-position', '']],
     'css-list-style-type' => [['list-style-type', '']],
     'css-list-style' => [['list-style', '']],
-    'css-margin' => [['margin', ''], ['margin-top', ''], ['margin-bottom', ''], ['margin-left', ''], ['margin-right', '']],
+    'css-margin' => [['margin', ''], ['margin-top', ''], ['margin-bottom', ''], ['margin-left', ''],
+                     ['margin-right', '']],
     'css-max-width' => [['max-width', '']],
     'css-mix-blend-mode' => [['mix-blend-mode', '']],
     'css-object-fit' => [['object-fit', '']],
     'css-object-position' => [['object-position', '']],
     'css-opacity' => [['opacity', '']],
     'css-overflow' => [['overflow', '']],
-    'css-padding' => [['padding', ''], ['padding-top', ''], ['padding-bottom', ''], ['padding-left', ''], ['padding-right', '']],
+    'css-padding' => [['padding', ''], ['padding-top', ''], ['padding-bottom', ''], ['padding-left', ''],
+                      ['padding-right', '']],
     'css-position' => [['position', '']],
     'css-text-align' => [['text-align', '']],
     'css-text-decoration-color' => [['text-decoration-color', '']],
@@ -305,7 +307,7 @@ class CaniuseGenerator
   end
 
   def generate_css_variables
-    rule = data.detect{ |r| r['slug'] == 'css-variables' }
+    rule = data.detect { |r| r['slug'] == 'css-variables' }
     if rule.present?
       {
         notes: rule['notes_by_num'],
@@ -318,45 +320,44 @@ class CaniuseGenerator
   end
 
   def generate_one_level_maps(maps)
-    maps.reduce({}) do |agg, (k, v)|
-      rule = data.detect{ |r| r['slug'] == k }
-      if rule.present?
-        agg[v] = {
+    maps.each_with_object({}) do |(k, v), agg|
+      rule = data.detect { |r| r['slug'] == k }
+      next unless rule.present?
+
+      agg[v] = {
+        notes: rule['notes_by_num'],
+        stats: normalize_support(rule['stats']),
+        url: rule['url']
+      }
+    end
+  end
+
+  def generate_multi_level_maps(maps)
+    maps.each_with_object({}) do |(k, v), agg|
+      rule = data.detect { |r| r['slug'] == k }
+      next unless rule.present?
+
+      v.each do |item|
+        agg[item[0]] ||= {}
+        agg[item[0]][item[1]] = {
           notes: rule['notes_by_num'],
           stats: normalize_support(rule['stats']),
           url: rule['url']
         }
       end
-      agg
-    end
-  end
-
-  def generate_multi_level_maps(maps)
-    maps.reduce({}) do |agg, (k, v)|
-      rule = data.detect{ |r| r['slug'] == k }
-      if rule.present?
-        v.each do |item|
-          agg[item[0]] ||= {}
-          agg[item[0]][item[1]] = {
-            notes: rule['notes_by_num'],
-            stats: normalize_support(rule['stats']),
-            url: rule['url']
-          }
-        end
-      end
-      agg
     end
   end
 
   def normalize_support(hash)
     hash.reduce({}) do |agg, (k, v)|
-      if v.is_a?(Hash)
+      case v
+      when Hash
         agg.merge(
           k => normalize_support(v)
         )
-      elsif v.is_a?(String)
+      when String
         agg.merge(
-          k => v.split(' ').map{ |rd| rd.gsub('#', '') }
+          k => v.split.map { |rd| rd.delete('#') }
         )
       end
     end

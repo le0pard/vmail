@@ -24,10 +24,10 @@ gem 'rake'
 
 # Dev
 group :development do
+  gem 'faraday'
+  gem 'faraday_middleware'
   gem 'lefthook', require: false
   gem 'rubocop', '>= 1.7.0', require: false
   gem 'rubocop-performance', '>= 1.9.1', require: false
   gem 'rubocop-rake', '>= 0.5.1', require: false
-  gem 'faraday'
-  gem 'faraday_middleware'
 end
