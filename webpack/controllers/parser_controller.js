@@ -107,6 +107,7 @@ const testHTML = `<html>
   @page :first {
     margin: 2cm;
     padding: 50%;
+    margin-top:var(--bs-gutter-y);
   }
 
   @keyframes slidein {
@@ -138,6 +139,10 @@ const testHTML = `<html>
     src: url("/fonts/OpenSans-Regular-webfont.woff2") format("woff2"),
         url("/fonts/OpenSans-Regular-webfont.woff") format("woff");
   }
+
+  a::after {
+    content: "→";
+  }
 </style>
 <audio /><audio />
 <audio />
@@ -147,6 +152,18 @@ const testHTML = `<html>
 <button type="submit">Submit 2</button>
 <div style="margin: 0; text-transform: lowercase; font-size: 12px">Text</div>
 <img src="img.webp" alt="img" />
+<div role="application" aria-labelledby="calendar" aria-describedby="info">
+    <h1 id="calendar">Calendar</h1>
+    <p id="info">
+        This calendar shows the game schedule for the Boston Red Sox.
+    </p>
+    <div role="grid">
+        ...
+    </div>
+</div>
+<img src="data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUA
+    AAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO
+        9TXL0Y4OHwAAAABJRU5ErkJggg==" alt="Red dot" />
 </body>
 </html>
 `

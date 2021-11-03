@@ -29,4 +29,5 @@ group :development do
   gem 'rubocop-performance', '>= 1.9.1', require: false
   gem 'rubocop-rake', '>= 0.5.1', require: false
   gem 'faraday'
+  gem 'faraday_middleware'
 end

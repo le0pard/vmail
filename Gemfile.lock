@@ -101,6 +101,8 @@ GEM
     faraday-net_http_persistent (1.2.0)
     faraday-patron (1.0.0)
     faraday-rack (1.0.0)
+    faraday_middleware (1.2.0)
+      faraday (~> 1.0)
     fastimage (2.2.5)
     ffi (1.15.4)
     generator (0.0.1)
@@ -209,6 +211,7 @@ DEPENDENCIES
   builder (>= 3.2.2)
   erubis (>= 2.7)
   faraday
+  faraday_middleware
   kramdown (>= 2.3.0)
   lefthook
   middleman!
