@@ -1,10 +1,6 @@
 <%# encoding: utf-8 %>
----
-pageable: true
-per_page: 10
----
 <% content_for :title, "" %>
 
-<h2>Hello</h2>
-
-<div data-controller="parser"></div>
+<div data-controller="parser">
+  <div data-parser-target="appContainer"></div>
+</div>

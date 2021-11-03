@@ -1,5 +1,6 @@
 import {Controller} from '@hotwired/stimulus'
 import {memoize} from 'utils/memoize'
+import App from 'components/App'
 
 const loadWasmParser = memoize(async () => {
   const go = new window.Go()
@@ -169,6 +170,8 @@ const testHTML = `<html>
 `
 
 export default class extends Controller {
+  static targets = ['appContainer']
+
   initialize() {
     // this.navigationMedia = window.matchMedia('(max-width: 768px)')
     // this.onNavigationMediaChange = this.onNavigationMediaChange.bind(this)
@@ -185,6 +188,12 @@ export default class extends Controller {
       endTime = performance.now()
       console.log(`Call to VMail took ${endTime - startTime} milliseconds`)
       console.log(message)
+      new App({
+        target: this.appContainerTarget,
+        props: {
+          option: '1212'
+        }
+      })
     })
     // document.addEventListener('turbo:before-cache', this.cleanupNavigationForTurboCache)
     // this.navigationMedia.addEventListener('change', this.onNavigationMediaChange)

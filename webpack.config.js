@@ -2,6 +2,7 @@
 
 const path = require('path')
 const webpack = require('webpack')
+const preprocess = require('svelte-preprocess')
 const TerserPlugin = require('terser-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
@@ -100,12 +101,16 @@ let config = {
   },
 
   resolve: {
+    alias: {
+      svelte: path.dirname(require.resolve('svelte/package.json'))
+    },
     modules: [
       path.join(__dirname, 'webpack'),
       path.join(__dirname, 'source/images'),
       path.join(__dirname, 'node_modules')
     ],
-    extensions: ['.js', '.json']
+    extensions: ['.mjs', '.js', '.json', '.svelte'],
+    mainFields: ['svelte', 'browser', 'module', 'main']
   },
 
   module: {
@@ -130,6 +135,28 @@ let config = {
         test: /\.(scss|sass)$/,
         sideEffects: true,
         use: cssLoaders
+      },
+      {
+        test: /\.svelte$/,
+        use: {
+          loader: 'svelte-loader',
+          options: {
+            compilerOptions: {
+              dev: !isProduction
+            },
+            emitCss: isProduction,
+            hotReload: !isProduction,
+            preprocess: preprocess({
+              postcss: true
+            })
+          }
+        }
+      },
+      {
+        test: /node_modules\/svelte\/.*\.mjs$/,
+        resolve: {
+          fullySpecified: false
+        }
       }
     ]
   },
