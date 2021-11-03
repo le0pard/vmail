@@ -421,6 +421,7 @@ func (prs *ParserEngine) saveToReportCssSelectorType(selectorType CssSelectorTyp
 }
 
 func (prs *ParserEngine) checkCssSelectorType(selectorType CssSelectorType, position int) {
+	// log.Printf("[checkCssSelectorType]: %v - %v\n", selectorType, position)
 	if cssSelectorTypeData, ok := rulesDB.CssSelectorTypes[selectorType.String()]; ok {
 		prs.saveToReportCssSelectorType(selectorType, position, cssSelectorTypeData)
 	}
@@ -514,6 +515,7 @@ func (prs *ParserEngine) checkCssParsedToken(p *css.Parser, gt css.GrammarType, 
 		}
 
 		chainingSelectorsCount := 0
+		typeSelector := false
 		for _, val := range p.Values() {
 			if val.TokenType == css.LeftBracketToken {
 				prs.checkCssSelectorType(ATTRIBUTE_SELECTOR_TYPE, position)
@@ -522,7 +524,11 @@ func (prs *ParserEngine) checkCssParsedToken(p *css.Parser, gt css.GrammarType, 
 				if chainingSelectorsCount > 1 {
 					prs.checkCssSelectorType(CHAINING_SELECTORS_TYPE, position)
 				}
+				if typeSelector {
+					prs.checkCssSelectorType(TYPE_SELECTOR_TYPE, position)
+				}
 				chainingSelectorsCount = 0
+				typeSelector = false
 				prs.checkCssSelectorType(DESCENDANT_COMBINATOR_TYPE, position)
 			}
 			if val.TokenType == css.HashToken {
@@ -530,6 +536,7 @@ func (prs *ParserEngine) checkCssParsedToken(p *css.Parser, gt css.GrammarType, 
 			}
 
 			if val.TokenType == css.DelimToken {
+				typeSelector = false
 				delimVal := strings.ToLower(strings.Trim(string(val.Data), WHITESPACE))
 				if delimVal == "." {
 					chainingSelectorsCount += 1
@@ -551,11 +558,20 @@ func (prs *ParserEngine) checkCssParsedToken(p *css.Parser, gt css.GrammarType, 
 			if prevTokenType.TokenType == css.ColonToken && val.TokenType == css.IdentToken {
 				prs.checkCssPseudoSelector(string(val.Data), position)
 			}
+			if prevTokenType.TokenType != css.ColonToken && prevTokenType.TokenType != css.DelimToken && val.TokenType == css.IdentToken {
+				typeSelectorVal := strings.ToLower(strings.Trim(string(val.Data), WHITESPACE))
+				if typeSelectorVal != "from" && typeSelectorVal != "to" { // ignore @keyframe values as tags
+					typeSelector = true
+				}
+			}
 			prevTokenType = val
 		}
 
 		if chainingSelectorsCount > 1 {
 			prs.checkCssSelectorType(CHAINING_SELECTORS_TYPE, position)
+		}
+		if typeSelector {
+			prs.checkCssSelectorType(TYPE_SELECTOR_TYPE, position)
 		}
 	case css.DeclarationGrammar:
 		propVal := ""

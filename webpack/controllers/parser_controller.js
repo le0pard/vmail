@@ -114,6 +114,8 @@ const testHTML = `<html>
       transform: translateX(0%);
     }
 
+    50%  { margin-top: 150px !important; }
+
     to {
       transform: translateX(100%);
     }
