@@ -489,8 +489,6 @@ func (prs *ParserEngine) saveToReportCssProperty(propertyKey, propertyVal string
 
 func (prs *ParserEngine) checkCssParsedToken(p *css.Parser, gt css.GrammarType, data []byte, position int) {
 	switch gt {
-	case css.QualifiedRuleGrammar:
-		prs.checkCssSelectorType(GROUPING_SELECTORS_TYPE, position)
 	case css.AtRuleGrammar:
 		prs.checkAtRuleCssStatements(string(data), "", position)
 		for _, val := range p.Values() {
@@ -505,7 +503,11 @@ func (prs *ParserEngine) checkCssParsedToken(p *css.Parser, gt css.GrammarType, 
 				prs.checkCssDimention(string(val.Data), position)
 			}
 		}
-	case css.BeginRulesetGrammar:
+	case css.QualifiedRuleGrammar, css.BeginRulesetGrammar:
+		if gt == css.QualifiedRuleGrammar {
+			prs.checkCssSelectorType(GROUPING_SELECTORS_TYPE, position)
+		}
+
 		prevTokenType := css.Token{
 			TokenType: css.ErrorToken,
 			Data:      []byte{},
