@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><![endif]-->
-    <title><% if content_for?(:title) %><%= yield_content(:title).blank? ? default_title_helper : "#{yield_content(:title)} | #{default_title_helper}" %><% else %><%= current_page.data.title ? "#{current_page.data.title} | #{default_title_helper}" : default_title_helper %><% end %></title>
+    <title><%= current_page.data.title ? "#{current_page.data.title} | #{default_title_helper}" : default_title_helper %></title>
     <meta name="keywords" content="<%= default_keywords_helper %>">
     <meta name="description" content="<%= default_description_helper %>">
     <meta name="theme-color" content="#e2dbcb" />

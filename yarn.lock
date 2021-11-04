@@ -1825,6 +1825,83 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@codemirror/commands@npm:^0.19.5":
+  version: 0.19.5
+  resolution: "@codemirror/commands@npm:0.19.5"
+  dependencies:
+    "@codemirror/language": ^0.19.0
+    "@codemirror/matchbrackets": ^0.19.0
+    "@codemirror/state": ^0.19.2
+    "@codemirror/text": ^0.19.0
+    "@codemirror/view": ^0.19.0
+    "@lezer/common": ^0.15.0
+  checksum: 6f826cd20620e2540ae0385e3a8bcf19aac4e2b56b9f5a527581c92926bc311f91c6cbfb33ac17006f149d56aa60bf300e45b730f446ff47c1f7b297dc7f8137
+  languageName: node
+  linkType: hard
+
+"@codemirror/language@npm:^0.19.0":
+  version: 0.19.3
+  resolution: "@codemirror/language@npm:0.19.3"
+  dependencies:
+    "@codemirror/state": ^0.19.0
+    "@codemirror/text": ^0.19.0
+    "@codemirror/view": ^0.19.0
+    "@lezer/common": ^0.15.5
+    "@lezer/lr": ^0.15.0
+  checksum: 53d755568bf3bbcf8b19755230c1a30f7c18175ba1a261838c9581529cbd064c0bab18e4a3bed1fbcebff306ec66bdc968a5d4b4a1540620b711ab59caed6a94
+  languageName: node
+  linkType: hard
+
+"@codemirror/matchbrackets@npm:^0.19.0":
+  version: 0.19.3
+  resolution: "@codemirror/matchbrackets@npm:0.19.3"
+  dependencies:
+    "@codemirror/language": ^0.19.0
+    "@codemirror/state": ^0.19.0
+    "@codemirror/view": ^0.19.0
+    "@lezer/common": ^0.15.0
+  checksum: 101bc22c8d9c62941318e56f8ea010732cf8a282b642deabd61ef11bab925be1b12ef10dbd848cc345278f42d3b473fa15a82ff300c96121ae6014a967654e04
+  languageName: node
+  linkType: hard
+
+"@codemirror/rangeset@npm:^0.19.0":
+  version: 0.19.1
+  resolution: "@codemirror/rangeset@npm:0.19.1"
+  dependencies:
+    "@codemirror/state": ^0.19.0
+  checksum: 6337b1d3b20e6a13bf67eea9d6c39f36a280598949ac138b465d32fe6d56c12d029105ce1fe530540379fc7c0437b548c0caaa18be01b34731228ec6cba228fa
+  languageName: node
+  linkType: hard
+
+"@codemirror/state@npm:^0.19.0, @codemirror/state@npm:^0.19.2, @codemirror/state@npm:^0.19.3":
+  version: 0.19.3
+  resolution: "@codemirror/state@npm:0.19.3"
+  dependencies:
+    "@codemirror/text": ^0.19.0
+  checksum: 96bdd78f746b66ff00d802f2df1e1981dea20df70ee3572285d54b16bf406add0e29efaf59d8be4823fd1ca4533f7ada2ee90a9cf5991f5f0bf307c4b830999c
+  languageName: node
+  linkType: hard
+
+"@codemirror/text@npm:^0.19.0":
+  version: 0.19.5
+  resolution: "@codemirror/text@npm:0.19.5"
+  checksum: e8ff270e705fe7f9adb3c479845569f6bfb3d8033b70cb1da530f37d9088160713b7cda2b60106fa03df5dd82cd8bcde45662450dd42854006303101a0296892
+  languageName: node
+  linkType: hard
+
+"@codemirror/view@npm:^0.19.0, @codemirror/view@npm:^0.19.12":
+  version: 0.19.12
+  resolution: "@codemirror/view@npm:0.19.12"
+  dependencies:
+    "@codemirror/rangeset": ^0.19.0
+    "@codemirror/state": ^0.19.3
+    "@codemirror/text": ^0.19.0
+    style-mod: ^4.0.0
+    w3c-keyname: ^2.2.4
+  checksum: 4d8deced86c15e211e5c9051015f0448a8b5823aa57ecdb778889aee1c4ac930c137906eac421263eda9e671cd88a77b77c22f2ef7db9cda86d5cf578666638b
+  languageName: node
+  linkType: hard
+
 "@csstools/convert-colors@npm:^1.4.0":
   version: 1.4.0
   resolution: "@csstools/convert-colors@npm:1.4.0"
@@ -1917,6 +1994,22 @@ __metadata:
   version: 1.2.0
   resolution: "@humanwhocodes/object-schema@npm:1.2.0"
   checksum: 40b75480376de8104d65f7c44a7dd76d30fb57823ca8ba3a3239b2b568323be894d93440578a72fd8e5e2cc3df3577ce0d2f0fe308b990dd51cf35392bf3c9a2
+  languageName: node
+  linkType: hard
+
+"@lezer/common@npm:^0.15.0, @lezer/common@npm:^0.15.5":
+  version: 0.15.7
+  resolution: "@lezer/common@npm:0.15.7"
+  checksum: 572bbc369c6a7770761d39627eac60f67c74b49da4908d3b218cc8fc57e478bd6ca26318af7114e2f4b0c890d19305b5bc76b48582f2293dec373408ae63acfe
+  languageName: node
+  linkType: hard
+
+"@lezer/lr@npm:^0.15.0":
+  version: 0.15.4
+  resolution: "@lezer/lr@npm:0.15.4"
+  dependencies:
+    "@lezer/common": ^0.15.0
+  checksum: 7d89a461c7f48e93bdadffb9062759b3e5d8b2cf197879d920dc9aa6ad5a1c58038931f2751ad7c0e422f9f741a0ef42ebb20b832a154943d3fec0ef65e00a5b
   languageName: node
   linkType: hard
 
@@ -10645,6 +10738,9 @@ fsevents@~2.3.2:
     "@babel/preset-env": 7.15.8
     "@babel/runtime": 7.15.4
     "@babel/runtime-corejs3": 7.15.4
+    "@codemirror/commands": ^0.19.5
+    "@codemirror/state": ^0.19.3
+    "@codemirror/view": ^0.19.12
     "@hotwired/stimulus": ^3.0.1
     "@hotwired/stimulus-webpack-helpers": ^1.0.1
     "@hotwired/turbo": 7.0.1
@@ -11404,6 +11500,13 @@ fsevents@~2.3.2:
   peerDependencies:
     webpack: ^5.0.0
   checksum: 470feef680f59e2fce4d6601b5c55b88c01ad8d1dd693c528ffd591ff5fd7c01a4eff3bdbe62f26f847d6bd2430c9ab594be23307cfe7a3446ab236683f0d066
+  languageName: node
+  linkType: hard
+
+"style-mod@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "style-mod@npm:4.0.0"
+  checksum: c19f73d660a94244f0715180a6141bf75d05e5b156cc956ba11970b83cd303c3f7edafe5fb61a3192da6186cc008bdcdd803a979070f9b64e13046463644043c
   languageName: node
   linkType: hard
 
@@ -12291,6 +12394,13 @@ fsevents@~2.3.2:
   dependencies:
     browser-process-hrtime: ^1.0.0
   checksum: ec3c2dacbf8050d917bbf89537a101a08c2e333b4c19155f7d3bedde43529d4339db6b3d049d9610789cb915f9515f8be037e0c54c079e9d4735c50b37ed52b9
+  languageName: node
+  linkType: hard
+
+"w3c-keyname@npm:^2.2.4":
+  version: 2.2.4
+  resolution: "w3c-keyname@npm:2.2.4"
+  checksum: 890180452bdd7d25f05deb97b3c0839911264432a7c5dd8dc4c9d9b6384237a66d66b7c2a145440b607826d5aa61cd90098cfffcf50b50c0e4c2259b0d208038
   languageName: node
   linkType: hard
 

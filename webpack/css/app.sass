@@ -1,21 +1,14 @@
 @charset "UTF-8"
 
-@import "base/normalize"
-@import "base/grid"
-@import "base/spaces"
-@import "base/helpers"
+@import "normalize.css/normalize"
+@import "svg_icons"
+@import "sw_notification"
 
-@import "components/typography"
-@import "components/layout"
+html
+  font-size: responsive 14px 18px
+  font-range: 420px 1440px
 
-@import "objects/navigation"
-@import "objects/subscribe"
-@import "objects/article"
-@import "objects/button"
-@import "objects/box"
-@import "objects/author"
-@import "objects/tags"
-@import "objects/svg_icons"
-@import "objects/audio"
-@import "objects/search"
-@import "objects/sw_notification"
+body
+  font-family: system-ui
+  font-weight: 400
+  line-height: 1.5rem
