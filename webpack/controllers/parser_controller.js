@@ -7,7 +7,7 @@ const loadWasmParser = memoize(async () => {
   const go = new window.Go()
   const fetchPromise = window.fetch('/parser.wasm')
   const {instance} = await window.WebAssembly.instantiateStreaming(fetchPromise, go.importObject)
-  go.run(instance)
+  go.run(instance) // do not wait for this promise
   return instance
 })
 
@@ -44,13 +44,13 @@ export default class extends Controller {
   }
 
   disconnect() {
-    if (this.errorComponent) {
-      this.errorComponent.$destroy()
-      this.errorComponent = null
-    }
     if (this.appComponent) {
       this.appComponent.$destroy()
       this.appComponent = null
+    }
+    if (this.errorComponent) {
+      this.errorComponent.$destroy()
+      this.errorComponent = null
     }
   }
 }

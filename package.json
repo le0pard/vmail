@@ -20,6 +20,8 @@
     "@babel/runtime": "7.15.4",
     "@babel/runtime-corejs3": "7.15.4",
     "@codemirror/commands": "^0.19.5",
+    "@codemirror/gutter": "^0.19.4",
+    "@codemirror/lang-html": "^0.19.3",
     "@codemirror/state": "^0.19.3",
     "@codemirror/view": "^0.19.12",
     "@hotwired/stimulus": "^3.0.1",
