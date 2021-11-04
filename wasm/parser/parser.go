@@ -529,7 +529,7 @@ func (prs *ParserEngine) checkCssSelectorType(selectorType CssSelectorType, posi
 
 func (prs *ParserEngine) checkCssPropertyStyle(propertyKey, propertyVal string, position int) {
 	propertyKey = strings.ToLower(strings.Trim(propertyKey, WHITESPACE))
-	propertyVal = strings.ToLower(strings.Trim(propertyVal, WHITESPACE))
+	propertyVal = strings.Trim(strings.ReplaceAll(strings.ToLower(propertyVal), "!important", ""), WHITESPACE)
 
 	if cssKeyData, ok := rulesDB.CssProperties[propertyKey]; ok {
 		if cssValData, ok := cssKeyData[""]; ok {
@@ -642,6 +642,11 @@ func (prs *ParserEngine) checkCssParsedToken(p *css.Parser, gt css.GrammarType, 
 				delimVal := strings.ToLower(strings.Trim(string(val.Data), WHITESPACE))
 				if delimVal == "." {
 					chainingSelectorsCount += 1
+				} else {
+					if chainingSelectorsCount > 1 {
+						prs.checkCssSelectorType(CHAINING_SELECTORS_TYPE, position)
+					}
+					chainingSelectorsCount = 0
 				}
 				if delimVal == "*" {
 					prs.checkCssSelectorType(UNIVERSAL_SELECTOR_STAR_TYPE, position)
@@ -659,6 +664,9 @@ func (prs *ParserEngine) checkCssParsedToken(p *css.Parser, gt css.GrammarType, 
 
 			if prevTokenType.TokenType == css.ColonToken && val.TokenType == css.IdentToken {
 				prs.checkCssPseudoSelector(string(val.Data), position)
+			}
+			if prevTokenType.TokenType == css.DelimToken && string(prevTokenType.Data) == "." && val.TokenType == css.IdentToken {
+				prs.checkCssSelectorType(CLASS_SELECTOR_TYPE, position)
 			}
 			if prevTokenType.TokenType != css.ColonToken && prevTokenType.TokenType != css.DelimToken && val.TokenType == css.IdentToken {
 				typeSelectorVal := strings.ToLower(strings.Trim(string(val.Data), WHITESPACE))
