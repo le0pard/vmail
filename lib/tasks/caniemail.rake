@@ -216,21 +216,21 @@ class CaniuseGenerator
   }.freeze
 
   IMG_FORMATS_MAPS = {
-    'image-apng' => [['apng', '']],
-    'image-avif' => [['avif', '']],
-    'image-base64' => [['base64', '']],
-    'image-bmp' => [['bmp', '']],
-    'image-gif' => [['gif', '']],
-    'image-hdr' => [['hdr', '']],
-    'image-heif' => [['heif', '']],
-    'image-ico' => [['ico', '']],
-    'image-jpg' => [['jpg', '']],
-    'image-mp4' => [['mp4', '']],
-    'image-png' => [['png', '']],
-    'image-ppm' => [['ppm', '']],
-    'image-svg' => [['svg', '']],
-    'image-tiff' => [['tiff', '']],
-    'image-webp' => [['webp', '']]
+    'image-apng' => 'apng',
+    'image-avif' => 'avif',
+    'image-base64' => 'base64',
+    'image-bmp' => 'bmp',
+    'image-gif' => 'gif',
+    'image-hdr' => 'hdr',
+    'image-heif' => 'heif',
+    'image-ico' => 'ico',
+    'image-jpg' => 'jpg',
+    'image-mp4' => 'mp4',
+    'image-png' => 'png',
+    'image-ppm' => 'ppm',
+    'image-svg' => 'svg',
+    'image-tiff' => 'tiff',
+    'image-webp' => 'webp'
   }.freeze
 
   attr_reader :data
@@ -303,7 +303,7 @@ class CaniuseGenerator
   end
 
   def generate_img_formats
-    generate_multi_level_maps(IMG_FORMATS_MAPS)
+    generate_one_level_maps(IMG_FORMATS_MAPS)
   end
 
   def generate_css_variables

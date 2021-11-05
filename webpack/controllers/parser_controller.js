@@ -14,9 +14,6 @@ const loadWasmParser = memoize(async () => {
 export default class extends Controller {
   static targets = ['appContainer']
 
-  initialize() {
-  }
-
   connect() {
     if (!window.WebAssembly) {
       this.errorComponent = new ErrorComponent({

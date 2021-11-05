@@ -6,13 +6,20 @@
 	import {history, historyKeymap} from '@codemirror/history'
 	import {lineNumbers, highlightActiveLineGutter} from '@codemirror/gutter'
 	import {defaultHighlightStyle} from '@codemirror/highlight'
-	import {oneDarkTheme} from '@codemirror/theme-one-dark'
 	import {html} from '@codemirror/lang-html'
 
 	let editorElement
 
+	let editorView = null
+
+	const eTheme = EditorView.baseTheme({
+		'&.cm-editor': {
+			height: '100%'
+		}
+	})
+
 	const eState = EditorState.create({
-		doc: "Hello World",
+		doc: '',
 		extensions: [
 			lineNumbers(),
 			highlightActiveLineGutter(),
@@ -23,17 +30,33 @@
 				...historyKeymap
 			]),
 			html(),
-			oneDarkTheme
+			eTheme
 		]
 	})
 
 	onMount(() => {
-		const editorView = new EditorView({
+		editorView = new EditorView({
 			state: eState,
 			parent: editorElement
 		})
-		console.log(editorView)
+
+		return () => {
+			if (editorView) {
+				editorView.destroy()
+				editorView = null
+			}
+		}
 	})
+
+	const onSubmitHtml = async () => {
+		const html = editorView.state.doc.toString()
+		try {
+			const report = await window.VMail(html)
+			console.log('Report', report)
+		} catch (err) {
+			console.log('error', err)
+		}
+	}
 </script>
 
 <style>
@@ -103,21 +126,21 @@
 	.parser-report-area {
 		flex-grow: 1;
 		position: relative;
+		overflow: scroll;
 	}
 </style>
 
 <div class="parser-view">
 	<div class="parser-editor">
 		<div class="parser-editor-header">
-			<p>Header</p>
-			<p>Header</p>
+			<a href="/">Home</a>
+			<a href="/about.html">About</a>
 		</div>
 		<div class="parser-editor-area">
 			<div class="parser-editor-area-edit" bind:this={editorElement}></div>
 		</div>
 		<div class="parser-editor-footer">
-			<p>Footer</p>
-			<p>Footer</p>
+			<button on:click|preventDefault={onSubmitHtml}>Check</button>
 		</div>
 	</div>
 	<div class="parser-resize"></div>
@@ -126,6 +149,35 @@
 			<p>Header</p>
 			<p>Header</p>
 		</div>
-		<div class="parser-report-area"></div>
+		<div class="parser-report-area">
+			<p>report</p>
+			<p>report</p>
+			<p>report</p>
+			<p>report</p>
+			<p>report</p>
+			<p>report</p>
+			<p>report</p>
+			<p>report</p>
+			<p>report</p>
+			<p>report</p>
+			<p>report</p>
+			<p>report</p>
+			<p>report</p>
+			<p>report</p>
+			<p>report</p>
+			<p>report</p>
+			<p>report</p>
+			<p>report</p>
+			<p>report</p>
+			<p>report</p>
+			<p>report</p>
+			<p>report</p>
+			<p>report</p>
+			<p>report</p>
+			<p>report</p>
+			<p>report</p>
+			<p>report</p>
+			<p>report</p>
+		</div>
 	</div>
 </div>

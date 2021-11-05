@@ -25,7 +25,6 @@
     "@codemirror/history": "^0.19.0",
     "@codemirror/lang-html": "^0.19.3",
     "@codemirror/state": "^0.19.3",
-    "@codemirror/theme-one-dark": "^0.19.0",
     "@codemirror/view": "^0.19.12",
     "@hotwired/stimulus": "^3.0.1",
     "@hotwired/stimulus-webpack-helpers": "^1.0.1",

@@ -1864,7 +1864,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/highlight@npm:^0.19.0, @codemirror/highlight@npm:^0.19.6":
+"@codemirror/highlight@npm:^0.19.6":
   version: 0.19.6
   resolution: "@codemirror/highlight@npm:0.19.6"
   dependencies:
@@ -2002,17 +2002,6 @@ __metadata:
   version: 0.19.5
   resolution: "@codemirror/text@npm:0.19.5"
   checksum: e8ff270e705fe7f9adb3c479845569f6bfb3d8033b70cb1da530f37d9088160713b7cda2b60106fa03df5dd82cd8bcde45662450dd42854006303101a0296892
-  languageName: node
-  linkType: hard
-
-"@codemirror/theme-one-dark@npm:^0.19.0":
-  version: 0.19.0
-  resolution: "@codemirror/theme-one-dark@npm:0.19.0"
-  dependencies:
-    "@codemirror/highlight": ^0.19.0
-    "@codemirror/state": ^0.19.0
-    "@codemirror/view": ^0.19.0
-  checksum: 7116d5c66bc3a12f7f05d0cd7734c62b5efb261943538ceb0220acb3444efee05737422ae1ee34a3dfdccd02b2956add2cc23cdf0d9b1db17fd66f15b2e69517
   languageName: node
   linkType: hard
 
@@ -10949,7 +10938,6 @@ fsevents@~2.3.2:
     "@codemirror/history": ^0.19.0
     "@codemirror/lang-html": ^0.19.3
     "@codemirror/state": ^0.19.3
-    "@codemirror/theme-one-dark": ^0.19.0
     "@codemirror/view": ^0.19.12
     "@hotwired/stimulus": ^3.0.1
     "@hotwired/stimulus-webpack-helpers": ^1.0.1
