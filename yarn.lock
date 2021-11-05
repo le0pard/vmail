@@ -1864,7 +1864,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/highlight@npm:^0.19.6":
+"@codemirror/highlight@npm:^0.19.0, @codemirror/highlight@npm:^0.19.6":
   version: 0.19.6
   resolution: "@codemirror/highlight@npm:0.19.6"
   dependencies:
@@ -1875,6 +1875,16 @@ __metadata:
     "@lezer/common": ^0.15.0
     style-mod: ^4.0.0
   checksum: 833ffe5aea7269ab782649059a6e41c68f7be3f5a49c3824dcf9a22b1efdc33ac081239fbc79fbdbdc9063800f155f16b435e31441598a9748f31c20a6a301b4
+  languageName: node
+  linkType: hard
+
+"@codemirror/history@npm:^0.19.0":
+  version: 0.19.0
+  resolution: "@codemirror/history@npm:0.19.0"
+  dependencies:
+    "@codemirror/state": ^0.19.0
+    "@codemirror/view": ^0.19.0
+  checksum: 768b62110065eaccffca9baf83b1049a0a7a69520caf2ddf75d52eba7fed87fa666e0e2cd34cce432723b189ca03aac4aadc6afc29075b4e1195f29d6aec298f
   languageName: node
   linkType: hard
 
@@ -1992,6 +2002,17 @@ __metadata:
   version: 0.19.5
   resolution: "@codemirror/text@npm:0.19.5"
   checksum: e8ff270e705fe7f9adb3c479845569f6bfb3d8033b70cb1da530f37d9088160713b7cda2b60106fa03df5dd82cd8bcde45662450dd42854006303101a0296892
+  languageName: node
+  linkType: hard
+
+"@codemirror/theme-one-dark@npm:^0.19.0":
+  version: 0.19.0
+  resolution: "@codemirror/theme-one-dark@npm:0.19.0"
+  dependencies:
+    "@codemirror/highlight": ^0.19.0
+    "@codemirror/state": ^0.19.0
+    "@codemirror/view": ^0.19.0
+  checksum: 7116d5c66bc3a12f7f05d0cd7734c62b5efb261943538ceb0220acb3444efee05737422ae1ee34a3dfdccd02b2956add2cc23cdf0d9b1db17fd66f15b2e69517
   languageName: node
   linkType: hard
 
@@ -6544,6 +6565,15 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
+"import-cwd@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "import-cwd@npm:3.0.0"
+  dependencies:
+    import-from: ^3.0.0
+  checksum: f2c4230e8389605154a390124381f9136811306ae4ba1c8017398c3c6926bc5cf75cf89350372b4938f79792ea373776b4efabd27506440ec301ce34c4e867eb
+  languageName: node
+  linkType: hard
+
 "import-fresh@npm:^3.0.0, import-fresh@npm:^3.2.1":
   version: 3.3.0
   resolution: "import-fresh@npm:3.3.0"
@@ -6551,6 +6581,15 @@ fsevents@~2.3.2:
     parent-module: ^1.0.0
     resolve-from: ^4.0.0
   checksum: 2cacfad06e652b1edc50be650f7ec3be08c5e5a6f6d12d035c440a42a8cc028e60a5b99ca08a77ab4d6b1346da7d971915828f33cdab730d3d42f08242d09baa
+  languageName: node
+  linkType: hard
+
+"import-from@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "import-from@npm:3.0.0"
+  dependencies:
+    resolve-from: ^5.0.0
+  checksum: 5040a7400e77e41e2c3bb6b1b123b52a15a284de1ffc03d605879942c00e3a87428499d8d031d554646108a0f77652549411167f6a7788e4fc7027eefccf3356
   languageName: node
   linkType: hard
 
@@ -9496,6 +9535,22 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
+"postcss-load-config@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "postcss-load-config@npm:3.1.0"
+  dependencies:
+    import-cwd: ^3.0.0
+    lilconfig: ^2.0.3
+    yaml: ^1.10.2
+  peerDependencies:
+    ts-node: ">=9.0.0"
+  peerDependenciesMeta:
+    ts-node:
+      optional: true
+  checksum: 7fd62064eab1e0e77ba315d9a782f09f4c62e1025630b53d38a936d5a2730bb632a3f259143115fc639e70d22f14744a75c7a6f471343ebdb03f6a3ef72d2f08
+  languageName: node
+  linkType: hard
+
 "postcss-loader@npm:6.2.0":
   version: 6.2.0
   resolution: "postcss-loader@npm:6.2.0"
@@ -10890,8 +10945,11 @@ fsevents@~2.3.2:
     "@babel/runtime-corejs3": 7.15.4
     "@codemirror/commands": ^0.19.5
     "@codemirror/gutter": ^0.19.4
+    "@codemirror/highlight": ^0.19.6
+    "@codemirror/history": ^0.19.0
     "@codemirror/lang-html": ^0.19.3
     "@codemirror/state": ^0.19.3
+    "@codemirror/theme-one-dark": ^0.19.0
     "@codemirror/view": ^0.19.12
     "@hotwired/stimulus": ^3.0.1
     "@hotwired/stimulus-webpack-helpers": ^1.0.1
@@ -10921,6 +10979,7 @@ fsevents@~2.3.2:
     postcss: 8.3.11
     postcss-browser-reporter: 0.6.0
     postcss-import: 14.0.2
+    postcss-load-config: ^3.1.0
     postcss-loader: 6.2.0
     postcss-preset-env: 6.7.0
     postcss-reporter: 7.0.4

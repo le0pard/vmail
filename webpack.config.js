@@ -179,12 +179,15 @@ config.optimization.splitChunks = {
   chunks: 'async'
 }
 
+config.plugins.push(
+  new webpack.DefinePlugin({
+    'process.env': {
+      NODE_ENV: JSON.stringify(currentEnv)
+    }
+  })
+)
+
 if (isProduction) {
-  config.plugins.push(
-    new webpack.DefinePlugin({
-      'process.env': {NODE_ENV: JSON.stringify('production')}
-    })
-  )
   config.optimization.minimizer = [
     new TerserPlugin({
       parallel: true,

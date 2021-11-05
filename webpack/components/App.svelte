@@ -1,5 +1,131 @@
 <script>
-	let name = 'world';
+	import {onMount} from 'svelte'
+	import {EditorState} from '@codemirror/state'
+	import {EditorView, keymap} from '@codemirror/view'
+	import {defaultKeymap} from '@codemirror/commands'
+	import {history, historyKeymap} from '@codemirror/history'
+	import {lineNumbers, highlightActiveLineGutter} from '@codemirror/gutter'
+	import {defaultHighlightStyle} from '@codemirror/highlight'
+	import {oneDarkTheme} from '@codemirror/theme-one-dark'
+	import {html} from '@codemirror/lang-html'
+
+	let editorElement
+
+	const eState = EditorState.create({
+		doc: "Hello World",
+		extensions: [
+			lineNumbers(),
+			highlightActiveLineGutter(),
+			history(),
+			defaultHighlightStyle.fallback,
+			keymap.of([
+				...defaultKeymap,
+				...historyKeymap
+			]),
+			html(),
+			oneDarkTheme
+		]
+	})
+
+	onMount(() => {
+		const editorView = new EditorView({
+			state: eState,
+			parent: editorElement
+		})
+		console.log(editorView)
+	})
 </script>
 
-<h1>Hello {name}!</h1>
+<style>
+	.parser-view {
+		display: flex;
+		position: absolute;
+		bottom: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+	}
+
+	.parser-editor {
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+		flex: 1;
+		position: relative;
+	}
+
+	.parser-editor-header {
+		flex-shrink: 0;
+		overflow: hidden;
+    white-space: nowrap;
+	}
+
+	.parser-editor-area {
+		flex-grow: 1;
+		position: relative;
+	}
+
+	.parser-editor-area-edit {
+		height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+		overflow: scroll;
+	}
+
+	.parser-editor-header {
+		flex-shrink: 0;
+		overflow: hidden;
+    white-space: nowrap;
+	}
+
+	.parser-resize {
+		display: flex;
+		width: 30px;
+	}
+
+	.parser-report {
+		height: 100%;
+		flex: 1;
+		position: relative;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.parser-report-header {
+		flex-shrink: 0;
+		overflow: hidden;
+    white-space: nowrap;
+	}
+
+	.parser-report-area {
+		flex-grow: 1;
+		position: relative;
+	}
+</style>
+
+<div class="parser-view">
+	<div class="parser-editor">
+		<div class="parser-editor-header">
+			<p>Header</p>
+			<p>Header</p>
+		</div>
+		<div class="parser-editor-area">
+			<div class="parser-editor-area-edit" bind:this={editorElement}></div>
+		</div>
+		<div class="parser-editor-footer">
+			<p>Footer</p>
+			<p>Footer</p>
+		</div>
+	</div>
+	<div class="parser-resize"></div>
+	<div class="parser-report">
+		<div class="parser-report-header">
+			<p>Header</p>
+			<p>Header</p>
+		</div>
+		<div class="parser-report-area"></div>
+	</div>
+</div>
