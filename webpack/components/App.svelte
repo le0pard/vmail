@@ -21,13 +21,36 @@
 		}
 	})
 
+	// const eDarkTheme = EditorView.baseTheme({
+	// 	"&": {
+	// 		color: "white",
+	// 		backgroundColor: "#034",
+	// 		fontSize: '0.9rem',
+	// 		height: '100%'
+	// 	},
+	// 	".cm-content": {
+	// 		caretColor: "#0e9"
+	// 	},
+	// 	"&.cm-focused .cm-cursor": {
+	// 		borderLeftColor: "#0e9"
+	// 	},
+	// 	"&.cm-focused .cm-selectionBackground, ::selection": {
+	// 		backgroundColor: "#074"
+	// 	},
+	// 	".cm-gutters": {
+	// 		backgroundColor: "#045",
+	// 		color: "#ddd",
+	// 		border: "none"
+	// 	}
+	// }, {dark: true})
+
 	const initialEditorState = EditorState.create({
 		doc: '',
 		extensions: [
 			lineNumbers(),
 			highlightActiveLineGutter(),
 			history(),
-			defaultHighlightStyle.fallback,
+			defaultHighlightStyle,
 			keymap.of([
 				...defaultKeymap,
 				...historyKeymap
@@ -45,6 +68,7 @@
 		const editorLine = editorView.state.doc.line(line)
 		const selection = EditorSelection.cursor(editorLine.from)
 		editorView.dispatch({effects: EditorView.centerOn.of(selection), selection})
+		editorView.focus()
 	}
 
 	const onSubmitHtml = async () => {
@@ -73,6 +97,7 @@
 	})
 
 	onDestroy(unsubscribeReport)
+	onDestroy(() => report.reset())
 </script>
 
 <style>
