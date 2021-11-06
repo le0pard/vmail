@@ -55,6 +55,28 @@ func (d CssSelectorType) String() string {
 	return []string{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"}[d]
 }
 
+//
+
+var (
+	normalizeCssPropsMap = map[string]string{
+		"margin-top":     "margin",
+		"margin-bottom":  "margin",
+		"margin-left":    "margin",
+		"margin-right":   "margin",
+		"padding-top":    "padding",
+		"padding-bottom": "padding",
+		"padding-left":   "padding",
+		"padding-right":  "padding",
+	}
+)
+
+func normalizeCssProp(prop string) string {
+	if newProp, ok := normalizeCssPropsMap[prop]; ok {
+		return newProp
+	}
+	return prop
+}
+
 // json config structs begin
 
 type CaniuseDB struct {
@@ -528,7 +550,7 @@ func (prs *ParserEngine) checkCssSelectorType(selectorType CssSelectorType, posi
 }
 
 func (prs *ParserEngine) checkCssPropertyStyle(propertyKey, propertyVal string, position int) {
-	propertyKey = strings.ToLower(strings.Trim(propertyKey, WHITESPACE))
+	propertyKey = normalizeCssProp(strings.ToLower(strings.Trim(propertyKey, WHITESPACE)))
 	propertyVal = strings.Trim(strings.ReplaceAll(strings.ToLower(propertyVal), "!important", ""), WHITESPACE)
 
 	if cssKeyData, ok := rulesDB.CssProperties[propertyKey]; ok {

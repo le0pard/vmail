@@ -25,6 +25,47 @@ func TestReportFromHTMLSimple(t *testing.T) {
 	}
 }
 
+func TestReportFromHTMLPropsNormalization(t *testing.T) {
+	html := `<html><body>
+	<style>
+	  .button {
+			margin-top: 10px;
+			margin-bottom: 15px!important;
+			padding: 10px;
+		}
+
+		.not-button {
+			margin-left: 10px;
+			margin-right: 15px;
+			padding-top: 30px !important;
+		}
+	</style>
+	<button class="button not-button">To be or not to be</button>
+</body></html>`
+	report, err := ReportFromHTML([]byte(html))
+	if err != nil {
+		t.Fatalf(`ReportFromHTML("%s"), %v`, html, err)
+	}
+	var tests = []struct {
+		checkType string
+		got       map[int]bool
+		want      map[int]bool
+	}{
+		{"HtmlTags style", report.HtmlTags["style"][""].Lines, map[int]bool{2: true}},
+		{"CssProperties margin", report.CssProperties["margin"][""].Lines, map[int]bool{4: true, 5: true, 10: true, 11: true}},
+		{"CssProperties padding", report.CssProperties["padding"][""].Lines, map[int]bool{6: true, 12: true}},
+	}
+
+	for _, tt := range tests {
+		testname := tt.checkType
+		t.Run(testname, func(t *testing.T) {
+			if !reflect.DeepEqual(tt.got, tt.want) {
+				t.Errorf("%s: got %v, want %v", tt.checkType, tt.got, tt.want)
+			}
+		})
+	}
+}
+
 func TestReportFromHTMLWithStyleTag(t *testing.T) {
 	html := `<html><body>
 	<style>
