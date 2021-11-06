@@ -30,7 +30,8 @@ export default class extends Controller {
         target: this.appContainerTarget,
         props: {}
       })
-    }).catch(() => {
+    }).catch((e) => {
+      console.error('Error', e)
       this.errorComponent = new ErrorComponent({
         target: this.appContainerTarget,
         props: {

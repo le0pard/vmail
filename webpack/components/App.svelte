@@ -1,12 +1,14 @@
 <script>
-	import {onMount} from 'svelte'
-	import {EditorState} from '@codemirror/state'
+	import {onMount, onDestroy} from 'svelte'
+	import {EditorState, EditorSelection} from '@codemirror/state'
 	import {EditorView, keymap} from '@codemirror/view'
 	import {defaultKeymap} from '@codemirror/commands'
 	import {history, historyKeymap} from '@codemirror/history'
 	import {lineNumbers, highlightActiveLineGutter} from '@codemirror/gutter'
 	import {defaultHighlightStyle} from '@codemirror/highlight'
 	import {html} from '@codemirror/lang-html'
+	import {report} from 'stores/report'
+	import ReportListComponent from './ReportList'
 
 	let editorElement
 
@@ -19,7 +21,7 @@
 		}
 	})
 
-	const eState = EditorState.create({
+	const initialEditorState = EditorState.create({
 		doc: '',
 		extensions: [
 			lineNumbers(),
@@ -35,9 +37,30 @@
 		]
 	})
 
+	const unsubscribeReport = report.subscribe((rData) => {
+		console.log('rData', rData)
+	})
+
+	const handleScroll = (line) => {
+		const editorLine = editorView.state.doc.line(line)
+		const selection = EditorSelection.cursor(editorLine.from)
+		editorView.dispatch({effects: EditorView.centerOn.of(selection), selection})
+	}
+
+	const onSubmitHtml = async () => {
+		const html = editorView.state.doc.toString()
+
+		try {
+			const reportData = await window.VMail(html)
+			report.update(reportData)
+		} catch (err) {
+			console.log('error', err)
+		}
+	}
+
 	onMount(() => {
 		editorView = new EditorView({
-			state: eState,
+			state: initialEditorState,
 			parent: editorElement
 		})
 
@@ -49,15 +72,7 @@
 		}
 	})
 
-	const onSubmitHtml = async () => {
-		const html = editorView.state.doc.toString()
-		try {
-			const report = await window.VMail(html)
-			console.log('Report', report)
-		} catch (err) {
-			console.log('error', err)
-		}
-	}
+	onDestroy(unsubscribeReport)
 </script>
 
 <style>
@@ -148,37 +163,13 @@
 	<div class="parser-report">
 		<div class="parser-report-header">
 			<p>Header</p>
-			<p>Header</p>
 		</div>
 		<div class="parser-report-area">
-			<p>report</p>
-			<p>report</p>
-			<p>report</p>
-			<p>report</p>
-			<p>report</p>
-			<p>report</p>
-			<p>report</p>
-			<p>report</p>
-			<p>report</p>
-			<p>report</p>
-			<p>report</p>
-			<p>report</p>
-			<p>report</p>
-			<p>report</p>
-			<p>report</p>
-			<p>report</p>
-			<p>report</p>
-			<p>report</p>
-			<p>report</p>
-			<p>report</p>
-			<p>report</p>
-			<p>report</p>
-			<p>report</p>
-			<p>report</p>
-			<p>report</p>
-			<p>report</p>
-			<p>report</p>
-			<p>report</p>
+			{#if Object.keys($report).length > 0}
+				<ReportListComponent handleScroll={handleScroll} />
+			{:else}
+				<p>Submit your HTML</p>
+			{/if}
 		</div>
 	</div>
 </div>
