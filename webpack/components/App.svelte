@@ -1,11 +1,17 @@
 <script>
 	import {onMount, onDestroy} from 'svelte'
-	import {EditorState, EditorSelection} from '@codemirror/state'
+	import {EditorState, EditorSelection, StateField, StateEffect} from '@codemirror/state'
 	import {EditorView, keymap} from '@codemirror/view'
 	import {defaultKeymap} from '@codemirror/commands'
 	import {history, historyKeymap} from '@codemirror/history'
-	import {lineNumbers, highlightActiveLineGutter} from '@codemirror/gutter'
+	import {
+		lineNumbers,
+		highlightActiveLineGutter,
+		GutterMarker,
+		gutter
+	} from '@codemirror/gutter'
 	import {defaultHighlightStyle} from '@codemirror/highlight'
+	import {RangeSet} from '@codemirror/rangeset'
 	import {html} from '@codemirror/lang-html'
 	import {report} from 'stores/report'
 	import ReportListComponent from './ReportList'
@@ -44,9 +50,60 @@
 	// 	}
 	// }, {dark: true})
 
+	const breakpointEffect = StateEffect.define({
+		map: (val, mapping) => ({pos: mapping.mapPos(val.pos), on: val.on})
+	})
+
+	const breakpointState = StateField.define({
+		create() { return RangeSet.empty },
+		update(set, transaction) {
+			set = set.map(transaction.changes)
+			for (let e of transaction.effects) {
+				if (e.is(breakpointEffect)) {
+					if (e.value.on)
+						set = set.update({add: [breakpointMarker.range(e.value.pos)]})
+					else
+						set = set.update({filter: from => from != e.value.pos})
+				}
+			}
+			return set
+		}
+	})
+
+	const toggleBreakpoint = (view, pos) => {
+		let breakpoints = view.state.field(breakpointState)
+		let hasBreakpoint = false
+		breakpoints.between(pos, pos, () => {hasBreakpoint = true})
+		view.dispatch({
+			effects: breakpointEffect.of({pos, on: !hasBreakpoint})
+		})
+	}
+
+	const breakpointMarker = new class extends GutterMarker {
+		toDOM() {
+			const marker = document.createElement('div')
+			marker.className = 'lint-marker-error'
+			marker.innerText = 'err'
+			marker.style = 'width: 10px'
+			return marker
+		}
+	}
+
 	const initialEditorState = EditorState.create({
 		doc: '',
 		extensions: [
+			breakpointState,
+			gutter({
+				class: 'cm-breakpoint-gutter',
+				markers: v => v.state.field(breakpointState),
+				initialSpacer: () => breakpointMarker,
+				domEventHandlers: {
+					mousedown(view, line) {
+						toggleBreakpoint(view, line.from)
+						return true
+					}
+				}
+			}),
 			lineNumbers(),
 			highlightActiveLineGutter(),
 			history(),
