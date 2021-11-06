@@ -365,8 +365,6 @@ func (prs *ParserEngine) saveToReportImgFormats(psSelectorValue string, position
 }
 
 func (prs *ParserEngine) checkImgFormat(imgUrl string, position int) {
-	imgUrl = strings.ToLower(strings.Trim(imgUrl, WHITESPACE))
-
 	if cssUrlRe.MatchString(imgUrl) {
 		imgUrl = cssUrlRe.FindStringSubmatch(imgUrl)[1] // parse url from "url(img.path)"
 	}
@@ -387,6 +385,22 @@ func (prs *ParserEngine) checkImgFormat(imgUrl string, position int) {
 	if imgFormatsData, ok := rulesDB.ImgFormats[format]; ok {
 		prs.saveToReportImgFormats(format, position, imgFormatsData)
 	}
+}
+
+func (prs *ParserEngine) checkAttrImgFormat(attrKey, imgUrl string, position int) {
+	imgUrl = strings.ToLower(strings.Trim(imgUrl, WHITESPACE))
+
+	if attrKey == "srcset" && (strings.Contains(imgUrl, " ") || strings.Contains(imgUrl, ",")) {
+		for _, imgWithSize := range strings.Split(imgUrl, ",") {
+			imgAndOther := strings.Split(strings.Trim(imgWithSize, WHITESPACE), " ")
+			if len(imgAndOther) > 0 {
+				prs.checkImgFormat(strings.Trim(imgAndOther[0], WHITESPACE), position)
+			}
+		}
+		return
+	}
+
+	prs.checkImgFormat(imgUrl, position)
 }
 
 func makeInitialCssPseudoSelectorsReport(position int, ruleCssSelectorData interface{}) CssPseudoSelectorsReport {
@@ -835,6 +849,19 @@ func (prs *ParserEngine) saveToReportHtmlTag(tagName, tagAttr string, position i
 	}
 }
 
+func (prs *ParserEngine) checkHtmlTagWithAttr(attrKey, attrVal string, position int) {
+	prs.checkHtmlAttribute(attrKey, "", position)
+	prs.checkHtmlAttribute(attrKey, attrVal, position)
+
+	if attrKey == "style" {
+		prs.checkTagInlinedStyle(attrVal, position)
+	}
+
+	if attrKey == "src" || attrKey == "srcset" {
+		prs.checkAttrImgFormat(attrKey, attrVal, position)
+	}
+}
+
 func (prs *ParserEngine) checkHtmlTags(tagName string, attrs []html.Attribute, position int) {
 	if len(tagName) == 0 {
 		return
@@ -859,16 +886,7 @@ func (prs *ParserEngine) checkHtmlTags(tagName string, attrs []html.Attribute, p
 				prs.saveToReportHtmlTag(tagName, attrWithVal, position, ruleTagAttrData)
 			}
 
-			prs.checkHtmlAttribute(attrKey, "", position)
-			prs.checkHtmlAttribute(attrKey, attrVal, position)
-
-			if attrKey == "style" {
-				prs.checkTagInlinedStyle(attrVal, position)
-			}
-
-			if attrKey == "src" {
-				prs.checkImgFormat(attrVal, position)
-			}
+			prs.checkHtmlTagWithAttr(attrKey, attrVal, position)
 		}
 	} else {
 		// check inline style for valid elements too
@@ -876,16 +894,7 @@ func (prs *ParserEngine) checkHtmlTags(tagName string, attrs []html.Attribute, p
 			attrKey := strings.ToLower(att.Key)
 			attrVal := strings.ToLower(att.Val)
 
-			prs.checkHtmlAttribute(attrKey, "", position)
-			prs.checkHtmlAttribute(attrKey, attrVal, position)
-
-			if attrKey == "style" {
-				prs.checkTagInlinedStyle(attrVal, position)
-			}
-
-			if attrKey == "src" {
-				prs.checkImgFormat(attrVal, position)
-			}
+			prs.checkHtmlTagWithAttr(attrKey, attrVal, position)
 		}
 	}
 }

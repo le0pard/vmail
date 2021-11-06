@@ -14,6 +14,7 @@
 
 	const eTheme = EditorView.baseTheme({
 		'&.cm-editor': {
+			fontSize: '0.9rem',
 			height: '100%'
 		}
 	})

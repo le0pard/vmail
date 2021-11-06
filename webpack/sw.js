@@ -31,6 +31,7 @@ sha256(JSON.stringify(cachedAssets)).then((rev) => {
   precacheAndRoute([
     {url: '/parser.wasm', revision: `${rev}-v1`},
     {url: '/index.html', revision: `${rev}-v1`},
+    {url: '/about.html', revision: `${rev}-v1`},
     {url: '/manifest.json', revision: `${rev}-v1`}
   ])
 })

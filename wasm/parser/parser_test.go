@@ -66,6 +66,57 @@ func TestReportFromHTMLPropsNormalization(t *testing.T) {
 	}
 }
 
+func TestReportFromHTMLImages(t *testing.T) {
+	html := `<html><body>
+	<style>
+	  .button {
+			background: url(img.jpg) no-repeat;
+		}
+	</style>
+	<img src="elva-fairy-800w.jpg" alt="Elva dressed as a fairy" />
+	<img srcset="elva-fairy-480w.jpg 480w,
+             elva-fairy-800w.jpg 800w"
+     sizes="(max-width: 600px) 480px,
+            800px"
+     src="elva-fairy-800w.webp"
+     alt="Elva dressed as a fairy" />
+	<img srcset="elva-fairy-320w.jpg,
+             elva-fairy-480w.jpg 1.5x,
+             elva-fairy-640w.jpg 2x"
+     src="elva-fairy-640w.avif"
+     alt="Elva dressed as a fairy" />
+
+	<picture>
+		<source media="(max-width: 799px)" srcset="elva-480w-close-portrait.jpg">
+		<source media="(min-width: 800px)" srcset="elva-800w.jpg">
+		<img src="elva-800w.jpg" alt="Chris standing up holding his daughter Elva">
+	</picture>
+</body></html>`
+	report, err := ReportFromHTML([]byte(html))
+	if err != nil {
+		t.Fatalf(`ReportFromHTML("%s"), %v`, html, err)
+	}
+	var tests = []struct {
+		checkType string
+		got       map[int]bool
+		want      map[int]bool
+	}{
+		{"HtmlTags picture", report.HtmlTags["picture"][""].Lines, map[int]bool{20: true}},
+		{"ImgFormats jpg", report.ImgFormats["jpg"].Lines, map[int]bool{4: true, 7: true, 8: true, 14: true, 21: true, 22: true, 23: true}},
+		{"ImgFormats webp", report.ImgFormats["webp"].Lines, map[int]bool{8: true}},
+		{"ImgFormats avif", report.ImgFormats["avif"].Lines, map[int]bool{14: true}},
+	}
+
+	for _, tt := range tests {
+		testname := tt.checkType
+		t.Run(testname, func(t *testing.T) {
+			if !reflect.DeepEqual(tt.got, tt.want) {
+				t.Errorf("%s: got %v, want %v", tt.checkType, tt.got, tt.want)
+			}
+		})
+	}
+}
+
 func TestReportFromHTMLWithStyleTag(t *testing.T) {
 	html := `<html><body>
 	<style>
