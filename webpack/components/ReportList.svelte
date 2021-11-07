@@ -1,7 +1,25 @@
 <script>
+  import {onMount} from 'svelte'
   import {report} from 'stores/report'
+  import {EVENT_LINE_TO_EDITOR, EVENT_LINE_TO_REPORT} from 'lib/constants'
 
-  export let handleScroll
+  const handleLineClick = (line) => {
+    window.dispatchEvent(new window.CustomEvent(EVENT_LINE_TO_EDITOR, { detail: {line} }))
+  }
+
+  const handleEditorLineClickEvent = (e) => {
+    if (!e.detail?.line) {
+      return
+    }
+
+    const {line} = e.detail
+    console.log('Scroll to line: ', line)
+  }
+
+  onMount(() => {
+    window.addEventListener(EVENT_LINE_TO_REPORT, handleEditorLineClickEvent)
+    return () => window.removeEventListener(EVENT_LINE_TO_REPORT, handleEditorLineClickEvent)
+  })
 </script>
 
 <ul>
@@ -12,7 +30,7 @@
           HTML Tag: {tagName}: {tagAttr}
           <div>
             {#each $report.html_tags[tagName][tagAttr].lines as line}
-              <button on:click|preventDefault={() => handleScroll(line)}>{line}</button>
+              <button on:click|preventDefault={() => handleLineClick(line)}>{line}</button>
             {/each}
           </div>
         </li>
@@ -26,7 +44,7 @@
           HTML Attribute: {attrName}: {attrVal}
           <div>
             {#each $report.html_attributes[attrName][attrVal].lines as line}
-              <button on:click|preventDefault={() => handleScroll(line)}>{line}</button>
+              <button on:click|preventDefault={() => handleLineClick(line)}>{line}</button>
             {/each}
           </div>
         </li>
@@ -40,7 +58,7 @@
           CSS Prop: {propName}: {propVal}
           <div>
             {#each $report.css_properties[propName][propVal].lines as line}
-              <button on:click|preventDefault={() => handleScroll(line)}>{line}</button>
+              <button on:click|preventDefault={() => handleLineClick(line)}>{line}</button>
             {/each}
           </div>
         </li>
@@ -54,7 +72,7 @@
           AT Rule CSS Statement: {atName}: {atVal}
           <div>
             {#each $report.at_rule_css_statements[atName][atVal].lines as line}
-              <button on:click|preventDefault={() => handleScroll(line)}>{line}</button>
+              <button on:click|preventDefault={() => handleLineClick(line)}>{line}</button>
             {/each}
           </div>
         </li>
