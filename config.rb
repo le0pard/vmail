@@ -17,7 +17,7 @@ end
 Time.zone = 'Kyiv'
 
 # Static pages
-proxy '/about.html', '/static_pages/about.html', ignore: true
+proxy '/faq.html', '/static_pages/faq.html', ignore: true
 
 ###
 # Helpers

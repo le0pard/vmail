@@ -26,10 +26,21 @@ export default class extends Controller {
     }
 
     loadWasmParser().then(() => {
-      this.appComponent = new AppComponent({
-        target: this.appContainerTarget,
-        props: {}
-      })
+      if (window.VMail) {
+        this.appComponent = new AppComponent({
+          target: this.appContainerTarget,
+          props: {
+            parserFunction: window.VMail
+          }
+        })
+      } else {
+        this.errorComponent = new ErrorComponent({
+          target: this.appContainerTarget,
+          props: {
+            message: 'Error to load wasm module'
+          }
+        })
+      }
     }).catch((e) => {
       console.error('Error', e)
       this.errorComponent = new ErrorComponent({

@@ -4,6 +4,8 @@
 	import EditorViewComponent from './EditorView'
 	import ReportListComponent from './ReportList'
 
+	export let parserFunction
+
 	onDestroy(() => report.reset())
 </script>
 
@@ -26,6 +28,7 @@
 	}
 
 	.parser-editor-header {
+		background-color: var(--headColor);
 		flex-shrink: 0;
 		overflow: hidden;
     white-space: nowrap;
@@ -51,6 +54,7 @@
 	}
 
 	.parser-report-header {
+		background-color: var(--headColor);
 		flex-shrink: 0;
 		overflow: hidden;
     white-space: nowrap;
@@ -67,9 +71,9 @@
 	<div class="parser-editor">
 		<div class="parser-editor-header">
 			<a href="/">Home</a>
-			<a href="/about.html">About</a>
+			<a href="/faq.html">FAQ</a>
 		</div>
-		<EditorViewComponent />
+		<EditorViewComponent parserFunction={parserFunction} />
 	</div>
 	<div class="parser-resize"></div>
 	<div class="parser-report">

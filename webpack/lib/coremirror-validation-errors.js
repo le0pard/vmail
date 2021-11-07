@@ -11,7 +11,7 @@ export const validationErrorsMarker = new class extends GutterMarker {
 }
 
 export const validationErrorsEffect = StateEffect.define({
-  map: (val, mapping) => ({pos: mapping.mapPos(val.pos)})
+  map: (val, mapping) => ({pos: mapping.mapPos(val.pos), selector: val.selector})
 })
 
 export const validationErrorsState = StateField.define({
@@ -22,7 +22,7 @@ export const validationErrorsState = StateField.define({
       if (e.is(validationErrorsEffect)) {
         switch (e.value.type) {
           case 'remove':
-            set = set.update({filter: from => from != e.value.pos})
+            set = set.update({filter: (from) => from != e.value.pos})
             break
           case 'empty':
             set = RangeSet.empty

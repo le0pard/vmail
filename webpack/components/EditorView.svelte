@@ -15,6 +15,8 @@
 	} from 'lib/coremirror-validation-errors'
   import {EVENT_LINE_TO_EDITOR, EVENT_LINE_TO_REPORT} from 'lib/constants'
 
+	export let parserFunction
+
   let editorElement
   let editorView = null
 
@@ -25,30 +27,6 @@
 		}
 	})
 
-	// const eDarkTheme = EditorView.baseTheme({
-	// 	"&": {
-	// 		color: "white",
-	// 		backgroundColor: "#034",
-	// 		fontSize: '0.9rem',
-	// 		height: '100%'
-	// 	},
-	// 	".cm-content": {
-	// 		caretColor: "#0e9"
-	// 	},
-	// 	"&.cm-focused .cm-cursor": {
-	// 		borderLeftColor: "#0e9"
-	// 	},
-	// 	"&.cm-focused .cm-selectionBackground, ::selection": {
-	// 		backgroundColor: "#074"
-	// 	},
-	// 	".cm-gutters": {
-	// 		backgroundColor: "#045",
-	// 		color: "#ddd",
-	// 		border: "none"
-	// 	}
-	// }, {dark: true})
-
-
 	const initialEditorState = EditorState.create({
 		doc: '',
 		extensions: [
@@ -58,6 +36,14 @@
 				markers: (v) => v.state.field(validationErrorsState),
 				initialSpacer: () => validationErrorsMarker,
 				domEventHandlers: {
+					mouseover(view, edLine) {
+						const line = view.state.doc.lineAt(edLine.from)
+            if (line?.number && $linesAndSelectors[line.number]) {
+							// tooltip?
+							// console.log('Info', $linesAndSelectors[line.number])
+						}
+						return true
+					},
 					mousedown(view, edLine) {
             const line = view.state.doc.lineAt(edLine.from)
             if (line?.number) {
@@ -101,27 +87,26 @@
 		const html = editorView.state.doc.toString()
 
 		try {
-			const reportData = await window.VMail(html)
+			const reportData = await parserFunction(html)
 			report.update(reportData)
 		} catch (err) {
 			console.log('error', err)
 		}
 	}
 
-  const unsubscribeLinesReport = linesAndSelectors.subscribe((linesData) => {
+  const unsubscribeLinesReport = linesAndSelectors.subscribe((linesSelector) => {
     if (!editorView) {
       return
     }
 
-    const {lines} = linesData
 	  editorView.dispatch({
 			effects: validationErrorsEffect.of({type: 'empty'})
 		})
-		lines.forEach((line) => {
+		Object.keys(linesSelector).forEach((line) => {
 			const editorLine = editorView.state.doc.line(line)
       if (editorLine?.from) {
         editorView.dispatch({
-          effects: validationErrorsEffect.of({pos: editorLine.from})
+          effects: validationErrorsEffect.of({pos: editorLine.from, selector: linesSelector[line]})
         })
       }
 		})
@@ -176,5 +161,5 @@
   <div class="editor-area-edit" bind:this={editorElement}></div>
 </div>
 <div class="editor-footer">
-  <button on:click|preventDefault={onSubmitHtml}>Check</button>
+  <button on:click|preventDefault={onSubmitHtml}>Check HTML</button>
 </div>

@@ -10,13 +10,8 @@ export const MULTI_LEVEL_REPORT_KEYS = [
   },
   {
     key: 'at_rule_css_statements'
-  },
-  {
-    key: 'css_properties'
   }
 ]
-
-export const multiSelectorName = (type, key, val) => `${type}_${key}_${val}`
 
 export const SINGLE_LEVEL_REPORT_KEYS = [
   {
@@ -36,13 +31,9 @@ export const SINGLE_LEVEL_REPORT_KEYS = [
   }
 ]
 
-export const singleSelectorName = (type, key) => `${type}_${key}`
-
 export const REPORT_CSS_VARIABLES = {
   key: 'css_variables'
 }
-
-export const cssVarsSelectorName = () => `css_variables`
 
 export const CSS_SELECTORS_MAP = {
   0: {
