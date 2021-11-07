@@ -323,9 +323,10 @@ class CaniuseGenerator
       next unless rule.present?
 
       agg[v] = {
-        notes: rule['notes_by_num'],
+        notes: rule['notes_by_num'] || [],
         stats: normalize_support(rule['stats']),
-        url: rule['url']
+        url: rule['url'] || '',
+        description: rule['description'] || ''
       }
     end
   end
@@ -340,7 +341,8 @@ class CaniuseGenerator
         agg[item[0]][item[1]] = {
           notes: rule['notes_by_num'] || [],
           stats: normalize_support(rule['stats']) ,
-          url: rule['url'] || ''
+          url: rule['url'] || '',
+          description: rule['description'] || ''
         }
       end
     end

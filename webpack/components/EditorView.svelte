@@ -7,7 +7,7 @@
 	import {lineNumbers, highlightActiveLineGutter, gutter} from '@codemirror/gutter'
 	import {defaultHighlightStyle} from '@codemirror/highlight'
 	import {html} from '@codemirror/lang-html'
-	import {report, linesAndSelectors} from 'stores/report'
+	import {report, reportLoading, reportError, linesAndSelectors} from 'stores/report'
 	import {
 		validationErrorsMarker,
 		validationErrorsEffect,
@@ -84,13 +84,17 @@
   }
 
   const onSubmitHtml = async () => {
+		reportError.set(null)
+		reportLoading.set(true)
 		const html = editorView.state.doc.toString()
 
 		try {
 			const reportData = await parserFunction(html)
-			report.update(reportData)
+			reportLoading.set(false)
+			report.set(reportData)
 		} catch (err) {
-			console.log('error', err)
+			reportLoading.set(false)
+			reportError.set(err)
 		}
 	}
 

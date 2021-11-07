@@ -37,48 +37,37 @@ export const REPORT_CSS_VARIABLES = {
 
 export const CSS_SELECTORS_MAP = {
   0: {
-    title: 'Adjacent sibling combinator',
-    description: `The adjacent sibling combinator (h1 + p) allows to target an element that is directly after another.`
+    title: 'Adjacent sibling combinator'
   },
   1: {
-    title: 'Attribute selector',
-    description: `The attribute selector ([attr]) targets elements with this specific attribute.`
+    title: 'Attribute selector'
   },
   2: {
-    title: 'Chaining selectors',
-    description: `Chaining selectors (.foo.bar) allows to apply styles to elements matching all the corresponding selectors.`
+    title: 'Chaining selectors'
   },
   3: {
-    title: 'Child combinator',
-    description: `The child combinator is represented by a superior sign (>) between two selectors and matches the second selector if it is a direct child of the first selector.`
+    title: 'Child combinator'
   },
   4: {
-    title: 'Class selector',
-    description: `The class selector (.className) allows to apply styles to a group of elements with the corresponding class attribute.`
+    title: 'Class selector'
   },
   5: {
-    title: 'Descendant combinator',
-    description: `The descendant combinator is represented by a space ( ) between two selectors and matches the second selector if it has ancestor matching the first selector.`
+    title: 'Descendant combinator'
   },
   6: {
-    title: 'General sibling combinator',
-    description: `The general sibling combinator (img ~ p) allows to target any element that after another (directly or indirectly).`
+    title: 'General sibling combinator'
   },
   7: {
-    title: 'Grouping selectors',
-    description: `Grouping selectors (.foo, .bar) allows to apply the same styles to the different corresponding elements.`
+    title: 'Grouping selectors'
   },
   8: {
-    title: 'ID selector',
-    description: `The ID selector (#id) allows to apply styles to an element with the corresponding id attribute.`
+    title: 'ID selector'
   },
   9: {
-    title: 'Type selector',
-    description: `Type selector or element selectors allow to apply styles by HTML element names.`
+    title: 'Type selector'
   },
   10: {
-    title: 'Universal selector *',
-    description: `The universal selector (*) allows to apply styles to every elements.`
+    title: 'Universal selector *'
   },
 }
 

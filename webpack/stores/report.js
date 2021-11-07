@@ -40,17 +40,19 @@ const selectLinesAndSelectors = (report) => {
   return lineToSelector
 }
 
-const createReport = () => {
-  const {subscribe, set} = writable({})
+const createBasicStore = (initialVal = null) => {
+  const {subscribe, set} = writable(initialVal)
 
   return {
     subscribe,
-    update: (data) => set(data),
+    set,
     reset: () => set({})
   }
 }
 
-export const report = createReport()
+export const reportLoading = createBasicStore(false)
+export const reportError = createBasicStore(null)
+export const report = createBasicStore({})
 export const linesAndSelectors = derived(
   report,
   $report => selectLinesAndSelectors($report)

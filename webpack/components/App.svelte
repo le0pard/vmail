@@ -1,12 +1,16 @@
 <script>
 	import {onDestroy} from 'svelte'
-	import {report} from 'stores/report'
+	import {report, reportLoading, reportError} from 'stores/report'
 	import EditorViewComponent from './EditorView'
 	import ReportListComponent from './ReportList'
 
 	export let parserFunction
 
-	onDestroy(() => report.reset())
+	onDestroy(() => {
+		report.reset()
+		reportLoading.reset()
+		reportError.reset()
+	})
 </script>
 
 <style>
