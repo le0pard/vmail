@@ -30,7 +30,7 @@ func TestReportFromHTMLPropsNormalization(t *testing.T) {
 	<style>
 	  .button {
 			margin-top: 10px;
-			margin-bottom: 15px!important;
+			margin-bottom: 15px!imporTant;
 			padding: 10px;
 		}
 
