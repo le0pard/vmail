@@ -158,6 +158,28 @@
 		flex-shrink: 0;
 		overflow: hidden;
     white-space: nowrap;
+		padding: 0.3rem 0;
+	}
+
+	.editor-area-btn {
+		color: var(--btnColor);
+		display: inline-block;
+		background-color: #0cc2aa;
+		line-height: 1.25;
+		text-align: center;
+		white-space: nowrap;
+		vertical-align: middle;
+		cursor: pointer;
+		user-select: none;
+		border: 1px solid transparent;
+		padding: 0.8rem 1rem;
+		border-radius: 0.25rem;
+		font-size: 1rem;
+		width: 100%;
+	}
+
+	.editor-area-btn:hover {
+		box-shadow: inset 0 -10rem 0 rgb(158 158 158 / 20%);
 	}
 </style>
 
@@ -165,5 +187,5 @@
   <div class="editor-area-edit" bind:this={editorElement}></div>
 </div>
 <div class="editor-footer">
-  <button on:click|preventDefault={onSubmitHtml}>Check HTML</button>
+  <button class="editor-area-btn" on:click|preventDefault={onSubmitHtml}>Check HTML</button>
 </div>

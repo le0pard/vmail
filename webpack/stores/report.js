@@ -46,7 +46,7 @@ const createBasicStore = (initialVal = null) => {
   return {
     subscribe,
     set,
-    reset: () => set({})
+    reset: () => set(initialVal)
   }
 }
 
