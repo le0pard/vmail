@@ -9,8 +9,6 @@ const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 const WorkboxPlugin = require('workbox-webpack-plugin')
 const WebpackAssetsManifest = require('webpack-assets-manifest')
 
-const browserList = require('./browserslist.config')
-
 // set NODE_ENV=production on the environment to add asset fingerprints
 const currentEnv = process.env.NODE_ENV || 'development'
 const isProduction = currentEnv === 'production'
@@ -29,40 +27,19 @@ const cssLoaders = [
   {
     loader: 'css-loader',
     options: {
-      modules: false,
       sourceMap: true
     }
   },
   {
     loader: 'postcss-loader',
     options: {
-      sourceMap: true,
-      postcssOptions: () => {
-        const plugins = [
-          ['postcss-import'],
-          ['postcss-preset-env', {
-            stage: 1,
-            browsers: browserList,
-            features: {
-              'custom-properties': {
-                strict: false,
-                warnings: false,
-                preserve: true
-              }
-            }
-          }],
-          ['lost', {
-            flexbox: 'flex'
-          }],
-          ['rucksack-css'],
-          ['postcss-browser-reporter'],
-          ['postcss-reporter']
-        ]
-
-        return {plugins}
-      }
+      sourceMap: true
     }
-  },
+  }
+]
+
+const sassLoaders = [
+  ...cssLoaders,
   {
     loader: 'sass-loader',
     options: {
@@ -116,6 +93,29 @@ let config = {
   module: {
     rules: [
       {
+        test: /\.svelte$/,
+        use: {
+          loader: 'svelte-loader',
+          options: {
+            compilerOptions: {
+              dev: !isProduction
+            },
+            emitCss: isProduction,
+            hotReload: !isProduction,
+            preprocess: preprocess({
+              babel: true,
+              postcss: true
+            })
+          }
+        }
+      },
+      {
+        test: /node_modules\/svelte\/.*\.mjs$/,
+        resolve: {
+          fullySpecified: false
+        }
+      },
+      {
         test: /\.js$/,
         exclude: /node_modules/,
         use: [
@@ -132,31 +132,14 @@ let config = {
         }
       },
       {
-        test: /\.(scss|sass)$/,
+        test: /\.css$/,
         sideEffects: true,
         use: cssLoaders
       },
       {
-        test: /\.svelte$/,
-        use: {
-          loader: 'svelte-loader',
-          options: {
-            compilerOptions: {
-              dev: !isProduction
-            },
-            emitCss: isProduction,
-            hotReload: !isProduction,
-            preprocess: preprocess({
-              postcss: true
-            })
-          }
-        }
-      },
-      {
-        test: /node_modules\/svelte\/.*\.mjs$/,
-        resolve: {
-          fullySpecified: false
-        }
+        test: /\.(scss|sass)$/,
+        sideEffects: true,
+        use: sassLoaders
       }
     ]
   },

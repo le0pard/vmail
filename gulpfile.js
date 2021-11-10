@@ -1,7 +1,5 @@
 const gulp = require('gulp')
 const del = require('del')
-const purgecss = require('gulp-purgecss')
-const gzip = require('gulp-gzip')
 const critical = require('critical').stream
 
 const criticalOptions = {
@@ -18,30 +16,6 @@ gulp.task('cleanup:assets', () => {
   ])
 })
 
-// Purgecss for app.css
-gulp.task('purgecss:app_css', () => {
-  return gulp.src('build/app-*.css')
-    .pipe(purgecss({
-      content: ['build/**/*.html', 'webpack/controllers/**/*.js'],
-      safelist: {
-        greedy: [/plyr/]
-      }
-    }))
-    .pipe(gulp.dest('build'))
-})
-
-// Gzip app.css after purgecss
-gulp.task('purgecss:recompress_app_css', () => {
-  return gulp.src('build/app-*.css')
-    .pipe(gzip({
-      append: true,
-      threshold: '10kb',
-      gzipOptions: {level: 9, memLevel: 8},
-      skipGrowingFiles: true
-    }))
-    .pipe(gulp.dest('build'))
-})
-
 // Generate & Inline Critical-path CSS
 gulp.task('critical:index', () => {
   return gulp
@@ -54,6 +28,5 @@ gulp.task('critical:index', () => {
     .pipe(gulp.dest('build'))
 })
 
-gulp.task('purgecss', gulp.series('purgecss:app_css', 'purgecss:recompress_app_css'))
 gulp.task('critical', gulp.series('critical:index'))
-gulp.task('optimize', gulp.series('purgecss', 'critical'))
+gulp.task('optimize', gulp.series('critical'))
