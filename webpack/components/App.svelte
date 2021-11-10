@@ -66,11 +66,7 @@
 		padding: 0.3rem 0;
 	}
 
-	.parser-editor-hidden {
-		display: none;
-	}
-
-	.parser-report-hidden {
+	.parser-editor-hidden, .parser-report-hidden {
 		display: none;
 	}
 </style>

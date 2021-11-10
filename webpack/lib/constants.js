@@ -1,15 +1,15 @@
 export const MULTI_LEVEL_REPORT_KEYS = [
   {
-    key: 'html_tags'
-  },
-  {
-    key: 'html_attributes'
-  },
-  {
     key: 'css_properties'
   },
   {
     key: 'at_rule_css_statements'
+  },
+  {
+    key: 'html_tags'
+  },
+  {
+    key: 'html_attributes'
   }
 ]
 
