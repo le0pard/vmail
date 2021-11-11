@@ -76,6 +76,37 @@
     height: 1.5rem;
   }
 
+  .report-header-score-chart>div:hover::before {
+    content: '';
+    display: block;
+    position: absolute;
+    left: -2px;
+    right: -2px;
+    top: -2px;
+    bottom: -2px;
+    border: 2px solid #1b1b1d;
+    outline: 1px solid #fff;
+    z-index: 1;
+  }
+
+  .report-header-score-chart>div:hover::after {
+    content: attr(title);
+    position: absolute;
+    z-index: 2;
+    bottom: auto;
+    right: 0.5rem;
+    padding: 0.5rem;
+    min-width: 6rem;
+    max-width: calc(100% - 2rem);
+    font-size: .75rem;
+    line-height: 1.25;
+    color: rgba(255,255,255,0.85);
+    background: #2a2a2e;
+    border: 1px solid #3c3c3d;
+    border-radius: 0.25rem;
+    box-shadow: -2px -2px 4px rgb(0 0 0 / 50%);
+  }
+
   .report-header-score-supported {
     background-color: #39b54a;
     flex-basis: auto;
