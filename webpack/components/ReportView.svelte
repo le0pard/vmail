@@ -1,6 +1,7 @@
 <script>
 	import {report} from 'stores/report'
   import ReportListComponent from './ReportList'
+  import ReportEmptyComponent from './ReportEmpty'
 </script>
 
 <style>
@@ -15,6 +16,6 @@
   {#if Object.keys($report).length > 0}
     <ReportListComponent />
   {:else}
-    <p>Submit your HTML</p>
+    <ReportEmptyComponent />
   {/if}
 </div>

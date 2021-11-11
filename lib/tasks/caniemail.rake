@@ -322,6 +322,8 @@ class CaniuseGenerator
       rule = data.detect { |r| r['slug'] == k }
       next unless rule.present?
 
+      next if count_not_support(rule['stats']).zero? # supported in all clients
+
       agg[v] = {
         notes: rule['notes_by_num'] || [],
         stats: normalize_support(rule['stats']),
@@ -335,6 +337,8 @@ class CaniuseGenerator
     maps.each_with_object({}) do |(k, v), agg|
       rule = data.detect { |r| r['slug'] == k }
       next unless rule.present?
+
+      next if count_not_support(rule['stats']).zero? # supported in all clients
 
       v.each do |item|
         agg[item[0]] ||= {}
@@ -359,6 +363,17 @@ class CaniuseGenerator
         agg.merge(
           k => v.split.map { |rd| rd.delete('#') }
         )
+      end
+    end
+  end
+
+  def count_not_support(hash)
+    hash.reduce(0) do |agg, (k, v)|
+      case v
+      when Hash
+        agg + count_not_support(v)
+      when String
+        agg + (v.downcase != 'y' ? 1 : 0)
       end
     end
   end

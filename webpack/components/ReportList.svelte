@@ -8,8 +8,7 @@
     EVENT_LINE_TO_EDITOR,
     EVENT_LINE_TO_REPORT
   } from 'lib/constants'
-  import ReportMultiItemComponent from './ReportMultiItem'
-  import ReportSingleItemComponent from './ReportSingleItem'
+  import ReportItemComponent from './ReportItem'
 
   const handleLineClick = (line) => {
     window.dispatchEvent(new window.CustomEvent(EVENT_LINE_TO_EDITOR, {detail: {line}}))
@@ -43,7 +42,7 @@
     {#if $report[reportInfo.key]}
       {#each Object.keys($report[reportInfo.key]).sort() as itemName (itemName)}
         {#each Object.keys($report[reportInfo.key][itemName]).sort() as itemVal (itemVal)}
-          <ReportMultiItemComponent
+          <ReportItemComponent
             reportInfo={reportInfo}
             itemName={itemName}
             itemVal={itemVal}
@@ -56,9 +55,10 @@
   {/each}
 
   {#if $report[REPORT_CSS_VARIABLES.key] && $report[REPORT_CSS_VARIABLES.key].lines.length > 0}
-    <ReportSingleItemComponent
+    <ReportItemComponent
       reportInfo={REPORT_CSS_VARIABLES}
       itemName={'css_vars'}
+      itemVal={''}
       report={$report[REPORT_CSS_VARIABLES.key]}
       handleLineClick={handleLineClick}
     />
@@ -67,9 +67,10 @@
   {#each SINGLE_LEVEL_REPORT_KEYS as reportInfo (reportInfo.key)}
     {#if $report[reportInfo.key]}
       {#each Object.keys($report[reportInfo.key]).sort() as itemName (itemName)}
-        <ReportSingleItemComponent
+        <ReportItemComponent
           reportInfo={reportInfo}
           itemName={itemName}
+          itemVal={''}
           report={$report[reportInfo.key][itemName]}
           handleLineClick={handleLineClick}
         />
