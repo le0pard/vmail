@@ -144,6 +144,9 @@
             <button on:click|preventDefault={() => handleLineClick(line)} class="report-line-button">{line}</button>
             {#if i < report.lines.length - 1},{/if}
           {/each}
+          {#if report.more_lines}
+            and more...
+          {/if}
         </div>
       </div>
       <div class="report-header-score">
