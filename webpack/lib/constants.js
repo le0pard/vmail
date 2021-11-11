@@ -1,38 +1,48 @@
 export const MULTI_LEVEL_REPORT_KEYS = [
   {
-    key: 'css_properties'
+    key: 'css_properties',
+    title: 'CSS Property'
   },
   {
-    key: 'at_rule_css_statements'
+    key: 'at_rule_css_statements',
+    title: 'At-rules'
   },
   {
-    key: 'html_tags'
+    key: 'html_tags',
+    title: 'HTML Tag'
   },
   {
-    key: 'html_attributes'
+    key: 'html_attributes',
+    title: 'HTML Attribute'
   }
 ]
 
 export const SINGLE_LEVEL_REPORT_KEYS = [
   {
-    key: 'css_selector_types'
+    key: 'css_selector_types',
+    title: 'CSS Selector'
   },
   {
-    key: 'css_dimentions'
+    key: 'css_dimentions',
+    title: 'CSS Dimention'
   },
   {
-    key: 'css_functions'
+    key: 'css_functions',
+    title: 'CSS Function'
   },
   {
-    key: 'css_pseudo_selectors'
+    key: 'css_pseudo_selectors',
+    title: 'CSS Pseudo-class'
   },
   {
-    key: 'img_formats'
+    key: 'img_formats',
+    title: 'Image format'
   }
 ]
 
 export const REPORT_CSS_VARIABLES = {
-  key: 'css_variables'
+  key: 'css_variables',
+  title: 'CSS Variable'
 }
 
 export const CSS_SELECTORS_MAP = {

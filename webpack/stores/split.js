@@ -1,20 +1,28 @@
 import {writable} from 'svelte/store'
 
+export const screenSizeMinMedia = window.matchMedia('(max-width: 800px)')
+
 const createBasicStore = () => {
   const initialVisibility = 'both'
-  const initialVal = {visible: initialVisibility}
-  const {subscribe, set, update} = writable(initialVal)
-  const toggleFn = (state, isSkipInitial = false) => (currentVal) => ({
-    visible: (isSkipInitial ? state : (currentVal.visible === initialVisibility ? state : initialVisibility))
+  const initialValue = {
+    visible: initialVisibility
+  }
+  const {subscribe, set, update} = writable(initialValue)
+  const toggleFn = (state) => (currentVal) => ({
+    visible: (
+      screenSizeMinMedia.matches ? state : (
+        currentVal.visible === initialVisibility ? state : initialVisibility
+      )
+    )
   })
 
   return {
     subscribe,
     set,
-    hideLeft: (isSkipInitial = false) => update(toggleFn('right', isSkipInitial)),
-    hideRight: (isSkipInitial = false) => update(toggleFn('left', isSkipInitial)),
+    hideLeft: () => update(toggleFn('right')),
+    hideRight: () => update(toggleFn('left')),
     hideForceRight: () => set({visible: 'left'}),
-    reset: () => set(initialVal)
+    reset: () => set(initialValue)
   }
 }
 

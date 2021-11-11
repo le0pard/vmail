@@ -1,8 +1,6 @@
 <script>
   import {onMount} from 'svelte'
-  import {splitState} from 'stores/split'
-
-  const screenSizeMinMedia = window.matchMedia('(max-width: 800px)')
+  import {splitState, screenSizeMinMedia} from 'stores/split'
 
 	const onScreenSizeMinMediaChange = (e) => {
 		if (e.matches) {
@@ -11,11 +9,11 @@
 	}
 
   const handleHideLeft = () => {
-    splitState.hideLeft(screenSizeMinMedia.matches)
+    splitState.hideLeft()
   }
 
   const handleHideRight = () => {
-    splitState.hideRight(screenSizeMinMedia.matches)
+    splitState.hideRight()
   }
 
   onMount(() => {

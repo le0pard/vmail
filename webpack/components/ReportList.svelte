@@ -1,10 +1,18 @@
 <script>
   import {onMount} from 'svelte'
   import {report} from 'stores/report'
-  import {EVENT_LINE_TO_EDITOR, EVENT_LINE_TO_REPORT} from 'lib/constants'
+  import {
+    MULTI_LEVEL_REPORT_KEYS,
+    SINGLE_LEVEL_REPORT_KEYS,
+    REPORT_CSS_VARIABLES,
+    EVENT_LINE_TO_EDITOR,
+    EVENT_LINE_TO_REPORT
+  } from 'lib/constants'
+  import ReportMultiItemComponent from './ReportMultiItem'
+  import ReportSingleItemComponent from './ReportSingleItem'
 
   const handleLineClick = (line) => {
-    window.dispatchEvent(new window.CustomEvent(EVENT_LINE_TO_EDITOR, { detail: {line} }))
+    window.dispatchEvent(new window.CustomEvent(EVENT_LINE_TO_EDITOR, {detail: {line}}))
   }
 
   const handleEditorLineClickEvent = (e) => {
@@ -22,101 +30,50 @@
   })
 </script>
 
-<ul>
-  {#if $report.html_tags}
-    {#each Object.keys($report.html_tags).sort() as tagName (tagName)}
-      {#each Object.keys($report.html_tags[tagName]).sort() as tagAttr (tagAttr)}
-        <li>
-          HTML Tag: {tagName}: {tagAttr}
-          <div>
-            {#each $report.html_tags[tagName][tagAttr].lines as line}
-              <button on:click|preventDefault={() => handleLineClick(line)}>{line}</button>
-            {/each}
-          </div>
-        </li>
+<style>
+  .report-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0.5rem 0.5rem 1rem 0.5rem;
+  }
+</style>
+
+<ul class="report-list">
+  {#each MULTI_LEVEL_REPORT_KEYS as reportInfo (reportInfo.key)}
+    {#if $report[reportInfo.key]}
+      {#each Object.keys($report[reportInfo.key]).sort() as itemName (itemName)}
+        {#each Object.keys($report[reportInfo.key][itemName]).sort() as itemVal (itemVal)}
+          <ReportMultiItemComponent
+            reportInfo={reportInfo}
+            itemName={itemName}
+            itemVal={itemVal}
+            report={$report[reportInfo.key][itemName][itemVal]}
+            handleLineClick={handleLineClick}
+          />
+        {/each}
       {/each}
-    {/each}
+    {/if}
+  {/each}
+
+  {#if $report[REPORT_CSS_VARIABLES.key] && $report[REPORT_CSS_VARIABLES.key].lines.length > 0}
+    <ReportSingleItemComponent
+      reportInfo={REPORT_CSS_VARIABLES}
+      itemName={'css_vars'}
+      report={$report[REPORT_CSS_VARIABLES.key]}
+      handleLineClick={handleLineClick}
+    />
   {/if}
-  {#if $report.html_attributes}
-    {#each Object.keys($report.html_attributes).sort() as attrName (attrName)}
-      {#each Object.keys($report.html_attributes[attrName]).sort() as attrVal (attrVal)}
-        <li>
-          HTML Attribute: {attrName}: {attrVal}
-          <div>
-            {#each $report.html_attributes[attrName][attrVal].lines as line}
-              <button on:click|preventDefault={() => handleLineClick(line)}>{line}</button>
-            {/each}
-          </div>
-        </li>
+
+  {#each SINGLE_LEVEL_REPORT_KEYS as reportInfo (reportInfo.key)}
+    {#if $report[reportInfo.key]}
+      {#each Object.keys($report[reportInfo.key]).sort() as itemName (itemName)}
+        <ReportSingleItemComponent
+          reportInfo={reportInfo}
+          itemName={itemName}
+          report={$report[reportInfo.key][itemName]}
+          handleLineClick={handleLineClick}
+        />
       {/each}
-    {/each}
-  {/if}
-  {#if $report.css_properties}
-    {#each Object.keys($report.css_properties).sort() as propName (propName)}
-      {#each Object.keys($report.css_properties[propName]).sort() as propVal (propVal)}
-        <li>
-          CSS Prop: {propName}: {propVal}
-          <div>
-            {#each $report.css_properties[propName][propVal].lines as line}
-              <button on:click|preventDefault={() => handleLineClick(line)}>{line}</button>
-            {/each}
-          </div>
-        </li>
-      {/each}
-    {/each}
-  {/if}
-  {#if $report.at_rule_css_statements}
-    {#each Object.keys($report.at_rule_css_statements).sort() as atName (atName)}
-      {#each Object.keys($report.at_rule_css_statements[atName]).sort() as atVal (atVal)}
-        <li>
-          AT Rule CSS Statement: {atName}: {atVal}
-          <div>
-            {#each $report.at_rule_css_statements[atName][atVal].lines as line}
-              <button on:click|preventDefault={() => handleLineClick(line)}>{line}</button>
-            {/each}
-          </div>
-        </li>
-      {/each}
-    {/each}
-  {/if}
-  {#if $report.css_selector_types}
-    {#each Object.keys($report.css_selector_types).sort() as selectorType (selectorType)}
-      <li>
-        CSS SELECTOR: {selectorType}
-      </li>
-    {/each}
-  {/if}
-  {#if $report.css_dimentions}
-    {#each Object.keys($report.css_dimentions).sort() as dimensionType (dimensionType)}
-      <li>
-        CSS Dimention: {dimensionType}
-      </li>
-    {/each}
-  {/if}
-  {#if $report.css_functions}
-    {#each Object.keys($report.css_functions).sort() as functionType (functionType)}
-      <li>
-        CSS Function: {functionType}
-      </li>
-    {/each}
-  {/if}
-  {#if $report.css_pseudo_selectors}
-    {#each Object.keys($report.css_pseudo_selectors).sort() as pseudoSelectorType (pseudoSelectorType)}
-      <li>
-        CSS Pseudo Selector: {pseudoSelectorType}
-      </li>
-    {/each}
-  {/if}
-  {#if $report.img_formats}
-    {#each Object.keys($report.img_formats).sort() as imgType (imgType)}
-      <li>
-        Img formats: {imgType}
-      </li>
-    {/each}
-  {/if}
-  {#if $report.css_variables && $report.css_variables.length > 0}
-    <li>
-      CSS Variables: {JSON.stringify($report.css_variables)}
-    </li>
-  {/if}
+    {/if}
+  {/each}
 </ul>
