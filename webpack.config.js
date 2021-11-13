@@ -63,7 +63,8 @@ let config = {
     maxAssetSize: 1024000
   },
   entry: {
-    'app': preScriptsEnv.concat(['./webpack/app.js'])
+    'app': preScriptsEnv.concat(['./webpack/app.js']),
+    'ww': preScriptsEnv.concat(['./webpack/ww.js'])
   },
 
   output: {

@@ -1,5 +1,6 @@
 <script>
-	import {onDestroy} from 'svelte'
+	import {wrap, releaseProxy} from 'comlink'
+	import {onMount, onDestroy, setContext} from 'svelte'
 	import {report, reportLoading, reportError} from 'stores/report'
 	import {splitState} from 'stores/split'
 	import EditorHeaderComponent from './EditorViewHeader'
@@ -9,6 +10,27 @@
 	import ReportViewComponent from './ReportView'
 
 	export let parserFunction
+	export let workerURL
+
+	let workerObject = null
+
+	setContext('ww', {
+		getWebWorker: () => workerObject
+	})
+
+	onMount(() => {
+		const worker = new Worker(workerURL)
+		workerObject = wrap(worker)
+
+		return () => {
+			if (workerObject) {
+				workerObject[releaseProxy]()
+			}
+			if (worker?.terminate) {
+				worker.terminate()
+			}
+		}
+	})
 
 	onDestroy(() => {
 		report.reset()

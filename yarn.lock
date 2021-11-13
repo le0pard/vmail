@@ -2340,14 +2340,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/gutter@npm:^0.19.4":
-  version: 0.19.4
-  resolution: "@codemirror/gutter@npm:0.19.4"
+"@codemirror/gutter@npm:^0.19.5":
+  version: 0.19.5
+  resolution: "@codemirror/gutter@npm:0.19.5"
   dependencies:
     "@codemirror/rangeset": ^0.19.0
     "@codemirror/state": ^0.19.0
     "@codemirror/view": ^0.19.0
-  checksum: 5e3ed8c8aad85411651dd752ad5e634c918e47b271dcf74206181bee27acd6cc01c495a921abcdd614076e535c66387973104a7bd34c67d0655c4c4d1b951cc4
+  checksum: 9a00c2e079ecd822b6b237d3917110cb8ac1c899981896a6e2497724df888b9f4db4389286ea66a947ce8f7cca119bd691fa8a642ea254582e2aaaa6790a3801
   languageName: node
   linkType: hard
 
@@ -2524,16 +2524,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/view@npm:^0.19.15":
-  version: 0.19.15
-  resolution: "@codemirror/view@npm:0.19.15"
+"@codemirror/view@npm:^0.19.16":
+  version: 0.19.16
+  resolution: "@codemirror/view@npm:0.19.16"
   dependencies:
     "@codemirror/rangeset": ^0.19.0
     "@codemirror/state": ^0.19.3
     "@codemirror/text": ^0.19.0
     style-mod: ^4.0.0
     w3c-keyname: ^2.2.4
-  checksum: 7864fc4b5ba6d490a4b1b3416a6ef93108a70cc28a6261bbf34c484358d64d739c80c723aa3d0c8344ccb437aeea39020f7e5a6b10ae4438ed8d12df20a7e568
+  checksum: 0243086dcd79ced591f8b74371fa9945d363af92d64e1590cd3deae0b1fc745969a493a8dd8027bcc5f3534051150c8b95495d43f2a066e4f0e7afd7e78141d7
   languageName: node
   linkType: hard
 
@@ -4471,6 +4471,13 @@ __metadata:
   dependencies:
     delayed-stream: ~1.0.0
   checksum: 49fa4aeb4916567e33ea81d088f6584749fc90c7abec76fd516bf1c5aa5c79f3584b5ba3de6b86d26ddd64bae5329c4c7479343250cfe71c75bb366eae53bb7c
+  languageName: node
+  linkType: hard
+
+"comlink@npm:^4.3.1":
+  version: 4.3.1
+  resolution: "comlink@npm:4.3.1"
+  checksum: 557360a6558708c55aff74a25f834bfb9bfca8a42444682c4d5aead57681534a0206202be2a2760b4de124c3ba6d485b08978b6d5469cb3d26bf1438ee28a4f1
   languageName: node
   linkType: hard
 
@@ -11317,16 +11324,17 @@ fsevents@~2.3.2:
     "@babel/runtime": 7.16.3
     "@babel/runtime-corejs3": 7.16.3
     "@codemirror/commands": ^0.19.5
-    "@codemirror/gutter": ^0.19.4
+    "@codemirror/gutter": ^0.19.5
     "@codemirror/highlight": ^0.19.6
     "@codemirror/history": ^0.19.0
     "@codemirror/lang-html": ^0.19.3
     "@codemirror/state": ^0.19.5
-    "@codemirror/view": ^0.19.15
+    "@codemirror/view": ^0.19.16
     "@hotwired/stimulus": ^3.0.1
     "@hotwired/stimulus-webpack-helpers": ^1.0.1
     "@hotwired/turbo": 7.0.1
     babel-loader: 8.2.3
+    comlink: ^4.3.1
     core-js: 3.19.1
     critical: 4.0.1
     css-loader: 6.5.1
@@ -11358,7 +11366,7 @@ fsevents@~2.3.2:
     svelte-preprocess: ^4.9.8
     terser-webpack-plugin: 5.2.5
     url-loader: 4.1.1
-    webpack: 5.63.0
+    webpack: 5.64.0
     webpack-assets-manifest: 5.0.6
     webpack-cli: 4.9.1
     workbox-webpack-plugin: 6.4.0
@@ -13078,9 +13086,9 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"webpack@npm:5.63.0":
-  version: 5.63.0
-  resolution: "webpack@npm:5.63.0"
+"webpack@npm:5.64.0":
+  version: 5.64.0
+  resolution: "webpack@npm:5.64.0"
   dependencies:
     "@types/eslint-scope": ^3.7.0
     "@types/estree": ^0.0.50
@@ -13111,7 +13119,7 @@ fsevents@~2.3.2:
       optional: true
   bin:
     webpack: bin/webpack.js
-  checksum: 8127be3d900d8e57f106f61dc66f8334162d5425d770f46b2110c89057c1607e9be1a20fa37ee53bd6915e3041dc074c5e2aa99665abb18112463b91606946f7
+  checksum: 9d32a61d988b0cd34f7c2b9006ac2eec81c36a72acf3b7f01c6c567c2ebc95bb75d422a53a5bea69c36dbfc50c11ac953ec07742da43c55beb512d0f2d4bb400
   languageName: node
   linkType: hard
 

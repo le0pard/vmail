@@ -361,7 +361,7 @@ class CaniuseGenerator
         )
       when String
         agg.merge(
-          k => v.split.map { |rd| rd.delete('#') }
+          k => v.split.map { |rd| rd.delete('#') }.map(&:downcase)
         )
       end
     end

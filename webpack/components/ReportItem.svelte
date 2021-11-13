@@ -1,5 +1,6 @@
 <script>
-  import {normalizeItemVal, reportStats} from 'lib/report-helpers'
+  import {getContext} from 'svelte'
+  import {normalizeItemVal, reportStats, clientsList} from 'lib/report-helpers'
 
   export let reportInfo
   export let itemName
@@ -7,7 +8,21 @@
   export let report
   export let handleLineClick
 
-  let itemStats = reportStats(report.rules)
+  let normalizedClientsList = null
+  let itemStats = null
+
+  const {getWebWorker} = getContext('ww')
+  const webWorker = getWebWorker()
+
+  if (webWorker?.getStatsAndClients) {
+    webWorker.getStatsAndClients(report.rules).then(([resStats, resClients]) => {
+      itemStats = resStats
+      normalizedClientsList = resClients
+    })
+  } else {
+    itemStats = reportStats(report.rules)
+    normalizedClientsList = clientsList(report.rules)
+  }
 </script>
 
 <style>
@@ -149,24 +164,86 @@
           {/if}
         </div>
       </div>
-      <div class="report-header-score">
-        <div class="report-header-score-chart">
-          {#if itemStats.supportedPercentage > 0}
-            <div tabindex="0" title="{itemStats.supportedPercentage}% supported" role="group" style="width:{itemStats.supportedPercentage}%;" class="report-header-score-supported"></div>
-          {/if}
-          {#if itemStats.mitigatedPercentage > 0}
-            <div tabindex="0" title="{itemStats.mitigatedPercentage}% partially supported" role="group" style="width:{itemStats.mitigatedPercentage}%;" class="report-header-score-mitigated"></div>
-          {/if}
-          {#if itemStats.unsupportedPercentage > 0}
-            <div tabindex="0" title="{itemStats.unsupportedPercentage}% not supported" role="group" style="width:{itemStats.unsupportedPercentage}%;" class="report-header-score-unsupported"></div>
-          {/if}
+      {#if itemStats}
+        <div class="report-header-score">
+          <div class="report-header-score-chart">
+            {#if itemStats.supportedPercentage > 0}
+              <div tabindex="0" title="{itemStats.supportedPercentage}% supported" role="group" style="width:{itemStats.supportedPercentage}%;" class="report-header-score-supported"></div>
+            {/if}
+            {#if itemStats.mitigatedPercentage > 0}
+              <div tabindex="0" title="{itemStats.mitigatedPercentage}% partially supported" role="group" style="width:{itemStats.mitigatedPercentage}%;" class="report-header-score-mitigated"></div>
+            {/if}
+            {#if itemStats.unsupportedPercentage > 0}
+              <div tabindex="0" title="{itemStats.unsupportedPercentage}% not supported" role="group" style="width:{itemStats.unsupportedPercentage}%;" class="report-header-score-unsupported"></div>
+            {/if}
+          </div>
+          <div class="report-header-score-summary">
+            <span class="report-header-score-summary-supported-value" title="{itemStats.supportedPercentage}% supported">{itemStats.supportedPercentage}%</span>+
+            <span class="report-header-score-summary-mitigated-value" title="{itemStats.mitigatedPercentage}% partially supported">{itemStats.mitigatedPercentage}%</span> = {itemStats.fullSupportPercentage}%
+          </div>
         </div>
-        <div class="report-header-score-summary">
-			    <span class="report-header-score-summary-supported-value" title="{itemStats.supportedPercentage}% supported">{itemStats.supportedPercentage}%</span>+
-          <span class="report-header-score-summary-mitigated-value" title="{itemStats.mitigatedPercentage}% partially supported">{itemStats.mitigatedPercentage}%</span> = {itemStats.fullSupportPercentage}%
-        </div>
-      </div>
+      {/if}
     </div>
-    <div>{JSON.stringify(report)}</div>
+    {#if normalizedClientsList}
+      {#if normalizedClientsList.unsupported.length > 0}
+        <div>Unsupported clients</div>
+        {#each normalizedClientsList.unsupported as client}
+          <div>
+            <div>{client.title}</div>
+            {#if client.notes}
+              {#each client.notes as noteKey}
+                <div>
+                  <button>{noteKey}</button>
+                </div>
+              {/each}
+            {/if}
+          </div>
+        {/each}
+      {/if}
+      {#if normalizedClientsList.mitigated.length > 0}
+        <div>Mitigated clients</div>
+        {#each normalizedClientsList.mitigated as client}
+          <div>
+            <div>{client.title}</div>
+            {#if client.notes}
+              {#each client.notes as noteKey}
+                <div>
+                  <button>{noteKey}</button>
+                </div>
+              {/each}
+            {/if}
+          </div>
+        {/each}
+      {/if}
+      {#if normalizedClientsList.supported.length > 0}
+        <div>Supported clients</div>
+        {#each normalizedClientsList.supported as client}
+          <div>
+            <div>{client.title}</div>
+            {#if client.notes}
+              {#each client.notes as noteKey}
+                <div>
+                  <button>{noteKey}</button>
+                </div>
+              {/each}
+            {/if}
+          </div>
+        {/each}
+      {/if}
+    {/if}
+    {#if report.rules?.notes}
+      <div>Notes</div>
+      {#each Object.keys(report.rules.notes).sort() as noteKey}
+        <div>
+          <button>{noteKey}</button>
+          <div>{report.rules.notes[noteKey]}</div>
+        </div>
+      {/each}
+    {/if}
+    {#if report.rules?.url}
+      <div>
+        <a href="{report.rules.url}">More info</a>
+      </div>
+    {/if}
   </div>
 </li>

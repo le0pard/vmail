@@ -12,6 +12,9 @@ const loadWasmParser = memoize(async () => {
 })
 
 export default class extends Controller {
+  static values = {
+    workerUrl: String
+  }
   static targets = ['appContainer']
 
   connect() {
@@ -30,6 +33,7 @@ export default class extends Controller {
         this.appComponent = new AppComponent({
           target: this.appContainerTarget,
           props: {
+            workerURL: this.workerUrlValue,
             parserFunction: window.VMail
           }
         })
