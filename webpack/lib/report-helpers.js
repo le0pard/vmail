@@ -46,46 +46,14 @@ export const normalizeItemVal = (itemVal) => {
   return itemVal
 }
 
-export const reportStats = (rules) => {
-  const countValues = Object.keys(rules.stats).reduce((agg, family) => {
+export const clientsListWithStats = (rules) => {
+  const reducedData = Object.keys(rules.stats).reduce((agg, family) => {
     Object.keys(rules.stats[family]).forEach((platform) => {
-      Object.keys(rules.stats[family][platform]).forEach((version) => {
-        const state = rules.stats[family][platform][version][0]
-        if (state === 'y') {
-          agg = {...agg, supported: agg.supported + 1}
-        } else if (state === 'n') {
-          agg = {...agg, unsupported: agg.unsupported + 1}
-        } else {
-          agg = {...agg, mitigated: agg.mitigated + 1}
-        }
-      })
-    })
-
-    return agg
-  }, {
-    supported: 0,
-    mitigated: 0,
-    unsupported: 0,
-  })
-
-  const countAll = countValues.supported + countValues.mitigated + countValues.unsupported
-
-  return {
-    ...countValues,
-    supportedPercentage: round(countValues.supported * 100 / countAll),
-    mitigatedPercentage: round(countValues.mitigated * 100 / countAll),
-    unsupportedPercentage: round(countValues.unsupported * 100 / countAll),
-    fullSupportPercentage: round((countValues.supported + countValues.mitigated) * 100 / countAll),
-  }
-}
-
-export const clientsList = (rules) => {
-  return Object.keys(rules.stats).reduce((agg, family) => {
-    Object.keys(rules.stats[family]).forEach((platform) => {
+      const versionsCount = Object.keys(rules.stats[family][platform]).length
       Object.keys(rules.stats[family][platform]).forEach((version) => {
         const [state, ...notes] = rules.stats[family][platform][version]
         const clientData = {
-          title: `${getFamily(family)} ${getPlatform(platform)} (${version})`,
+          title: `${getFamily(family)} ${getPlatform(platform)}${versionsCount > 1 ? `(${version})` : ''}`,
           notes
         }
         if (state === 'y') {
@@ -94,7 +62,8 @@ export const clientsList = (rules) => {
             supported: [
               ...agg.supported,
               clientData
-            ]
+            ],
+            supportedCount: agg.supportedCount + 1
           }
         } else if (state === 'n') {
           agg = {
@@ -102,7 +71,8 @@ export const clientsList = (rules) => {
             unsupported: [
               ...agg.unsupported,
               clientData
-            ]
+            ],
+            unsupportedCount: agg.unsupportedCount + 1
           }
         } else {
           agg = {
@@ -110,7 +80,8 @@ export const clientsList = (rules) => {
             mitigated: [
               ...agg.mitigated,
               clientData
-            ]
+            ],
+            mitigatedCount: agg.mitigatedCount + 1
           }
         }
       })
@@ -119,7 +90,19 @@ export const clientsList = (rules) => {
     return agg
   }, {
     supported: [],
+    supportedCount: 0,
     mitigated: [],
+    mitigatedCount: 0,
     unsupported: [],
+    unsupportedCount: 0
   })
+
+  const countAll = reducedData.supportedCount + reducedData.mitigatedCount + reducedData.unsupportedCount
+
+  return {
+    ...reducedData,
+    supportedPercentage: round(reducedData.supportedCount * 100 / countAll),
+    mitigatedPercentage: round(reducedData.mitigatedCount * 100 / countAll),
+    unsupportedPercentage: round(reducedData.unsupportedCount * 100 / countAll)
+  }
 }

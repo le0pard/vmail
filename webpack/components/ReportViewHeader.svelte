@@ -5,7 +5,8 @@
 		flex-shrink: 0;
 		overflow: hidden;
     white-space: nowrap;
-		box-shadow: 0 2px 2px rgb(0 0 0 / 3%), 0 1px 0 rgb(0 0 0 / 3%);
+		box-shadow: 0 10px 30px 0 rgb(82 63 105 / 8%);
+		border-bottom: 1px solid var(--headBorderColor);
 	}
 
 	.report-header-item {

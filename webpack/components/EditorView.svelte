@@ -155,10 +155,12 @@
 	}
 
   .editor-footer {
+		background-color: var(--bgColor);
 		flex-shrink: 0;
 		overflow: hidden;
     white-space: nowrap;
 		padding: 0.3rem 0;
+		box-shadow: 0 -10px 30px 0 rgb(82 63 105 / 8%);
 	}
 
 	.editor-area-btn {
@@ -191,5 +193,5 @@
   <div class="editor-area-edit" bind:this={editorElement}></div>
 </div>
 <div class="editor-footer">
-  <button class="editor-area-btn" on:click|preventDefault={onSubmitHtml}>Check HTML</button>
+  <button class="editor-area-btn" on:click|preventDefault={onSubmitHtml}>Check email HTML and CSS</button>
 </div>

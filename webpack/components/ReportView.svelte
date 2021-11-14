@@ -9,6 +9,7 @@
 		flex-grow: 1;
 		position: relative;
 		overflow: scroll;
+    padding: 1rem 1rem;
 	}
 </style>
 
