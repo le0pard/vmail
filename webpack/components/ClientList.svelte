@@ -82,21 +82,23 @@
     class:client-bullet-warning="{bullet === 'warning'}"
     class:client-bullet-success="{bullet === 'success'}"
   ></span>
+
   <div class="client-list-body">
     <div class="client-list-title">{title}</div>
     <div class="client-list-items">
       {#each clients as client}
-        <div>{client.title}</div>
-        {#if client.notes}
-          {#each client.notes as noteKey}
-            <div>
+        <div>
+          <span>{client.title}</span>
+          {#if client.notes}
+            {#each client.notes as noteKey}
               <button>{noteKey}</button>
-            </div>
-          {/each}
-        {/if}
+            {/each}
+          {/if}
+        </div>
       {/each}
     </div>
   </div>
+
   <div
     class="client-list-percentage"
     class:client-list-percentage-error="{bullet === 'error'}"
