@@ -162,9 +162,9 @@
 	}
 
 	.editor-area-btn {
-		color: var(--btnColor);
+		color: var(--buttonColor);
 		display: inline-block;
-		background-color: #0cc2aa;
+		background-color: var(--buttonBgColor);
 		line-height: 1.25;
 		text-align: center;
 		white-space: nowrap;
@@ -173,13 +173,17 @@
 		user-select: none;
 		border: 1px solid transparent;
 		padding: 0.8rem 1rem;
-		border-radius: 0.25rem;
 		font-size: 1rem;
 		width: 100%;
 	}
 
 	.editor-area-btn:hover {
+		background-color: var(--buttonBgHoverColor);
 		box-shadow: inset 0 -10rem 0 rgb(158 158 158 / 20%);
+	}
+
+	.editor-area-btn:active {
+		background-color: var(--buttonBgActiveColor);
 	}
 </style>
 

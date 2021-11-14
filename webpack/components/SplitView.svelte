@@ -31,8 +31,8 @@
 
   .split-left, .split-right {
     align-items: center;
-    background-color: var(--splitColor);
-    color: #fff;
+    background-color: var(--splitBgColor);
+    color: var(--splitColor);
     cursor: pointer;
     display: flex;
     flex: 1;
@@ -41,18 +41,32 @@
   }
 
   .split-left {
+    border-left: 1px solid var(--splitBorderColor);
+    border-right: 1px solid var(--splitBorderColor);
+  }
+
+  .split-right {
     border-right: 1px solid var(--splitBorderColor);
   }
 
   .split-left:hover, .split-right:hover {
-    background-color: var(--splitColorHover);
+    background-color: var(--splitBgHoverColor);
+  }
+
+  .split-left:active, .split-right:active {
+    background-color: var(--splitBgHoverColor);
   }
 
   .arrow-left, .arrow-right {
-    border: solid black;
+    border-style: solid;
+    border-color: var(--splitColor);
     border-width: 0 2px 2px 0;
     display: inline-block;
     padding: 2px;
+  }
+
+  .split-left:hover .arrow-left, .split-right:hover .arrow-right {
+    border-color: var(--splitHoverColor);
   }
 
   .arrow-left {

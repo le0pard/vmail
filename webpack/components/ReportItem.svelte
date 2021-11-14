@@ -27,7 +27,7 @@
 
 <style>
   .report-item {
-    background-color: var(--headColor);
+    background-color: var(--headBgColor);
     padding: 0.5rem 1rem;
     border: 1px solid var(--borderColor);
   }
