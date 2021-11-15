@@ -7,6 +7,7 @@
     flex-direction: column;
     min-width: 0;
     background-color: var(--cardBgColor);
+    border-radius: 0.4rem;
   }
 
   .empty-report-body {

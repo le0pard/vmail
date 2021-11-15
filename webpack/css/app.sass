@@ -20,11 +20,17 @@
   --warningBgColor: #fff8dd
   --errorColor: #f1416c
   --errorBgColor: #fff5f8
+  // clients
+  --clientColor: #3f4254
   // button
   --buttonColor: #fff
   --buttonBgColor: #0bb783
   --buttonBgHoverColor: #04aa77
   --buttonBgActiveColor: #00afaf
+  --mutedButtonColor: #a1a5b7
+  --mutedButtonBgColor: #f5f8fa
+  --mutedButtonHoverColor: #7e8299
+  --mutedButtonHoverBgColor: #e4e6ef
   // split
   --splitColor: #7e8299
   --splitHoverColor: #04c8c8
@@ -50,18 +56,23 @@
   --warningBgColor: #392f28
   --errorColor: #f64e60
   --errorBgColor: #3a2434
+  // clients
+  --clientColor: #cdcdde
   // button
   --buttonColor: #fff
   --buttonBgColor: #0bb783
   --buttonBgHoverColor: #04aa77
   --buttonBgActiveColor: #00afaf
+  --mutedButtonColor: #565674
+  --mutedButtonBgColor: #1b1b29
+  --mutedButtonHoverColor: #cdcdde
+  --mutedButtonHoverBgColor: #323248
   // split
   --splitColor: #cdcdde
   --splitHoverColor: #0bb783
   --splitBgColor: #1b1b29
   --splitBgHoverColor: #1c3238
   --splitBorderColor: #323248
-
 
 html
   font-size: responsive 14px 18px
@@ -98,7 +109,8 @@ h4
 .parser-container
   height: 100%
 
-
+.js-focus-visible :focus:not(.focus-visible)
+  outline: none
 
 @import "svg_icons"
 @import "codemirror"

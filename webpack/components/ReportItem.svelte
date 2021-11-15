@@ -1,6 +1,8 @@
 <script>
   import {getContext} from 'svelte'
+  import {createNotesStore} from 'stores/notes'
   import ClientListComponent from './ClientList'
+  import NotesListComponent from './NotesList'
   import {normalizeItemVal, clientsListWithStats} from 'lib/report-helpers'
 
   export let reportInfo
@@ -9,6 +11,7 @@
   export let report
   export let handleLineClick
 
+  let notesStore = createNotesStore()
   let clientsWithStats = null
 
   const {getWebWorker} = getContext('ww')
@@ -33,6 +36,7 @@
     min-width: 0;
     background-color: var(--cardBgColor);
     margin-bottom: 1rem;
+    border-radius: 0.4rem;
   }
 
   .report-item:last-child {
@@ -108,8 +112,11 @@
         {/if}
       </div>
       <div class="report-header-main-lines">
+        <div>Found on lines:</div>
         {#each report.lines as line, i}
-          <button on:click|preventDefault={() => handleLineClick(line)} class="report-line-button">{line}</button>
+          <button on:click|preventDefault={() => handleLineClick(line)} class="report-line-button">
+            {line}
+          </button>
           {#if i < report.lines.length - 1},{/if}
         {/each}
         {#if report.more_lines}
@@ -124,14 +131,16 @@
           bullet="error"
           clients={clientsWithStats.unsupported}
           percentage={clientsWithStats.unsupportedPercentage}
+          notesStore={notesStore}
         />
       {/if}
       {#if clientsWithStats.mitigated.length > 0}
         <ClientListComponent
-          title="Mitigated clients"
+          title="Partially supported clients"
           bullet="warning"
           clients={clientsWithStats.mitigated}
           percentage={clientsWithStats.mitigatedPercentage}
+          notesStore={notesStore}
         />
       {/if}
       {#if clientsWithStats.supported.length > 0}
@@ -140,38 +149,15 @@
           bullet="success"
           clients={clientsWithStats.supported}
           percentage={clientsWithStats.supportedPercentage}
+          notesStore={notesStore}
         />
       {/if}
     {/if}
     {#if report.rules?.notes}
-      <div>Notes</div>
-      {#each Object.keys(report.rules.notes).sort() as noteKey}
-        <div>
-          <button>{noteKey}</button>
-          <div>{report.rules.notes[noteKey]}</div>
-        </div>
-      {/each}
+      <NotesListComponent
+        notes={report.rules.notes}
+        notesStore={notesStore}
+      />
     {/if}
   </div>
 </li>
-
-
-<!-- {#if false}
-  <div class="report-header-score">
-    <div class="report-header-score-chart">
-      {#if itemStats.supportedPercentage > 0}
-        <div tabindex="0" title="{itemStats.supportedPercentage}% supported" role="group" style="width:{itemStats.supportedPercentage}%;" class="report-header-score-supported"></div>
-      {/if}
-      {#if itemStats.mitigatedPercentage > 0}
-        <div tabindex="0" title="{itemStats.mitigatedPercentage}% partially supported" role="group" style="width:{itemStats.mitigatedPercentage}%;" class="report-header-score-mitigated"></div>
-      {/if}
-      {#if itemStats.unsupportedPercentage > 0}
-        <div tabindex="0" title="{itemStats.unsupportedPercentage}% not supported" role="group" style="width:{itemStats.unsupportedPercentage}%;" class="report-header-score-unsupported"></div>
-      {/if}
-    </div>
-    <div class="report-header-score-summary">
-      <span class="report-header-score-summary-supported-value" title="{itemStats.supportedPercentage}% supported">{itemStats.supportedPercentage}%</span>+
-      <span class="report-header-score-summary-mitigated-value" title="{itemStats.mitigatedPercentage}% partially supported">{itemStats.mitigatedPercentage}%</span> = {itemStats.fullSupportPercentage}%
-    </div>
-  </div>
-{/if} -->

@@ -3,6 +3,7 @@
   export let clients
   export let percentage
   export let bullet = 'success'
+  export let notesStore
 </script>
 
 <style>
@@ -49,6 +50,38 @@
     flex-wrap: wrap;
   }
 
+  .client-list-client {
+    font-size: 0.85rem;
+    color: var(--clientColor);
+    margin-bottom: 0.2rem;
+    margin-right: 0.4rem;
+    border: 1px solid var(--headBorderColor);
+    padding: 0.1rem 0.2rem;
+    border-radius: 0.4rem;
+  }
+
+  .client-list-line {
+    border: 0;
+    box-shadow: none;
+    color: var(--mutedButtonColor);
+    background-color: var(--mutedButtonBgColor);
+    padding: calc(0.2rem + 1px) calc(0.3rem + 1px);
+    border-radius: 0.4rem;
+    margin-right: 0.2rem;
+    cursor: pointer;
+		user-select: none;
+  }
+
+  .client-list-line:hover, .client-list-line:active {
+    color: var(--mutedButtonHoverColor);
+    background-color: var(--mutedButtonHoverBgColor);
+  }
+
+  .client-list-line-active {
+    color: var(--mutedButtonHoverColor);
+    background-color: var(--mutedButtonHoverBgColor);
+  }
+
   .client-list-percentage {
     display: flex;
     align-items: center;
@@ -57,6 +90,7 @@
     justify-content: center;
     padding: 0.5rem;
     min-width: 4rem;
+    border-radius: 0.4rem;
   }
 
   .client-list-percentage-error {
@@ -87,11 +121,20 @@
     <div class="client-list-title">{title}</div>
     <div class="client-list-items">
       {#each clients as client}
-        <div>
+        <div class="client-list-client">
           <span>{client.title}</span>
           {#if client.notes}
             {#each client.notes as noteKey}
-              <button>{noteKey}</button>
+              <button
+                class="client-list-line"
+                class:client-list-line-active="{$notesStore.line === noteKey}"
+                on:focus={() => notesStore.setLine(noteKey)}
+                on:mouseover={() => notesStore.setLine(noteKey)}
+                on:blur={() => notesStore.reset()}
+                on:mouseout={() => notesStore.reset()}
+              >
+                {noteKey}
+              </button>
             {/each}
           {/if}
         </div>
