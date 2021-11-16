@@ -7,13 +7,15 @@
 	import {lineNumbers, highlightActiveLineGutter, gutter} from '@codemirror/gutter'
 	import {defaultHighlightStyle} from '@codemirror/highlight'
 	import {html} from '@codemirror/lang-html'
+	import {oneDarkTheme, oneDarkHighlightStyle} from 'lib/codemirrorDarkTheme'
+	import {isDarkThemeON} from 'stores/theme'
 	import {report, reportLoading, reportError, linesAndSelectors} from 'stores/report'
 	import {splitState} from 'stores/split'
 	import {
 		validationErrorsMarker,
 		validationErrorsEffect,
 		validationErrorsState
-	} from 'lib/coremirror-validation-errors'
+	} from 'lib/codemirrorValidationErrors'
   import {EVENT_LINE_TO_EDITOR, EVENT_LINE_TO_REPORT} from 'lib/constants'
 
 	export let parserFunction
@@ -21,56 +23,70 @@
   let editorElement
   let editorView = null
 
-  const eTheme = EditorView.baseTheme({
-		'&.cm-editor': {
-			fontSize: '0.9rem',
-			height: '100%'
-		}
-	})
+	const getEditorState = (doc = '') => {
+		const [eTheme, eThemeHighLight] = (() => {
+			if ($isDarkThemeON) {
+				return [
+					oneDarkTheme,
+					oneDarkHighlightStyle
+				]
+			}
 
-	const initialEditorState = EditorState.create({
-		doc: '',
-		extensions: [
-			validationErrorsState,
-			gutter({
-				class: 'validation-error-gutter',
-				markers: (v) => v.state.field(validationErrorsState),
-				initialSpacer: () => validationErrorsMarker,
-				domEventHandlers: {
-					mouseover(view, edLine) {
-						const line = view.state.doc.lineAt(edLine.from)
-            if (line?.number && $linesAndSelectors[line.number]) {
-							// tooltip?
-							// console.log('Info', $linesAndSelectors[line.number])
-						}
-						return true
-					},
-					mousedown(view, edLine) {
-            const line = view.state.doc.lineAt(edLine.from)
-            if (line?.number) {
-              window.dispatchEvent(
-                new window.CustomEvent(
-                  EVENT_LINE_TO_REPORT,
-                  { detail: {line: line.number} }
-                )
-              )
-            }
-            return true
+			return [
+				EditorView.baseTheme({
+					'&.cm-editor': {
+						fontSize: '0.9rem',
+						height: '100%'
 					}
-				}
-			}),
-			lineNumbers(),
-			highlightActiveLineGutter(),
-			history(),
-			defaultHighlightStyle,
-			keymap.of([
-				...defaultKeymap,
-				...historyKeymap
-			]),
-			html(),
-			eTheme
-		]
-	})
+				}),
+				defaultHighlightStyle
+			]
+		})()
+
+		return EditorState.create({
+			doc,
+			extensions: [
+				validationErrorsState,
+				gutter({
+					class: 'validation-error-gutter',
+					markers: (v) => v.state.field(validationErrorsState),
+					initialSpacer: () => validationErrorsMarker,
+					domEventHandlers: {
+						mouseover(view, edLine) {
+							const line = view.state.doc.lineAt(edLine.from)
+							if (line?.number && $linesAndSelectors[line.number]) {
+								// tooltip?
+								// console.log('Info', $linesAndSelectors[line.number])
+							}
+							return true
+						},
+						mousedown(view, edLine) {
+							const line = view.state.doc.lineAt(edLine.from)
+							if (line?.number) {
+								window.dispatchEvent(
+									new window.CustomEvent(
+										EVENT_LINE_TO_REPORT,
+										{ detail: {line: line.number} }
+									)
+								)
+							}
+							return true
+						}
+					}
+				}),
+				lineNumbers(),
+				highlightActiveLineGutter(),
+				history(),
+				eThemeHighLight,
+				keymap.of([
+					...defaultKeymap,
+					...historyKeymap
+				]),
+				html(),
+				eTheme
+			]
+		})
+	}
 
   const handleReportLineClickEvent = (e) => {
     if (!editorView || !e.detail?.line) {
@@ -118,18 +134,31 @@
 		})
   })
 
-  onMount(() => {
+	const createEditor = (doc = '') => {
 		editorView = new EditorView({
-			state: initialEditorState,
+			state: getEditorState(doc),
 			parent: editorElement
 		})
+	}
 
-		return () => {
-			if (editorView) {
-				editorView.destroy()
-				editorView = null
-			}
+	const destroyEditor = () => {
+		if (editorView) {
+			editorView.destroy()
+			editorView = null
 		}
+	}
+
+	const unsubscribeIsDarkTheme = isDarkThemeON.subscribe(() => {
+		if (editorView) {
+			const html = editorView.state.doc.toString()
+			destroyEditor()
+			createEditor(html)
+		}
+	})
+
+  onMount(() => {
+		createEditor()
+		return destroyEditor
 	})
 
   onMount(() => {
@@ -138,6 +167,7 @@
   })
 
   onDestroy(unsubscribeLinesReport)
+	onDestroy(unsubscribeIsDarkTheme)
 </script>
 
 <style>

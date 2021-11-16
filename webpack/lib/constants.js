@@ -1,3 +1,6 @@
+export const APP_THEMES_LIGHT = 'light'
+export const APP_THEMES_DARK = 'dark'
+
 export const MULTI_LEVEL_REPORT_KEYS = [
   {
     key: 'css_properties',

@@ -3,7 +3,7 @@
   import {createNotesStore} from 'stores/notes'
   import ClientListComponent from './ClientList'
   import NotesListComponent from './NotesList'
-  import {normalizeItemName, normalizeItemVal, clientsListWithStats} from 'lib/report-helpers'
+  import {normalizeItemName, normalizeItemVal, clientsListWithStats} from 'lib/reportHelpers'
 
   export let reportInfo
   export let itemName

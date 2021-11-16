@@ -1,3 +1,7 @@
+<script>
+	import ThemeSwitcherComponent from './ThemeSwitcher'
+</script>
+
 <style>
   .report-header {
 		display: flex;
@@ -12,7 +16,8 @@
 
 	.report-header-item {
 		display: flex;
-		align-items: stretch;
+		align-items: center;
+		justify-content: center;
 		padding-top: 0;
 		padding-bottom: 0;
 	}
@@ -27,11 +32,6 @@
 		text-decoration: none;
 	}
 
-	.report-header-link-active {
-		border-bottom: 2px solid var(--headHoverColor);
-		color: var(--headHoverColor);
-	}
-
 	.report-header-link:hover, .report-header-link:active {
 		border-bottom: 2px solid var(--headHoverColor);
 	}
@@ -39,7 +39,7 @@
 
 <div class="report-header">
 	<div class="report-header-item">
-		<a class="report-header-link report-header-link-active" href="/">Home</a>
+		<ThemeSwitcherComponent />
 	</div>
   <div class="report-header-item">
 		<a class="report-header-link" href="/faq.html">FAQ</a>
