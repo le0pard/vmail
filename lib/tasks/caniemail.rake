@@ -18,7 +18,7 @@ class CaniuseGenerator
     'html-dir' => [['dir', '']],
     'html-div' => [['div', '']],
     'html-form' => [['form', '']],
-    'html-h1-h6' => [['h1', ''], ['h2', ''], ['h3', ''], ['h4', ''], ['h5', ''], ['h6', '']],
+    'html-h1-h6' => [['h1-h6', ''], ['h2', ''], ['h3', ''], ['h4', ''], ['h5', ''], ['h6', '']],
     'html-image-maps' => [%w[img usemap]],
     'html-input-checkbox' => [['input', 'type||checkbox']],
     'html-input-hidden' => [['input', 'type||hidden']],

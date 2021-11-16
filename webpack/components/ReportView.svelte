@@ -1,7 +1,9 @@
 <script>
-	import {report} from 'stores/report'
+  import {report, reportLoading, reportError} from 'stores/report'
   import ReportListComponent from './ReportList'
+  import ReportLoadingComponent from './ReportLoading'
   import ReportEmptyComponent from './ReportEmpty'
+  import ReportErrorComponent from './ReportError'
 </script>
 
 <style>
@@ -14,9 +16,15 @@
 </style>
 
 <div class="parser-report-area">
-  {#if Object.keys($report).length > 0}
-    <ReportListComponent />
+  {#if $reportError}
+    <ReportErrorComponent error={$reportError} />
+  {:else if $reportLoading}
+    <ReportLoadingComponent />
   {:else}
-    <ReportEmptyComponent />
+    {#if Object.keys($report).length > 0}
+      <ReportListComponent />
+    {:else}
+      <ReportEmptyComponent />
+    {/if}
   {/if}
 </div>

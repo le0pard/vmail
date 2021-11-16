@@ -7,6 +7,7 @@
     white-space: nowrap;
 		box-shadow: 0 10px 30px 0 rgb(82 63 105 / 8%);
 		border-bottom: 1px solid var(--headBorderColor);
+		justify-content: flex-end;
 	}
 
 	.report-header-item {

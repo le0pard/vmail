@@ -8,6 +8,7 @@
 	import {defaultHighlightStyle} from '@codemirror/highlight'
 	import {html} from '@codemirror/lang-html'
 	import {report, reportLoading, reportError, linesAndSelectors} from 'stores/report'
+	import {splitState} from 'stores/split'
 	import {
 		validationErrorsMarker,
 		validationErrorsEffect,
@@ -90,12 +91,13 @@
 
 		try {
 			const reportData = await parserFunction(html)
-			reportLoading.set(false)
 			report.set(reportData)
+			splitState.switchToRightOnMobile()
 		} catch (err) {
-			reportLoading.set(false)
 			reportError.set(err)
 		}
+
+		reportLoading.set(false)
 	}
 
   const unsubscribeLinesReport = linesAndSelectors.subscribe((linesSelector) => {

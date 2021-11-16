@@ -8,20 +8,27 @@ const createBasicStore = () => {
     visible: initialVisibility
   }
   const {subscribe, set, update} = writable(initialValue)
-  const toggleFn = (state) => (currentVal) => ({
+  const toggleFn = (state) => () => update((currentVal) => ({
     visible: (
       screenSizeMinMedia.matches ? state : (
         currentVal.visible === initialVisibility ? state : initialVisibility
       )
+    )
+  }))
+  const toggleForMobileFn = (state) => () => set({
+    visible: (
+      screenSizeMinMedia.matches ? state : initialVisibility
     )
   })
 
   return {
     subscribe,
     set,
-    hideLeft: () => update(toggleFn('right')),
-    hideRight: () => update(toggleFn('left')),
+    hideLeft: toggleFn('right'),
+    hideRight: toggleFn('left'),
     hideForceRight: () => set({visible: 'left'}),
+    switchToRightOnMobile: toggleForMobileFn('right'),
+    switchToLeftOnMobile: toggleForMobileFn('left'),
     reset: () => set(initialValue)
   }
 }

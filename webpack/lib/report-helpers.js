@@ -1,3 +1,5 @@
+import {CSS_SELECTORS_MAP} from './constants'
+
 const FAMILY_MAP = {
   "gmail": "Gmail",
   "outlook": "Outlook",
@@ -38,10 +40,19 @@ const round = (num, precision = 2) => (
   Math.round((num + Number.EPSILON) * Math.pow(10, precision)) / Math.pow(10, precision)
 )
 
+export const normalizeItemName = (reportKey, itemName) => {
+  switch (reportKey) {
+    case 'css_selector_types':
+      return CSS_SELECTORS_MAP[itemName]?.title ?? ''
+    default:
+      return itemName
+  }
+}
+
 export const normalizeItemVal = (itemVal) => {
   if (itemVal.indexOf('||') >= 0) {
     const [itemV1, itemV2] = itemVal.split('||')
-    return `${itemV1}=${itemV2}`
+    return `[${itemV1}=${itemV2}]`
   }
   return itemVal
 }

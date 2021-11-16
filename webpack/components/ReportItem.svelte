@@ -3,7 +3,7 @@
   import {createNotesStore} from 'stores/notes'
   import ClientListComponent from './ClientList'
   import NotesListComponent from './NotesList'
-  import {normalizeItemVal, clientsListWithStats} from 'lib/report-helpers'
+  import {normalizeItemName, normalizeItemVal, clientsListWithStats} from 'lib/report-helpers'
 
   export let reportInfo
   export let itemName
@@ -58,19 +58,44 @@
     flex: 1;
     display: flex;
     flex-direction: row;
+    color: var(--baseColor);
+    border-bottom: 1px dashed var(--splitBorderColor);
+    padding-bottom: 0.3rem;
   }
 
   .report-item-header-type {
     flex: 2;
+    font-weight: 600;
+    font-size: 1.2rem;
   }
 
   .report-item-header-name {
     flex: 3;
+    font-size: 1.2rem;
+    font-weight: 600;
   }
 
   .report-item-header-link {
     flex: 1;
     text-align: right;
+  }
+
+  .report-item-header-more-link {
+    color: var(--linkColor);
+    text-decoration: none;
+    font-size: 0.8rem;
+  }
+
+  .report-item-header-more-link:hover, .report-item-header-more-link:active {
+    color: var(--linkHoverColor);
+  }
+
+  .report-item-header-description {
+    color: var(--cardBaseColor);
+    margin: 0.2rem 0;
+    width: fit-content;
+    font-size: 0.8rem;
+    font-weight: 500;
   }
 
   .report-header-main-lines {
@@ -79,18 +104,34 @@
     flex-direction: row;
     flex-wrap: wrap;
     align-items: flex-start;
+    color: var(--cardBaseColor);
+    margin: 0.3rem 0;
+    border-bottom: 1px dashed var(--splitBorderColor);
+    padding-bottom: 0.3rem;
+  }
+
+  .report-header-main-lines-title {
+    color: var(--baseColor);
+    font-weight: 500;
+    font-size: 1rem;
   }
 
   .report-line-button {
-    background: none;
-    border: none;
+    border: 0;
+    box-shadow: none;
+    color: var(--headColor);
+    background-color: var(--mutedButtonBgColor);
+    padding: calc(0.2rem + 1px) calc(0.3rem + 1px);
+    border-radius: 0.4rem;
+    margin-right: 0.2rem;
+    margin-bottom: 0.2rem;
     cursor: pointer;
-    text-decoration: underline;
-    font-size: 0.9rem;
+		user-select: none;
   }
 
-  .report-line-button:hover {
-    text-decoration: none;
+  .report-line-button:hover, .report-line-button:active {
+    color: var(--successColor);
+    background-color: var(--successBgColor);
   }
 </style>
 
@@ -98,30 +139,36 @@
   <div class="report-item-container">
     <div class="report-item-header">
       <div class="report-item-header-info">
-        <div class="report-item-header-type">{reportInfo.title}</div>
+        <div class="report-item-header-type">
+          {reportInfo.title}
+        </div>
         <div class="report-item-header-name">
-          {itemName}
-          {#if itemVal.length > 0}
-            {normalizeItemVal(itemVal)}
+          {#if itemName}
+            {normalizeItemName(reportInfo.key, itemName)}
+            {#if itemVal.length > 0}
+              {normalizeItemVal(itemVal)}
+            {/if}
           {/if}
         </div>
         {#if report.rules?.url}
           <div class="report-item-header-link">
-            <a href="{report.rules.url}" target="_blank" rel="noopener noreferrer">More info</a>
+            <a class="report-item-header-more-link" href="{report.rules.url}" target="_blank" rel="noopener noreferrer">More info</a>
           </div>
         {/if}
       </div>
+      {#if report.rules?.description}
+        <div class="report-item-header-description">
+          {report.rules?.description}
+        </div>
+      {/if}
       <div class="report-header-main-lines">
-        <div>Found on lines:</div>
+        <div class="report-header-main-lines-title">Found on lines:</div>
         {#each report.lines as line, i}
           <button on:click|preventDefault={() => handleLineClick(line)} class="report-line-button">
             {line}
           </button>
-          {#if i < report.lines.length - 1},{/if}
         {/each}
-        {#if report.more_lines}
-          <div>and more...</div>
-        {/if}
+        {#if report.more_lines}<div>and more...</div>{/if}
       </div>
     </div>
     {#if clientsWithStats}

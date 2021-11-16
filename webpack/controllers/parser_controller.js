@@ -22,6 +22,7 @@ export default class extends Controller {
       this.errorComponent = new ErrorComponent({
         target: this.appContainerTarget,
         props: {
+          title: 'Your browser do not support WebAssembly',
           message: 'Your browser do not support WebAssembly'
         }
       })
@@ -41,6 +42,7 @@ export default class extends Controller {
         this.errorComponent = new ErrorComponent({
           target: this.appContainerTarget,
           props: {
+            title: 'Error to load WebAssembly module',
             message: 'Error to load wasm module'
           }
         })
@@ -50,6 +52,7 @@ export default class extends Controller {
       this.errorComponent = new ErrorComponent({
         target: this.appContainerTarget,
         props: {
+          title: 'Error to load WebAssembly module',
           message: 'Error to load wasm module'
         }
       })

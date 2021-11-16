@@ -1,6 +1,7 @@
 <script>
   import {onMount} from 'svelte'
   import {report} from 'stores/report'
+  import {splitState} from 'stores/split'
   import {
     MULTI_LEVEL_REPORT_KEYS,
     SINGLE_LEVEL_REPORT_KEYS,
@@ -12,6 +13,7 @@
 
   const handleLineClick = (line) => {
     window.dispatchEvent(new window.CustomEvent(EVENT_LINE_TO_EDITOR, {detail: {line}}))
+    splitState.switchToLeftOnMobile()
   }
 
   const handleEditorLineClickEvent = (e) => {
@@ -57,7 +59,7 @@
   {#if $report[REPORT_CSS_VARIABLES.key] && $report[REPORT_CSS_VARIABLES.key].lines.length > 0}
     <ReportItemComponent
       reportInfo={REPORT_CSS_VARIABLES}
-      itemName={'css_vars'}
+      itemName={''}
       itemVal={''}
       report={$report[REPORT_CSS_VARIABLES.key]}
       handleLineClick={handleLineClick}
