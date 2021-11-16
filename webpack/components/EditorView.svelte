@@ -103,9 +103,9 @@
   const onSubmitHtml = async () => {
 		reportError.set(null)
 		reportLoading.set(true)
-		const html = editorView.state.doc.toString()
 
 		try {
+			const html = editorView.state.doc.toString()
 			const reportData = await parserFunction(html)
 			report.set(reportData)
 			splitState.switchToRightOnMobile()
@@ -114,6 +114,20 @@
 		}
 
 		reportLoading.set(false)
+	}
+
+	const createEditor = (doc = '') => {
+		editorView = new EditorView({
+			state: getEditorState(doc),
+			parent: editorElement
+		})
+	}
+
+	const destroyEditor = () => {
+		if (editorView) {
+			editorView.destroy()
+			editorView = null
+		}
 	}
 
   const unsubscribeLinesReport = linesAndSelectors.subscribe((linesSelector) => {
@@ -134,26 +148,14 @@
 		})
   })
 
-	const createEditor = (doc = '') => {
-		editorView = new EditorView({
-			state: getEditorState(doc),
-			parent: editorElement
-		})
-	}
-
-	const destroyEditor = () => {
-		if (editorView) {
-			editorView.destroy()
-			editorView = null
-		}
-	}
-
 	const unsubscribeIsDarkTheme = isDarkThemeON.subscribe(() => {
-		if (editorView) {
-			const html = editorView.state.doc.toString()
-			destroyEditor()
-			createEditor(html)
+		if (!editorView) {
+			return
 		}
+
+		const html = editorView.state.doc.toString()
+		destroyEditor()
+		createEditor(html)
 	})
 
   onMount(() => {
