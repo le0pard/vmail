@@ -36,6 +36,7 @@
   .client-list-title {
     font-weight: 600;
     font-size: 1.1rem;
+    margin-bottom: 0.4rem;
   }
 
   .client-list-body {
