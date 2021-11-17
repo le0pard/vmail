@@ -6,6 +6,7 @@ AllCops:
   NewCops: enable
   Exclude:
     - 'node_modules/**/*'
+    - 'vendor/**/*'
 
 Metrics/MethodLength:
   Max: 14
