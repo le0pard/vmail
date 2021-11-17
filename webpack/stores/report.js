@@ -13,7 +13,7 @@ const selectLinesAndSelectors = (report) => {
         Object.keys(report[reportInfo.key][name]).forEach((value) => {
           report[reportInfo.key][name][value].lines.forEach((line) => {
             lineToSelector[line] ||= []
-            lineToSelector[line] = [...lineToSelector[line], [reportInfo.key, name, value]]
+            lineToSelector[line] = [...lineToSelector[line], [reportInfo, name, value]]
           })
         })
       })
@@ -24,7 +24,7 @@ const selectLinesAndSelectors = (report) => {
       Object.keys(report[reportInfo.key]).forEach((name) => {
         report[reportInfo.key][name].lines.forEach((line) => {
           lineToSelector[line] ||= []
-          lineToSelector[line] = [...lineToSelector[line], [reportInfo.key, name]]
+          lineToSelector[line] = [...lineToSelector[line], [reportInfo, name, '']]
         })
       })
     }
@@ -33,7 +33,7 @@ const selectLinesAndSelectors = (report) => {
     Object.keys(report[REPORT_CSS_VARIABLES.key]).forEach((name) => {
       report[REPORT_CSS_VARIABLES.key][name].lines.forEach((line) => {
         lineToSelector[line] ||= []
-        lineToSelector[line] = [...lineToSelector[line], REPORT_CSS_VARIABLES.key]
+        lineToSelector[line] = [...lineToSelector[line], [REPORT_CSS_VARIABLES, '', '']]
       })
     })
   }

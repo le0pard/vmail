@@ -55,7 +55,7 @@
     color: var(--clientColor);
     margin-bottom: 0.2rem;
     margin-right: 0.4rem;
-    border: 1px solid var(--headBorderColor);
+    border: 1px solid var(--splitBorderColor);
     padding: 0.1rem 0.2rem;
     border-radius: 0.4rem;
   }

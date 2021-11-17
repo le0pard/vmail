@@ -53,6 +53,7 @@
 {#each Object.keys(notes).sort() as noteKey}
   <div
     class="notes-list-item"
+    tabindex="0"
     on:focus={() => notesStore.setLine(noteKey)}
     on:mouseover={() => notesStore.setLine(noteKey)}
     on:blur={() => notesStore.reset()}

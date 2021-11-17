@@ -17,11 +17,16 @@
 		validationErrorsState
 	} from 'lib/codemirrorValidationErrors'
   import {EVENT_LINE_TO_EDITOR, EVENT_LINE_TO_REPORT} from 'lib/constants'
+	import {getTooltipText} from 'lib/reportHelpers'
 
 	export let parserFunction
 
+	const TOOLTIP_SHIFT_PX = 20
+
   let editorElement
   let editorView = null
+	let tooltipElement = null
+	let tooltipTextElement = null
 
 	const getEditorState = (doc = '') => {
 		const [eTheme, eThemeHighLight] = (() => {
@@ -43,6 +48,43 @@
 			]
 		})()
 
+		const showTooltip = (view, edLine, event) => {
+			if (!tooltipElement || !tooltipTextElement) {
+				return
+			}
+
+			const line = view.state.doc.lineAt(edLine.from)
+			if (line?.number && $linesAndSelectors[line.number] && $linesAndSelectors[line.number].length > 0) {
+				tooltipTextElement.textContent = getTooltipText($linesAndSelectors[line.number])
+				tooltipElement.style.top = `${event.clientY + TOOLTIP_SHIFT_PX}px`
+				tooltipElement.style.left = `${event.clientX + TOOLTIP_SHIFT_PX}px`
+				tooltipElement.style.opacity = '1'
+				tooltipElement.style.display = 'block'
+			}
+		}
+
+		const hideTooltip = () => {
+			if (!tooltipElement || !tooltipTextElement) {
+				return
+			}
+
+			tooltipElement.style.display = 'none'
+			tooltipElement.style.opacity = '0'
+			tooltipTextElement.textContent = ''
+		}
+
+		const clickMarker = (view, edLine) => {
+			const line = view.state.doc.lineAt(edLine.from)
+			if (line?.number) {
+				window.dispatchEvent(
+					new window.CustomEvent(
+						EVENT_LINE_TO_REPORT,
+						{ detail: {line: line.number} }
+					)
+				)
+			}
+		}
+
 		return EditorState.create({
 			doc,
 			extensions: [
@@ -52,25 +94,35 @@
 					markers: (v) => v.state.field(validationErrorsState),
 					initialSpacer: () => validationErrorsMarker,
 					domEventHandlers: {
-						mouseover(view, edLine) {
-							const line = view.state.doc.lineAt(edLine.from)
-							if (line?.number && $linesAndSelectors[line.number]) {
-								// tooltip?
-								// console.log('Info', $linesAndSelectors[line.number])
-							}
+						mouseover(view, edLine, event) {
+							showTooltip(view, edLine, event)
 							return true
 						},
-						mousedown(view, edLine) {
-							const line = view.state.doc.lineAt(edLine.from)
-							if (line?.number) {
-								window.dispatchEvent(
-									new window.CustomEvent(
-										EVENT_LINE_TO_REPORT,
-										{ detail: {line: line.number} }
-									)
-								)
+						mousemove(_view, _edLine, event) {
+							if (!tooltipElement || !tooltipTextElement) {
+								return true
 							}
+
+							tooltipElement.style.top = `${event.clientY + TOOLTIP_SHIFT_PX}px`
+							tooltipElement.style.left = `${event.clientX + TOOLTIP_SHIFT_PX}px`
 							return true
+						},
+						mouseout() {
+							hideTooltip()
+							return true
+						},
+						click(view, edLine) {
+							clickMarker(view, edLine)
+							return true
+						},
+						keyup(view, edLine, event) {
+							// not working - edLine not changing :(
+							if (event.keyCode === 13 || event.key === 'Enter') {
+								event.preventDefault()
+								clickMarker(view, edLine)
+								return true
+							}
+							return false
 						}
 					}
 				}),
@@ -116,6 +168,24 @@
 		reportLoading.set(false)
 	}
 
+	const applyErrorGutters = (linesSelector) => {
+		if (!editorView) {
+      return
+    }
+
+		editorView.dispatch({
+			effects: validationErrorsEffect.of({type: 'empty'})
+		})
+		Object.keys(linesSelector).forEach((line) => {
+			const editorLine = editorView.state.doc.line(line)
+      if (editorLine?.from) {
+        editorView.dispatch({
+          effects: validationErrorsEffect.of({pos: editorLine.from, selector: linesSelector[line]})
+        })
+      }
+		})
+	}
+
 	const createEditor = (doc = '') => {
 		editorView = new EditorView({
 			state: getEditorState(doc),
@@ -131,21 +201,7 @@
 	}
 
   const unsubscribeLinesReport = linesAndSelectors.subscribe((linesSelector) => {
-    if (!editorView) {
-      return
-    }
-
-	  editorView.dispatch({
-			effects: validationErrorsEffect.of({type: 'empty'})
-		})
-		Object.keys(linesSelector).forEach((line) => {
-			const editorLine = editorView.state.doc.line(line)
-      if (editorLine?.from) {
-        editorView.dispatch({
-          effects: validationErrorsEffect.of({pos: editorLine.from, selector: linesSelector[line]})
-        })
-      }
-		})
+		applyErrorGutters(linesSelector)
   })
 
 	const unsubscribeIsDarkTheme = isDarkThemeON.subscribe(() => {
@@ -156,6 +212,7 @@
 		const html = editorView.state.doc.toString()
 		destroyEditor()
 		createEditor(html)
+		applyErrorGutters($linesAndSelectors)
 	})
 
   onMount(() => {
@@ -221,6 +278,28 @@
 	.editor-area-btn:active {
 		background-color: var(--buttonBgActiveColor);
 	}
+
+	.editor-tooltip {
+		display: none;
+		opacity: 0;
+		position: fixed;
+		z-index: 100;
+    max-width: 25rem;
+		white-space: pre-wrap;
+		overflow: hidden;
+		border-radius: 0.4rem;
+		padding: 0.4rem;
+		box-shadow: 0 3px 18px rgb(0 0 0 / 0%);
+		border: 2px solid var(--splitBorderColor);
+		color: var(--baseColor);
+		background-color: var(--cardBgColor);
+		font-size: 0.8rem;
+	}
+
+	.editor-tooltip-message {
+		background-position: top left;
+  	background-repeat: no-repeat;
+	}
 </style>
 
 <div class="editor-area">
@@ -228,4 +307,8 @@
 </div>
 <div class="editor-footer">
   <button class="editor-area-btn" on:click|preventDefault={onSubmitHtml}>Check email HTML and CSS</button>
+</div>
+<!-- tooltip -->
+<div class="editor-tooltip" bind:this={tooltipElement}>
+	<div class="editor-tooltip-message" bind:this={tooltipTextElement}></div>
 </div>

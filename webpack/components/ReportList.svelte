@@ -1,7 +1,8 @@
 <script>
   import {onMount} from 'svelte'
-  import {report} from 'stores/report'
+  import {report, linesAndSelectors} from 'stores/report'
   import {splitState} from 'stores/split'
+  import {camelize} from 'lib/reportHelpers'
   import {
     MULTI_LEVEL_REPORT_KEYS,
     SINGLE_LEVEL_REPORT_KEYS,
@@ -10,6 +11,10 @@
     EVENT_LINE_TO_REPORT
   } from 'lib/constants'
   import ReportItemComponent from './ReportItem'
+
+  const genElementID = ([reportInfo, itemName, itemVal]) => (
+    camelize(['item', reportInfo.key, itemName, itemVal].join('_')).replace(/_/g, '')
+  )
 
   const handleLineClick = (line) => {
     window.dispatchEvent(new window.CustomEvent(EVENT_LINE_TO_EDITOR, {detail: {line}}))
@@ -22,7 +27,24 @@
     }
 
     const {line} = e.detail
-    console.log('Scroll to line: ', line)
+    if (!$linesAndSelectors[line] || $linesAndSelectors[line].length === 0) {
+      return
+    }
+
+    const scrollElementID = genElementID($linesAndSelectors[line][0])
+    const scrollElement = document.getElementById(scrollElementID)
+    if (!scrollElement) {
+      return
+    }
+
+    splitState.switchToRightOnMobile()
+    setTimeout(() => {
+      scrollElement.scrollIntoView({
+        behavior: 'auto',
+        block: 'start',
+        inline: 'nearest'
+      })
+    }, 0)
   }
 
   onMount(() => {
@@ -48,6 +70,7 @@
             reportInfo={reportInfo}
             itemName={itemName}
             itemVal={itemVal}
+            elementID={genElementID([reportInfo, itemName, itemVal])}
             report={$report[reportInfo.key][itemName][itemVal]}
             handleLineClick={handleLineClick}
           />
@@ -61,6 +84,7 @@
       reportInfo={REPORT_CSS_VARIABLES}
       itemName={''}
       itemVal={''}
+      elementID={genElementID([REPORT_CSS_VARIABLES, '', ''])}
       report={$report[REPORT_CSS_VARIABLES.key]}
       handleLineClick={handleLineClick}
     />
@@ -73,6 +97,7 @@
           reportInfo={reportInfo}
           itemName={itemName}
           itemVal={''}
+          elementID={genElementID([reportInfo, itemName, ''])}
           report={$report[reportInfo.key][itemName]}
           handleLineClick={handleLineClick}
         />

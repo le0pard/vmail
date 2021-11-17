@@ -5,6 +5,7 @@
   import NotesListComponent from './NotesList'
   import {normalizeItemName, normalizeItemVal, clientsListWithStats} from 'lib/reportHelpers'
 
+  export let elementID
   export let reportInfo
   export let itemName
   export let itemVal
@@ -135,7 +136,7 @@
   }
 </style>
 
-<li class="report-item">
+<li id={elementID} class="report-item">
   <div class="report-item-container">
     <div class="report-item-header">
       <div class="report-item-header-info">

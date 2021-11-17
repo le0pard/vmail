@@ -40,6 +40,14 @@ const round = (num, precision = 2) => (
   Math.round((num + Number.EPSILON) * Math.pow(10, precision)) / Math.pow(10, precision)
 )
 
+export const camelize = (str) => (
+  str.replace(/([-_][a-z])/ig, ($1) => (
+    $1.toUpperCase()
+      .replace('-', '')
+      .replace('_', '')
+  ))
+)
+
 export const normalizeItemName = (reportKey, itemName) => {
   switch (reportKey) {
     case 'css_selector_types':
@@ -56,6 +64,16 @@ export const normalizeItemVal = (itemVal) => {
   }
   return itemVal
 }
+
+export const getTooltipText = (matches) => (
+  matches.map(([reportInfo, itemName, itemVal]) => (
+    [
+      reportInfo.title.replace(/\s/g, '\u00a0'), // "\u00a0" is non break space
+      itemName && `:\u00a0${normalizeItemName(reportInfo.key, itemName)}`, // "\u00a0" is non break space
+      itemVal && `(${normalizeItemVal(itemVal)})`
+    ].filter(Boolean).join('')
+  )).join(', ')
+)
 
 export const clientsListWithStats = (rules) => {
   const reducedData = Object.keys(rules.stats).reduce((agg, family) => {

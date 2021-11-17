@@ -4,7 +4,7 @@ import {GutterMarker} from '@codemirror/gutter'
 
 export const validationErrorsMarker = new class extends GutterMarker {
   toDOM() {
-    const marker = document.createElement('div')
+    const marker = document.createElement('button')
     marker.className = 'validation-error-marker'
     return marker
   }
