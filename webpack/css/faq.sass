@@ -1,0 +1,68 @@
+.faq-header
+  display: flex
+  background-color: var(--headBgColor)
+  flex-shrink: 0
+  overflow: hidden
+  white-space: nowrap
+  box-shadow: 0 10px 30px 0 rgb(82 63 105 / 8%)
+  border-bottom: 1px solid var(--headBorderColor)
+
+.faq-header-item
+  display: flex
+  align-items: stretch
+  padding-top: 0
+  padding-bottom: 0
+
+.faq-header-link
+  color: var(--headColor)
+  background-color: transparent
+  border-bottom: 2px solid transparent
+  transition: color 0.2s ease,background-color 0.2s ease
+  padding: 0.5rem 0
+  margin: 0 1rem
+  text-decoration: none
+
+.faq-header-link-active
+  border-bottom: 2px solid var(--headHoverColor)
+  color: var(--headHoverColor)
+
+.faq-header-link
+  &:hover, &:active
+    border-bottom: 2px solid var(--headHoverColor)
+
+.faq-center-container
+  display: flex
+  align-items: center
+  justify-content: center
+  margin: 0 auto
+
+.faq-container
+  border: 0
+  box-shadow: 0 10px 35px 0 rgb(56 71 109 / 8%)
+  position: relative
+  display: flex
+  flex-direction: column
+  min-width: 0
+  max-width: 1200px
+  background-color: var(--cardBgColor)
+  border-radius: 0.4rem
+  margin: 1rem
+
+.faq-body
+  flex: 1 1 auto
+  padding: 2rem
+
+.faq-text
+  color: var(--cardBaseColor)
+
+.faq-list
+  display: flex
+  flex-direction: column
+
+.faq-question
+  flex: 1
+  margin-bottom: 0.3rem
+
+.faq-answer
+  flex: 1
+  color: var(--cardBaseColor)

@@ -1,10 +1,8 @@
 <script>
 	import {wrap, releaseProxy} from 'comlink'
 	import {onMount, onDestroy, setContext} from 'svelte'
-	import {activateTheme} from 'lib/themeSwitcher'
 	import {report, reportLoading, reportError} from 'stores/report'
 	import {splitState} from 'stores/split'
-	import {theme} from 'stores/theme'
 	import EditorHeaderComponent from './EditorViewHeader'
 	import EditorViewComponent from './EditorView'
 	import SplitViewComponent from './SplitView'
@@ -32,10 +30,6 @@
 				worker.terminate()
 			}
 		}
-	})
-
-	onMount(() => {
-		activateTheme($theme)
 	})
 
 	onDestroy(() => {

@@ -1,4 +1,17 @@
 import {APP_THEMES_LIGHT, APP_THEMES_DARK} from 'lib/constants'
+import LocalStorage from 'lib/localStorage'
+
+export const getTheme = () => {
+  let theme = LocalStorage.getItem('theme')
+
+  if (!theme) {
+    if (window.matchMedia('(prefers-color-scheme: dark)')?.matches) {
+      theme = APP_THEMES_DARK
+    }
+  }
+
+  return theme || APP_THEMES_LIGHT
+}
 
 export const activateTheme = (theme) => {
   if (document) {

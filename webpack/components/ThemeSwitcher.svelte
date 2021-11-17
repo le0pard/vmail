@@ -1,6 +1,6 @@
 <script>
   import {theme, isDarkThemeON} from 'stores/theme'
-  import {activateTheme} from 'lib/themeSwitcher'
+  import {activateTheme} from 'utils/theme'
 
   let isDarkThemeActive = $isDarkThemeON
 
