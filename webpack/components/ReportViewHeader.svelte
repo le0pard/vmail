@@ -22,18 +22,20 @@
 		padding-bottom: 0;
 	}
 
-	.report-header-link {
-		color: var(--headColor);
-		background-color: transparent;
-		border-bottom: 2px solid transparent;
-		transition: color 0.2s ease,background-color 0.2s ease;
-		padding: 0.5rem 0;
+	.report-header-github-link {
+		color: var(--mutedButtonColor);
 		margin: 0 1rem;
-		text-decoration: none;
 	}
 
-	.report-header-link:hover, .report-header-link:active {
-		border-bottom: 2px solid var(--headHoverColor);
+	.report-header-github {
+		fill: var(--mutedButtonColor);
+		width: 2rem;
+		height: 2rem;
+		padding-top: 3px;
+	}
+
+	.report-header-github-link:hover .report-header-github {
+		fill: var(--mutedButtonHoverColor);
 	}
 </style>
 
@@ -42,6 +44,10 @@
 		<ThemeSwitcherComponent />
 	</div>
   <div class="report-header-item">
-		<a class="report-header-link" href="/faq.html">FAQ</a>
+		<a class="report-header-github-link" href="https://github.com/le0pard/vmail" target="_blank" rel="noopener noreferrer">
+			<svg class="report-header-github">
+				<use href="#github-svg-icon" />
+			</svg>
+		</a>
 	</div>
 </div>
