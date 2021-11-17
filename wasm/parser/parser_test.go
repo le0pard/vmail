@@ -319,7 +319,6 @@ func TestReportFromHTMLFirstFixture(t *testing.T) {
 	}{
 		{"HtmlTags style", report.HtmlTags["style"][""].Lines, map[int]bool{13: true, 61: true, 74: true, 85: true}},
 		{"CssProperties background", report.CssProperties["background"][""].Lines, map[int]bool{101: true, 102: true, 190: true, 191: true, 224: true, 225: true, 291: true, 292: true, 359: true, 360: true, 427: true, 428: true, 445: true, 448: true, 466: true, 467: true, 506: true, 507: true, 541: true, 559: true, 577: true}},
-		{"CssProperties width", report.CssProperties["width"][""].Lines, map[int]bool{64: true, 69: true, 76: true, 81: true, 88: true, 92: true, 102: true, 109: true, 120: true, 121: true, 152: true, 158: true, 170: true, 171: true, 191: true, 198: true, 225: true, 231: true, 243: true, 244: true, 257: true, 292: true, 299: true, 311: true, 312: true, 325: true, 360: true, 367: true, 379: true, 380: true}},
 		{"AtRuleCssStatements @media", report.AtRuleCssStatements["@media"][""].Lines, map[int]bool{62: true, 86: true}},
 		{"CssSelectorTypes DESCENDANT_COMBINATOR_TYPE", report.CssSelectorTypes["5"].Lines, map[int]bool{14: true, 75: true, 80: true}},
 		{"CssSelectorTypes TYPE_SELECTOR_TYPE", report.CssSelectorTypes["9"].Lines, map[int]bool{14: true, 18: true, 25: true, 26: true, 32: true, 41: true}},
