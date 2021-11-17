@@ -48,12 +48,11 @@ export default class extends Controller {
         })
       }
     }).catch((e) => {
-      console.error('Error', e)
       this.errorComponent = new ErrorComponent({
         target: this.appContainerTarget,
         props: {
           title: 'Error to load WebAssembly module',
-          message: 'Error to load wasm module'
+          message: e.toString()
         }
       })
     })

@@ -344,7 +344,7 @@ class CaniuseGenerator
         agg[item[0]] ||= {}
         agg[item[0]][item[1]] = {
           notes: rule['notes_by_num'] || [],
-          stats: normalize_support(rule['stats']) ,
+          stats: normalize_support(rule['stats']),
           url: rule['url'] || '',
           description: rule['description'] || ''
         }
@@ -368,12 +368,12 @@ class CaniuseGenerator
   end
 
   def count_not_support(hash)
-    hash.reduce(0) do |agg, (k, v)|
+    hash.reduce(0) do |agg, (_k, v)|
       case v
       when Hash
         agg + count_not_support(v)
       when String
-        agg + (v.downcase != 'y' ? 1 : 0)
+        agg + (v.casecmp('y').zero? ? 0 : 1)
       end
     end
   end

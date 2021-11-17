@@ -162,5 +162,5 @@ export const oneDarkHighlightStyle = HighlightStyle.define([
   {
     tag: t.invalid,
     color: invalid
-  },
+  }
 ])

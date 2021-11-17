@@ -1,36 +1,36 @@
 import {CSS_SELECTORS_MAP} from './constants'
 
 const FAMILY_MAP = {
-  "gmail": "Gmail",
-  "outlook": "Outlook",
-  "yahoo": "Yahoo! Mail",
-  "apple-mail": "Apple Mail",
-  "aol": "AOL",
-  "thunderbird": "Mozilla Thunderbird",
-  "microsoft": "Microsoft",
-  "samsung-email": "Samsung Email",
-  "sfr": "SFR",
-  "orange": "Orange",
-  "protonmail": "ProtonMail",
-  "hey": "HEY",
-  "mail-ru": "Mail.ru",
-  "fastmail": "Fastmail",
-  "laposte": "LaPoste.net",
-  "t-online-de": "T-online.de",
-  "free-fr": "Free.fr"
+  'gmail': 'Gmail',
+  'outlook': 'Outlook',
+  'yahoo': 'Yahoo! Mail',
+  'apple-mail': 'Apple Mail',
+  'aol': 'AOL',
+  'thunderbird': 'Mozilla Thunderbird',
+  'microsoft': 'Microsoft',
+  'samsung-email': 'Samsung Email',
+  'sfr': 'SFR',
+  'orange': 'Orange',
+  'protonmail': 'ProtonMail',
+  'hey': 'HEY',
+  'mail-ru': 'Mail.ru',
+  'fastmail': 'Fastmail',
+  'laposte': 'LaPoste.net',
+  't-online-de': 'T-online.de',
+  'free-fr': 'Free.fr'
 }
 
 const PLATFORM_MAP = {
-  "desktop-app": "Desktop",
-  "desktop-webmail": "Desktop Webmail",
-  "mobile-webmail": "Mobile Webmail",
-  "webmail": "Webmail",
-  "ios": "iOS",
-  "android": "Android",
-  "windows": "Windows",
-  "macos": "macOS",
-  "windows-mail": "Windows Mail",
-  "outlook-com": "Outlook.com"
+  'desktop-app': 'Desktop',
+  'desktop-webmail': 'Desktop Webmail',
+  'mobile-webmail': 'Mobile Webmail',
+  'webmail': 'Webmail',
+  'ios': 'iOS',
+  'android': 'Android',
+  'windows': 'Windows',
+  'macos': 'macOS',
+  'windows-mail': 'Windows Mail',
+  'outlook-com': 'Outlook.com'
 }
 
 const getFamily = (family) => FAMILY_MAP[family] ?? family

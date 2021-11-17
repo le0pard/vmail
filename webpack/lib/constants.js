@@ -81,7 +81,7 @@ export const CSS_SELECTORS_MAP = {
   },
   10: {
     title: 'Universal selector *'
-  },
+  }
 }
 
 export const EVENT_LINE_TO_EDITOR = 'line-to-editor'

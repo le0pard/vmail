@@ -1,7 +1,7 @@
 # VMail
 
-### Build wasm file
+### Build wasm file from Go files
 
 ```bash
-GOOS=js GOARCH=wasm go build -ldflags="-s -w" -o main.wasm
+bundle exec rake wasm:compile
 ```

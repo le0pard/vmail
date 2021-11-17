@@ -5732,6 +5732,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"eslint-plugin-svelte3@npm:^3.2.1":
+  version: 3.2.1
+  resolution: "eslint-plugin-svelte3@npm:3.2.1"
+  peerDependencies:
+    eslint: ">=6.0.0"
+    svelte: ^3.2.0
+  checksum: a59233f29f714f55b90fd61f21bfd0ab93b5ed7655dd4b7c52c6da9e957bae3aace90d3485060e496cde9685c2a80bd0ffeed6fc0cf3da1fc3e050c66cc3db7a
+  languageName: node
+  linkType: hard
+
 "eslint-scope@npm:5.1.1, eslint-scope@npm:^5.1.1":
   version: 5.1.1
   resolution: "eslint-scope@npm:5.1.1"
@@ -11343,6 +11353,7 @@ fsevents@~2.3.2:
     delegated-events: 1.1.2
     eslint: 8.2.0
     eslint-plugin-import: 2.25.3
+    eslint-plugin-svelte3: ^3.2.1
     file-loader: 6.2.0
     focus-visible: ^5.2.0
     gulp: 4.0.2

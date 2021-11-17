@@ -22,7 +22,7 @@ export const validationErrorsState = StateField.define({
       if (e.is(validationErrorsEffect)) {
         switch (e.value.type) {
           case 'remove':
-            set = set.update({filter: (from) => from != e.value.pos})
+            set = set.update({filter: (from) => from !== e.value.pos})
             break
           case 'empty':
             set = RangeSet.empty

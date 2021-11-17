@@ -10,4 +10,3 @@ export const createNotesStore = () => {
     reset: () => set(initialValue)
   }
 }
-

@@ -8,7 +8,7 @@ AllCops:
     - 'node_modules/**/*'
 
 Metrics/MethodLength:
-  Max: 13
+  Max: 14
 
 Metrics/ClassLength:
   Max: 400
@@ -17,7 +17,13 @@ Metrics/BlockLength:
   Max: 33
 
 Metrics/AbcSize:
-  Max: 21
+  Max: 24
+
+Metrics/CyclomaticComplexity:
+  Max: 10
+
+Metrics/PerceivedComplexity:
+  Max: 10
 
 Lint/DeprecatedOpenSSLConstant:
   Enabled: true
