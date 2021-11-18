@@ -54,6 +54,6 @@ configure :build do
   activate :gzip, exts: %w[.css .htm .html .js .svg .xhtml]
 end
 
-after_build do
-  system('yarn run optimize')
-end
+# after_build do
+#   system('yarn run optimize')
+# end
