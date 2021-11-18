@@ -1,9 +1,6 @@
 package parser
 
 import (
-	"io/ioutil"
-	"os"
-	"path"
 	"reflect"
 	"testing"
 )
