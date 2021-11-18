@@ -1,6 +1,11 @@
+<script>
+	import IconComponent from './Icon'
+</script>
+
 <style>
   .editor-header {
 		display: flex;
+		align-items: center;
 		background-color: var(--headBgColor);
 		flex-shrink: 0;
 		overflow: hidden;
@@ -22,7 +27,7 @@
 		border-bottom: 2px solid transparent;
 		transition: color 0.2s ease,background-color 0.2s ease;
 		padding: 0.5rem 0;
-		margin: 0 1rem;
+		margin: 0 0.5rem;
 		text-decoration: none;
 	}
 
@@ -34,11 +39,33 @@
 	.editor-header-link:hover, .editor-header-link:active {
 		border-bottom: 2px solid var(--headHoverColor);
 	}
+
+	.editor-header-logo-container {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.editor-header-logo-link {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 2rem;
+		height: 2rem;
+		margin: 0 0.5rem;
+	}
 </style>
 
 <div class="editor-header">
+	<div class="editor-header-logo-container">
+		<a class="editor-header-logo-link" href="/">
+			<IconComponent />
+		</a>
+	</div>
 	<div class="editor-header-item">
-		<a class="editor-header-link editor-header-link-active" href="/">Home</a>
+		<a class="editor-header-link editor-header-link-active" href="/">
+			Home
+		</a>
 	</div>
   <div class="editor-header-item">
 		<a class="editor-header-link" href="/faq.html">FAQ</a>
