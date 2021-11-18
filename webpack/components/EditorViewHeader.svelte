@@ -27,7 +27,7 @@
 		border-bottom: 2px solid transparent;
 		transition: color 0.2s ease,background-color 0.2s ease;
 		padding: 0.5rem 0;
-		margin: 0 0.5rem;
+		margin: 0 1rem;
 		text-decoration: none;
 	}
 
@@ -64,7 +64,7 @@
 	</div>
 	<div class="editor-header-item">
 		<a class="editor-header-link editor-header-link-active" href="/">
-			Home
+			VMail
 		</a>
 	</div>
   <div class="editor-header-item">
