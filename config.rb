@@ -49,7 +49,7 @@ activate :auto_blank_links,
 configure :build do
   config[:site_urls_base] = 'https://vmail.leopard.in.ua'
   # min html
-  activate :minify_html
+  activate :minify_html, ignore: ['samples/email_sample.html']
   # gzip
   activate :gzip, exts: %w[.css .htm .html .js .svg .xhtml]
 end
