@@ -29,6 +29,8 @@ const cachedAssets = self.__WB_MANIFEST
 
 sha256(JSON.stringify(cachedAssets)).then((rev) => {
   precacheAndRoute([
+    {url: '/favicon.ico', revision: `${rev}-v1`},
+    {url: '/favicon.svg', revision: `${rev}-v1`},
     {url: '/parser.wasm', revision: `${rev}-v1`},
     {url: '/index.html', revision: `${rev}-v1`},
     {url: '/faq.html', revision: `${rev}-v1`},
