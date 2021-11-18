@@ -37,11 +37,13 @@
       return
     }
 
-    scrollElement.scrollIntoView({
-      behavior: 'auto',
-      block: 'start',
-      inline: 'nearest'
-    })
+    setTimeout(() => {
+      scrollElement.scrollIntoView({
+        behavior: 'auto',
+        block: 'start',
+        inline: 'nearest'
+      })
+    }, 0)
   }
 
   onMount(() => {
