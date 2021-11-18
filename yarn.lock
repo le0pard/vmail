@@ -9849,67 +9849,6 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"rwpod@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "rwpod@workspace:."
-  dependencies:
-    "@babel/core": 7.16.0
-    "@babel/eslint-parser": ^7.16.3
-    "@babel/plugin-transform-runtime": 7.16.4
-    "@babel/preset-env": 7.16.4
-    "@babel/runtime": 7.16.3
-    "@babel/runtime-corejs3": 7.16.3
-    "@codemirror/commands": ^0.19.5
-    "@codemirror/gutter": ^0.19.5
-    "@codemirror/highlight": ^0.19.6
-    "@codemirror/history": ^0.19.0
-    "@codemirror/lang-html": ^0.19.3
-    "@codemirror/state": ^0.19.5
-    "@codemirror/view": ^0.19.19
-    "@hotwired/stimulus": ^3.0.1
-    "@hotwired/stimulus-webpack-helpers": ^1.0.1
-    "@hotwired/turbo": 7.0.1
-    babel-loader: 8.2.3
-    comlink: ^4.3.1
-    core-js: 3.19.1
-    css-loader: 6.5.1
-    css-minimizer-webpack-plugin: 3.1.4
-    del: 6.0.0
-    delegated-events: 1.1.2
-    eslint: 8.2.0
-    eslint-plugin-import: 2.25.3
-    eslint-plugin-svelte3: ^3.2.1
-    file-loader: 6.2.0
-    focus-visible: ^5.2.0
-    gulp: 4.0.2
-    lodash: 4.17.21
-    lost: 8.3.1
-    mini-css-extract-plugin: 2.4.5
-    normalize.css: 8.0.1
-    postcss: 8.3.11
-    postcss-browser-reporter: 0.6.0
-    postcss-import: 14.0.2
-    postcss-load-config: ^3.1.0
-    postcss-loader: 6.2.0
-    postcss-preset-env: 7.0.0
-    postcss-reporter: 7.0.4
-    rucksack-css: ^1.0.2
-    sass: 1.43.4
-    sass-loader: 12.3.0
-    style-loader: 3.3.1
-    svelte: ^3.44.1
-    svelte-loader: ^3.1.2
-    svelte-preprocess: ^4.9.8
-    terser-webpack-plugin: 5.2.5
-    url-loader: 4.1.1
-    webpack: 5.64.1
-    webpack-assets-manifest: 5.0.6
-    webpack-cli: 4.9.1
-    workbox-webpack-plugin: 6.4.1
-    workbox-window: 6.4.1
-  languageName: unknown
-  linkType: soft
-
 "safe-buffer@npm:^5.1.0":
   version: 5.2.1
   resolution: "safe-buffer@npm:5.2.1"
@@ -11300,6 +11239,67 @@ fsevents@~2.3.2:
   checksum: 1f663973f1362f2d074b554f79ff7673187667082373b3d3e628beb1fc2a7ff33024f10b492fbd8db421a09ea3b7b22c3d3de4a0f0e73ead7b4685af570b906f
   languageName: node
   linkType: hard
+
+"vmail@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "vmail@workspace:."
+  dependencies:
+    "@babel/core": 7.16.0
+    "@babel/eslint-parser": ^7.16.3
+    "@babel/plugin-transform-runtime": 7.16.4
+    "@babel/preset-env": 7.16.4
+    "@babel/runtime": 7.16.3
+    "@babel/runtime-corejs3": 7.16.3
+    "@codemirror/commands": ^0.19.5
+    "@codemirror/gutter": ^0.19.5
+    "@codemirror/highlight": ^0.19.6
+    "@codemirror/history": ^0.19.0
+    "@codemirror/lang-html": ^0.19.3
+    "@codemirror/state": ^0.19.5
+    "@codemirror/view": ^0.19.19
+    "@hotwired/stimulus": ^3.0.1
+    "@hotwired/stimulus-webpack-helpers": ^1.0.1
+    "@hotwired/turbo": 7.0.1
+    babel-loader: 8.2.3
+    comlink: ^4.3.1
+    core-js: 3.19.1
+    css-loader: 6.5.1
+    css-minimizer-webpack-plugin: 3.1.4
+    del: 6.0.0
+    delegated-events: 1.1.2
+    eslint: 8.2.0
+    eslint-plugin-import: 2.25.3
+    eslint-plugin-svelte3: ^3.2.1
+    file-loader: 6.2.0
+    focus-visible: ^5.2.0
+    gulp: 4.0.2
+    lodash: 4.17.21
+    lost: 8.3.1
+    mini-css-extract-plugin: 2.4.5
+    normalize.css: 8.0.1
+    postcss: 8.3.11
+    postcss-browser-reporter: 0.6.0
+    postcss-import: 14.0.2
+    postcss-load-config: ^3.1.0
+    postcss-loader: 6.2.0
+    postcss-preset-env: 7.0.0
+    postcss-reporter: 7.0.4
+    rucksack-css: ^1.0.2
+    sass: 1.43.4
+    sass-loader: 12.3.0
+    style-loader: 3.3.1
+    svelte: ^3.44.1
+    svelte-loader: ^3.1.2
+    svelte-preprocess: ^4.9.8
+    terser-webpack-plugin: 5.2.5
+    url-loader: 4.1.1
+    webpack: 5.64.1
+    webpack-assets-manifest: 5.0.6
+    webpack-cli: 4.9.1
+    workbox-webpack-plugin: 6.4.1
+    workbox-window: 6.4.1
+  languageName: unknown
+  linkType: soft
 
 "w3c-keyname@npm:^2.2.4":
   version: 2.2.4
