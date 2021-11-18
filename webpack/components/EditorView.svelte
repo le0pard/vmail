@@ -76,6 +76,7 @@
 		const clickMarker = (view, edLine) => {
 			const line = view.state.doc.lineAt(edLine.from)
 			if (line?.number) {
+				splitState.switchToRightOnMobile()
 				window.dispatchEvent(
 					new window.CustomEvent(
 						EVENT_LINE_TO_REPORT,
@@ -155,6 +156,7 @@
   const onSubmitHtml = async () => {
 		reportError.set(null)
 		reportLoading.set(true)
+		splitState.switchToRightOnMobile()
 
 		try {
 			const html = editorView.state.doc.toString()
@@ -162,9 +164,7 @@
   		const webWorker = getWebWorker()
 			if (webWorker?.processHTML) {
 				const reportData = await webWorker.processHTML(html)
-
 				report.set(reportData)
-				splitState.switchToRightOnMobile()
 			} else {
 				reportError.set(new Error('Web worker is not available'))
 			}

@@ -17,8 +17,8 @@
   )
 
   const handleLineClick = (line) => {
-    window.dispatchEvent(new window.CustomEvent(EVENT_LINE_TO_EDITOR, {detail: {line}}))
     splitState.switchToLeftOnMobile()
+    window.dispatchEvent(new window.CustomEvent(EVENT_LINE_TO_EDITOR, {detail: {line}}))
   }
 
   const handleEditorLineClickEvent = (e) => {
@@ -37,14 +37,11 @@
       return
     }
 
-    splitState.switchToRightOnMobile()
-    setTimeout(() => {
-      scrollElement.scrollIntoView({
-        behavior: 'auto',
-        block: 'start',
-        inline: 'nearest'
-      })
-    }, 0)
+    scrollElement.scrollIntoView({
+      behavior: 'auto',
+      block: 'start',
+      inline: 'nearest'
+    })
   }
 
   onMount(() => {
