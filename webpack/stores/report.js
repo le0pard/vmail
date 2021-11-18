@@ -57,3 +57,7 @@ export const linesAndSelectors = derived(
   report,
   $report => selectLinesAndSelectors($report)
 )
+export const isReportReady = derived(
+  [reportError, report],
+  ([$reportError, $report]) => !$reportError && Object.keys($report).length > 0
+)

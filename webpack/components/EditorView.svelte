@@ -16,7 +16,8 @@
 		validationErrorsEffect,
 		validationErrorsState
 	} from 'lib/codemirrorValidationErrors'
-  import {EVENT_LINE_TO_EDITOR, EVENT_LINE_TO_REPORT} from 'lib/constants'
+  import {EVENT_LINE_TO_EDITOR, EVENT_LINE_TO_REPORT, EVENT_SUBMIT_EXAMPLE} from 'lib/constants'
+	import {loadSampleContent} from 'lib/sampleHelpers'
 	import {getTooltipText} from 'lib/reportHelpers'
 
 	const TOOLTIP_SHIFT_PX = 20
@@ -80,7 +81,7 @@
 				window.dispatchEvent(
 					new window.CustomEvent(
 						EVENT_LINE_TO_REPORT,
-						{ detail: {line: line.number} }
+						{detail: {line: line.number}}
 					)
 				)
 			}
@@ -141,6 +142,22 @@
 		})
 	}
 
+	const runHtmlAnalyze = () => {
+		return new Promise((resolve, reject) => {
+			splitState.switchToRightOnMobile()
+			const editorContent = editorView.state.doc.toString()
+			const webWorker = getWebWorker()
+			if (webWorker?.processHTML) {
+				webWorker.processHTML(editorContent).then((data) => {
+					report.set(data)
+					resolve()
+				}).catch((err) => reject(err))
+			} else {
+				reject(new Error('Web worker is not available'))
+			}
+		})
+	}
+
   const handleReportLineClickEvent = (e) => {
     if (!editorView || !e.detail?.line) {
       return
@@ -153,26 +170,38 @@
 		editorView.focus()
   }
 
-  const onSubmitHtml = async () => {
+	const handleLoadSample = () => {
 		reportError.set(null)
 		reportLoading.set(true)
-		splitState.switchToRightOnMobile()
 
-		try {
-			const html = editorView.state.doc.toString()
-
-  		const webWorker = getWebWorker()
-			if (webWorker?.processHTML) {
-				const reportData = await webWorker.processHTML(html)
-				report.set(reportData)
-			} else {
-				reportError.set(new Error('Web worker is not available'))
+		loadSampleContent().then((sampleContent) => {
+			if (!sampleContent) {
+				return
 			}
-		} catch (err) {
-			reportError.set(err)
-		}
 
-		reportLoading.set(false)
+			const currentEditorValue = editorView.state.doc.toString()
+			const endPosition = currentEditorValue.length
+
+			editorView.dispatch({
+				changes: {
+					from: 0,
+					to: endPosition,
+					insert: sampleContent
+				}
+			})
+
+			return runHtmlAnalyze()
+		}).catch((err) => reportError.set(err))
+			.finally(() => reportLoading.set(false))
+	}
+
+  const onSubmitHtml = () => {
+		reportError.set(null)
+		reportLoading.set(true)
+
+		runHtmlAnalyze()
+			.catch((err) => reportError.set(err))
+			.finally(() => reportLoading.set(false))
 	}
 
 	const applyErrorGutters = (linesSelector) => {
@@ -229,7 +258,11 @@
 
   onMount(() => {
     window.addEventListener(EVENT_LINE_TO_EDITOR, handleReportLineClickEvent)
-    return () => window.removeEventListener(EVENT_LINE_TO_EDITOR, handleReportLineClickEvent)
+		window.addEventListener(EVENT_SUBMIT_EXAMPLE, handleLoadSample)
+    return () => {
+			window.removeEventListener(EVENT_LINE_TO_EDITOR, handleReportLineClickEvent)
+			window.removeEventListener(EVENT_SUBMIT_EXAMPLE, handleLoadSample)
+		}
   })
 
   onDestroy(unsubscribeLinesReport)
@@ -279,7 +312,6 @@
 
 	.editor-area-btn:hover {
 		background-color: var(--buttonBgHoverColor);
-		box-shadow: inset 0 -10rem 0 rgb(158 158 158 / 20%);
 	}
 
 	.editor-area-btn:active {

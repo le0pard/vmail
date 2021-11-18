@@ -1,5 +1,5 @@
 <script>
-  import {report, reportLoading, reportError} from 'stores/report'
+  import {isReportReady, reportLoading, reportError} from 'stores/report'
   import ReportListComponent from './ReportList'
   import ReportLoadingComponent from './ReportLoading'
   import ReportEmptyComponent from './ReportEmpty'
@@ -21,7 +21,7 @@
   {:else if $reportLoading}
     <ReportLoadingComponent />
   {:else}
-    {#if Object.keys($report).length > 0}
+    {#if $isReportReady}
       <ReportListComponent />
     {:else}
       <ReportEmptyComponent />

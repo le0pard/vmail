@@ -86,3 +86,4 @@ export const CSS_SELECTORS_MAP = {
 
 export const EVENT_LINE_TO_EDITOR = 'line-to-editor'
 export const EVENT_LINE_TO_REPORT = 'line-to-report'
+export const EVENT_SUBMIT_EXAMPLE = 'submit-example-for-editor'

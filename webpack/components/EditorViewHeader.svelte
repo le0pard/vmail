@@ -1,5 +1,15 @@
 <script>
+	import {EVENT_SUBMIT_EXAMPLE} from 'lib/constants'
 	import IconComponent from './Icon'
+
+	const genAndSubmitSample = () => {
+		window.dispatchEvent(
+			new window.CustomEvent(
+				EVENT_SUBMIT_EXAMPLE,
+				{detail: {}}
+			)
+		)
+	}
 </script>
 
 <style>
@@ -19,6 +29,10 @@
 		align-items: stretch;
 		padding-top: 0;
 		padding-bottom: 0;
+	}
+
+	.editor-header-item-full {
+		flex-grow: 1;
 	}
 
 	.editor-header-link {
@@ -54,6 +68,26 @@
 		height: 2rem;
 		margin: 0 0.5rem;
 	}
+
+	.editor-header-sample-button {
+		color: var(--mutedButtonColor);
+		border: 1px solid var(--buttonBgColor);
+    background-color: transparent;
+    border-radius: 0.4rem;
+		padding: 0.2rem;
+    margin: 0 1rem;
+		cursor: pointer;
+		font-size: 0.9rem;
+	}
+
+	.editor-header-sample-button:hover, .editor-header-sample-button:active {
+		color: var(--mutedButtonHoverColor);
+		border: 1px solid var(--buttonBgHoverColor);
+	}
+
+	.editor-header-sample-button:active {
+		box-shadow: inset 0 -10rem 0 rgb(158 158 158 / 15%);
+	}
 </style>
 
 <div class="editor-header">
@@ -69,5 +103,11 @@
 	</div>
   <div class="editor-header-item">
 		<a class="editor-header-link" href="/faq.html">FAQ</a>
+	</div>
+	<div class="editor-header-item-full"></div>
+	<div class="editor-header-item">
+		<button class="editor-header-sample-button" on:click|preventDefault={genAndSubmitSample}>
+			Sample HTML/CSS
+		</button>
 	</div>
 </div>
