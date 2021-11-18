@@ -353,6 +353,7 @@ func TestReportFromHTMLWithComplexStuff(t *testing.T) {
 		{"CssProperties display flex", report.CssProperties["display"]["flex"].Lines, map[int]bool{4: true}},
 		{"CssProperties display grid", report.CssProperties["display"]["grid"].Lines, map[int]bool{8: true}},
 		{"CssProperties display none", report.CssProperties["display"]["none"].Lines, map[int]bool{12: true}},
+		{"CssProperties background", report.CssProperties["background"][""].Lines, map[int]bool{15: true, 16: true, 19: true, 20: true, 24: true, 25: true}},
 		{"AtRuleCssStatements @media prefers-color-scheme", report.AtRuleCssStatements["@media"]["prefers-color-scheme"].Lines, map[int]bool{18: true, 23: true}},
 		{"CssSelectorTypes CLASS_SELECTOR_TYPE", report.CssSelectorTypes["4"].Lines, map[int]bool{3: true, 7: true, 11: true, 15: true, 16: true, 19: true, 20: true, 24: true, 25: true}},
 	}
