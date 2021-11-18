@@ -20,5 +20,11 @@ export const activateTheme = (theme) => {
       doc.classList.remove(APP_THEMES_LIGHT, APP_THEMES_DARK)
       doc.classList.add(theme)
     }
+    // update <meta name="theme-color"
+    const themeMeta = document.querySelector('meta[name="theme-color"]')
+    const style = getComputedStyle(document.body)
+    if (themeMeta && style) {
+      themeMeta.setAttribute('content', style.getPropertyValue('--bgColor'))
+    }
   }
 }
