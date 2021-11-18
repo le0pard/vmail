@@ -188,12 +188,12 @@ type ParserEngine struct {
 	styleTagLine    int
 }
 
-func InitParser() (*ParserEngine, error) {
+func InitParser() *ParserEngine {
 	return &ParserEngine{
 		bytesToLine:     []int{},
 		isStyleTagOpen:  false,
 		styleTagContent: "",
-	}, nil
+	}
 }
 
 func makeInitialHtmlAttributes(position int, ruleCssPropData interface{}) HtmlAttributesReport {
@@ -1009,11 +1009,7 @@ func init() {
 }
 
 func ReportFromHTML(document []byte) (*ParseReport, error) {
-	parser, err := InitParser()
-	if err != nil {
-		return nil, err
-	}
-
+	parser := InitParser()
 	report, err := parser.Report(document)
 	if err != nil {
 		return nil, err
