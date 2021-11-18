@@ -296,3 +296,73 @@ func TestReportFromHTMLWithInlineStylesAndStyleTag(t *testing.T) {
 		})
 	}
 }
+
+func TestReportFromHTMLWithComplexStuff(t *testing.T) {
+	html := `<html><body>
+	<style>
+	  .flex {
+			display: flex;
+		}
+
+		.grid {
+			display: grid;
+		}
+
+		.hidden {
+			display: none;
+		}
+
+		.day   { background: #eee; color: black; }
+		.night { background: #333; color: white; }
+
+		@media (prefers-color-scheme: dark) {
+			.day.dark-scheme   { background:  #333; color: white; }
+			.night.dark-scheme { background: black; color:  #ddd; }
+		}
+
+		@media (prefers-color-scheme: light) {
+			.day.light-scheme   { background: white; color:  #555; }
+			.night.light-scheme { background:  #eee; color: black; }
+		}
+	</style>
+	<button type="submit">Submit</button>
+	<button type="reset">Reset</button>
+	<input type="hidden" />
+	<input type="checkbox" />
+	<input type="radio" />
+	<input type="submit" />
+</body></html>`
+	report, err := ReportFromHTML([]byte(html))
+	if err != nil {
+		t.Fatalf(`ReportFromHTML("%s"), %v`, html, err)
+	}
+
+	// log.Printf("report: %v\n", report)
+
+	var tests = []struct {
+		checkType string
+		got       map[int]bool
+		want      map[int]bool
+	}{
+		{"HtmlTags button type=submit", report.HtmlTags["button"]["type||submit"].Lines, map[int]bool{28: true}},
+		{"HtmlTags button type=reset", report.HtmlTags["button"]["type||reset"].Lines, map[int]bool{29: true}},
+		{"HtmlTags input type=hidden", report.HtmlTags["input"]["type||hidden"].Lines, map[int]bool{30: true}},
+		{"HtmlTags input type=checkbox", report.HtmlTags["input"]["type||checkbox"].Lines, map[int]bool{31: true}},
+		{"HtmlTags input type=radio", report.HtmlTags["input"]["type||radio"].Lines, map[int]bool{32: true}},
+		{"HtmlTags input type=submit", report.HtmlTags["input"]["type||submit"].Lines, map[int]bool{33: true}},
+		{"CssProperties display flex", report.CssProperties["display"]["flex"].Lines, map[int]bool{4: true}},
+		{"CssProperties display grid", report.CssProperties["display"]["grid"].Lines, map[int]bool{8: true}},
+		{"CssProperties display none", report.CssProperties["display"]["none"].Lines, map[int]bool{12: true}},
+		{"AtRuleCssStatements @media prefers-color-scheme", report.AtRuleCssStatements["@media"]["prefers-color-scheme"].Lines, map[int]bool{18: true, 23: true}},
+		{"CssSelectorTypes CLASS_SELECTOR_TYPE", report.CssSelectorTypes["4"].Lines, map[int]bool{3: true, 7: true, 11: true, 15: true, 16: true, 19: true, 20: true, 24: true, 25: true}},
+	}
+
+	for _, tt := range tests {
+		testname := tt.checkType
+		t.Run(testname, func(t *testing.T) {
+			if !reflect.DeepEqual(tt.got, tt.want) {
+				t.Errorf("%s: got %v, want %v", tt.checkType, tt.got, tt.want)
+			}
+		})
+	}
+}
