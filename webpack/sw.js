@@ -29,11 +29,19 @@ const cachedAssets = self.__WB_MANIFEST
 
 sha256(JSON.stringify(cachedAssets)).then((rev) => {
   precacheAndRoute([
-    {url: '/favicon.ico', revision: `${rev}-v1`},
+    // favicons
+    {url: '/icon-192x192.png', revision: `${rev}-v1`},
+    {url: '/icon-512x512.png', revision: `${rev}-v1`},
+    {url: '/maskable_icon.png', revision: `${rev}-v1`},
     {url: '/favicon.svg', revision: `${rev}-v1`},
+    {url: '/favicon.ico', revision: `${rev}-v1`},
+    // wasm
     {url: '/parser.wasm', revision: `${rev}-v1`},
+    // root page
     {url: '/index.html', revision: `${rev}-v1`},
+    // faq page
     {url: '/faq.html', revision: `${rev}-v1`},
+    // manifest
     {url: '/manifest.json', revision: `${rev}-v1`}
   ])
 })
