@@ -378,18 +378,18 @@ func normalizeReportForPromise(report *parser.ParseReport) map[string]interface{
 // VMail returns a JavaScript function
 func VMail() js.Func {
 	return js.FuncOf(func(this js.Value, args []js.Value) interface{} {
-		// Get the URL as argument
+		// Get the HTML as argument
 		// args[0] is a js.Value, so we need to get a string out of it
 		htmlBody := args[0].String()
 		// Handler for the Promise: this is a JS function
 		// It receives two arguments, which are JS functions themselves: resolve and reject
-		handler := js.FuncOf(func(this js.Value, args []js.Value) interface{} {
-			resolve := args[0]
-			reject := args[1]
-
+		handler := js.FuncOf(func(promiseThis js.Value, promiseArgs []js.Value) interface{} {
+			resolve := promiseArgs[0]
+			reject := promiseArgs[1]
 			// Now that we have a way to return the response to JS, spawn a goroutine
 			// This way, we don't block the event loop and avoid a deadlock
 			go func() {
+
 				report, err := parser.ReportFromHTML([]byte(htmlBody))
 				if err != nil {
 					rejectWithError(reject, "Error to parser HTML")

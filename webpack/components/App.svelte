@@ -9,7 +9,6 @@
 	import ReportHeaderComponent from './ReportViewHeader'
 	import ReportViewComponent from './ReportView'
 
-	export let parserFunction
 	export let workerURL
 
 	let workerObject = null
@@ -74,7 +73,7 @@
 <div class="parser-view">
 	<div class="parser-editor" class:parser-editor-hidden="{$splitState.visible === 'right'}">
 		<EditorHeaderComponent />
-		<EditorViewComponent parserFunction={parserFunction} />
+		<EditorViewComponent />
 	</div>
 	<SplitViewComponent />
 	<div class="parser-report"  class:parser-report-hidden="{$splitState.visible === 'left'}">

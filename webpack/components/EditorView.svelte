@@ -1,5 +1,5 @@
 <script>
-  import {onMount, onDestroy} from 'svelte'
+  import {onMount, onDestroy, getContext} from 'svelte'
   import {EditorState, EditorSelection} from '@codemirror/state'
 	import {EditorView, keymap} from '@codemirror/view'
 	import {defaultKeymap} from '@codemirror/commands'
@@ -19,14 +19,14 @@
   import {EVENT_LINE_TO_EDITOR, EVENT_LINE_TO_REPORT} from 'lib/constants'
 	import {getTooltipText} from 'lib/reportHelpers'
 
-	export let parserFunction
-
 	const TOOLTIP_SHIFT_PX = 20
 
   let editorElement
   let editorView = null
 	let tooltipElement = null
 	let tooltipTextElement = null
+
+	const {getWebWorker} = getContext('ww')
 
 	const getEditorState = (doc = '') => {
 		const [eTheme, eThemeHighLight] = (() => {
@@ -158,9 +158,16 @@
 
 		try {
 			const html = editorView.state.doc.toString()
-			const reportData = await parserFunction(html)
-			report.set(reportData)
-			splitState.switchToRightOnMobile()
+
+  		const webWorker = getWebWorker()
+			if (webWorker?.processHTML) {
+				const reportData = await webWorker.processHTML(html)
+
+				report.set(reportData)
+				splitState.switchToRightOnMobile()
+			} else {
+				reportError.set(new Error('Web worker is not available'))
+			}
 		} catch (err) {
 			reportError.set(err)
 		}

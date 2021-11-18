@@ -1,5 +1,5 @@
 <script>
-  import {getContext} from 'svelte'
+  import {onMount, getContext} from 'svelte'
   import {createNotesStore} from 'stores/notes'
   import ClientListComponent from './ClientList'
   import NotesListComponent from './NotesList'
@@ -16,15 +16,17 @@
   let clientsWithStats = null
 
   const {getWebWorker} = getContext('ww')
-  const webWorker = getWebWorker()
 
-  if (webWorker?.clientsListWithStats) {
-    webWorker.clientsListWithStats(report.rules).then((resData) => {
-      clientsWithStats = resData
-    })
-  } else {
-    clientsWithStats = clientsListWithStats(report.rules)
-  }
+  onMount(() => {
+    const webWorker = getWebWorker()
+    if (webWorker?.clientsListWithStats) {
+      webWorker.clientsListWithStats(report.rules).then((resData) => {
+        clientsWithStats = resData
+      })
+    } else {
+      clientsWithStats = clientsListWithStats(report.rules)
+    }
+  })
 </script>
 
 <style>
