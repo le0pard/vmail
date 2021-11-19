@@ -3,15 +3,15 @@
 module DefaultSiteHelpers
 
   def default_title_helper
-    'RWpod - подкаст про мир Ruby и Web технологии'
+    'VMail - check HTML & CSS compatibility with email clients'
   end
 
   def default_keywords_helper
-    'RWpod, Ruby, Web, подкаст, русский подкаст, скринкасты, программирование'
+    'vmail, html, css, validate, email clients, check, ruby, sass, wasm, golang, svelte'
   end
 
   def default_description_helper
-    'RWpod - подкаст про мир Ruby и Web технологии (для тех, кому нравится мыслить в Ruby стиле).'
+    'VMail - check HTML & CSS compatibility with email clients'
   end
 
   def full_url(url)
