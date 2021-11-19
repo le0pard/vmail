@@ -31,7 +31,7 @@
 
 <div class="error-report">
   <div class="error-report-body">
-    <h3 class="error-report-title">Error to parse your HTML</h3>
+    <h3 class="error-report-title">Error to parse HTML</h3>
     <div class="error-report-text">
       {error.toString()}
     </div>

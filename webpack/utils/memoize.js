@@ -11,7 +11,7 @@ export const memoize = (fn) => {
       strX,
       fn(...args).catch((err) => {
         cache.delete(strX)
-        return err
+        throw err
       })
     )
     return cache.get(strX)
