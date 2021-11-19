@@ -376,8 +376,10 @@ func TestReportFromHTMLNestedMedia(t *testing.T) {
 				@media (min-height: 1px) {
 					@media (max-width: 9999px) {
 						@media (max-height: 9999px) {
-							body {
-								background: red;
+							@media (prefers-reduced-motion: reduce) {
+								body {
+									background: red;
+								}
 							}
 						}
 					}
@@ -398,9 +400,10 @@ func TestReportFromHTMLNestedMedia(t *testing.T) {
 		got       map[int]bool
 		want      map[int]bool
 	}{
-		{"CssProperties background", report.CssProperties["background"][""].Lines, map[int]bool{9: true}},
-		{"AtRuleCssStatements @media", report.AtRuleCssStatements["@media"][""].Lines, map[int]bool{3: true, 4: true, 5: true, 6: true, 7: true}},
-		{"CssSelectorTypes TYPE_SELECTOR_TYPE", report.CssSelectorTypes["9"].Lines, map[int]bool{8: true}},
+		{"CssProperties background", report.CssProperties["background"][""].Lines, map[int]bool{10: true}},
+		{"AtRuleCssStatements @media", report.AtRuleCssStatements["@media"][""].Lines, map[int]bool{3: true, 4: true, 5: true, 6: true, 7: true, 8: true}},
+		{"AtRuleCssStatements @media prefers-reduced-motion", report.AtRuleCssStatements["@media"]["prefers-reduced-motion"].Lines, map[int]bool{8: true}},
+		{"CssSelectorTypes TYPE_SELECTOR_TYPE", report.CssSelectorTypes["9"].Lines, map[int]bool{9: true}},
 	}
 
 	for _, tt := range tests {
