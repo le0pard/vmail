@@ -2,7 +2,7 @@
 
 Email clients use different rendering standards. This is why your email can be displayed not as you designed it. You need to check that your message code won't cause rendering issues.
 
-Vmail check HTML and CSS email content in search of problematic elements. For each it finds, it displays the list of email clients that lack support for it or support it only partially.
+Vmail (**V**alidate E**mail**) check HTML and CSS email content in search of problematic elements. For each it finds, it displays the list of email clients that lack support for it or support it only partially.
 
 ## Development
 
