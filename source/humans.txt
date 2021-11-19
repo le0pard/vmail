@@ -13,4 +13,5 @@
 
     HTML5, CSS3
     Ruby, SASS, Middleman
-    Webpack, PostCSS, Turbo
+    Go, Wasm
+    Webpack, PostCSS, Turbo, Svelte
