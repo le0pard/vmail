@@ -21,6 +21,16 @@
 
     <link rel="canonical" href="<%= full_url(current_page.url) %>" />
 
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CWKXJRGZ81"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-CWKXJRGZ81');
+    </script>
+
     <%= stylesheet_pack_tag "app" %>
     <%= javascript_pack_tag "app" %>
 </head>
