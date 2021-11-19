@@ -367,3 +367,48 @@ func TestReportFromHTMLWithComplexStuff(t *testing.T) {
 		})
 	}
 }
+
+func TestReportFromHTMLNestedMedia(t *testing.T) {
+	html := `<html><body>
+	<style>
+	  @media screen {
+			@media (min-width: 1px) {
+				@media (min-height: 1px) {
+					@media (max-width: 9999px) {
+						@media (max-height: 9999px) {
+							body {
+								background: red;
+							}
+						}
+					}
+				}
+			}
+		}
+	</style>
+</body></html>`
+	report, err := ReportFromHTML([]byte(html))
+	if err != nil {
+		t.Fatalf(`ReportFromHTML("%s"), %v`, html, err)
+	}
+
+	// log.Printf("report: %v\n", report)
+
+	var tests = []struct {
+		checkType string
+		got       map[int]bool
+		want      map[int]bool
+	}{
+		{"CssProperties background", report.CssProperties["background"][""].Lines, map[int]bool{9: true}},
+		{"AtRuleCssStatements @media", report.AtRuleCssStatements["@media"][""].Lines, map[int]bool{3: true, 4: true, 5: true, 6: true, 7: true}},
+		{"CssSelectorTypes TYPE_SELECTOR_TYPE", report.CssSelectorTypes["9"].Lines, map[int]bool{8: true}},
+	}
+
+	for _, tt := range tests {
+		testname := tt.checkType
+		t.Run(testname, func(t *testing.T) {
+			if !reflect.DeepEqual(tt.got, tt.want) {
+				t.Errorf("%s: got %v, want %v", tt.checkType, tt.got, tt.want)
+			}
+		})
+	}
+}
