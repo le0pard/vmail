@@ -7,7 +7,7 @@ module DefaultSiteHelpers
   end
 
   def default_keywords_helper
-    'vmail, html, css, validate, email clients, check, ruby, sass, wasm, golang, svelte'
+    'vmail, html, css, validate, email clients, check, ruby, sass, wasm, golang, svelte, turbo, hotwire, stimulus'
   end
 
   def default_description_helper
