@@ -2,6 +2,8 @@
 
 [![Build and Deploy](https://github.com/le0pard/vmail/actions/workflows/deploy.yml/badge.svg?branch=main)](https://github.com/le0pard/vmail/actions/workflows/deploy.yml)
 
+![VMail](https://user-images.githubusercontent.com/98444/142698496-ee804d5e-1108-47a0-95ba-6eedd72e7144.png)
+
 Email clients use different rendering standards. This is why your email can be displayed not as you designed it. You need to check that your message code won't cause rendering issues.
 
 Vmail (**V**alidate E**mail**) check HTML & CSS email template content in search of problematic elements. For each it finds, it displays the list of email clients that lack support for it or support it only partially.
@@ -30,3 +32,4 @@ bundle exec rake wasm:compile
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
