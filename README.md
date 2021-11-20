@@ -8,6 +8,8 @@ Email clients use different rendering standards. This is why your email can be d
 
 Vmail (**V**alidate E**mail**) check HTML & CSS email template content in search of problematic elements. For each it finds, it displays the list of email clients that lack support for it or support it only partially.
 
+VMail collect the data on support for particular HTML & CSS rules from [Caniemail.com](https://www.caniemail.com/)
+
 ## Development
 
 Web app build on top of [middleman](http://middlemanapp.com/). To start it in development mode, you need install ruby, node.js, golang and run in terminal:
