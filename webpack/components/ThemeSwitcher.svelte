@@ -1,4 +1,4 @@
-<svelte:options immutable={true} />
+<svelte:options immutable="{true}" />
 
 <script>
   import {theme, isDarkThemeON} from 'stores/theme'

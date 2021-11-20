@@ -19,10 +19,16 @@ $ bundle exec rake wasm:compile # build wasm module
 $ bundle exec middleman server # start server on 4567 port
 ```
 
-## Build wasm file from Go files
+### Build wasm file from Go files
 
 ```bash
 bundle exec rake wasm:compile
+```
+
+### Format svelte components
+
+```bash
+yarn prettier --write --plugin-search-dir=. ./webpack/components/*
 ```
 
 ## Contributing

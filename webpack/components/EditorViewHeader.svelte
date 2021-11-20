@@ -1,4 +1,4 @@
-<svelte:options immutable={true} />
+<svelte:options immutable="{true}" />
 
 <script>
   import {EVENT_SUBMIT_EXAMPLE} from 'lib/constants'
