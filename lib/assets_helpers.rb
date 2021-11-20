@@ -91,13 +91,4 @@ module AssetsHelpers
     Rails::Html::FullSanitizer.new.sanitize(html)
   end
 
-  def mail_to_hex(email_address)
-    hex_email = ERB::Util.html_escape(email_address).unpack('C*').map do |c|
-      char = c.chr
-      /\w/.match?(char) ? format('%%%x', c) : char
-    end.join
-
-    "mailto:#{hex_email}".html_safe
-  end
-
 end

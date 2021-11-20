@@ -28,7 +28,9 @@ const loadWasmParser = memoize(async () => {
   return instance
 })
 
-const processHTML = (html) => loadWasmParser().then(() => globals.VMail(html))
+const processHTML = (html) => (
+  loadWasmParser().then(() => globals.VMail(html))
+)
 
 expose({
   processHTML,

@@ -51,7 +51,7 @@ export default class extends Controller {
 
     this.wb.addEventListener('controlling', () => window.location.reload())
 
-    if (this.wbRegistration && this.wbRegistration.waiting) {
+    if (this.wbRegistration?.waiting) {
       // Send a message to the waiting service worker,
       // instructing it to activate.
       messageSW(this.wbRegistration.waiting, {type: 'SKIP_WAITING'})
