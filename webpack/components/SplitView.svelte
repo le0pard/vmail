@@ -17,10 +17,10 @@
   }
 
   onMount(() => {
-		onScreenSizeMinMediaChange(screenSizeMinMedia)
-		screenSizeMinMedia.addEventListener('change', onScreenSizeMinMediaChange)
-		return () => screenSizeMinMedia.removeEventListener('change', onScreenSizeMinMediaChange)
-	})
+    onScreenSizeMinMediaChange(screenSizeMinMedia)
+    screenSizeMinMedia.addEventListener('change', onScreenSizeMinMediaChange)
+    return () => screenSizeMinMedia.removeEventListener('change', onScreenSizeMinMediaChange)
+  })
 </script>
 
 <style>
