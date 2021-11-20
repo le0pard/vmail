@@ -4743,15 +4743,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"delegated-events@npm:1.1.2":
-  version: 1.1.2
-  resolution: "delegated-events@npm:1.1.2"
-  dependencies:
-    selector-set: ^1.1.5
-  checksum: 7f83211b802737cd02ee0b544bd2d60881911c175b49d4dbde4b9cbacca6f10a5143f0b8dfb5501a70df7c9e18c3a772bf042ad21d5ca8bcea0c49cd3a8b6814
-  languageName: node
-  linkType: hard
-
 "delegates@npm:^1.0.0":
   version: 1.0.0
   resolution: "delegates@npm:1.0.0"
@@ -7287,16 +7278,6 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"lost@npm:8.3.1":
-  version: 8.3.1
-  resolution: "lost@npm:8.3.1"
-  dependencies:
-    object-assign: ^4.1.1
-    postcss: 7.0.14
-  checksum: 07afe4165ab7b51ebdb6bcba9db269defee21b66cb8cde41367d9b0b302f99ac1e3adff71abddbd00a9a7e5184ec7d4f1057270a935a0fab01dd5f30f7aff780
-  languageName: node
-  linkType: hard
-
 "lru-cache@npm:^6.0.0":
   version: 6.0.0
   resolution: "lru-cache@npm:6.0.0"
@@ -7849,7 +7830,7 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"object-assign@npm:^4.1.0, object-assign@npm:^4.1.1":
+"object-assign@npm:^4.1.0":
   version: 4.1.1
   resolution: "object-assign@npm:4.1.1"
   checksum: fcc6e4ea8c7fe48abfbb552578b1c53e0d194086e2e6bbbf59e0a536381a292f39943c6e9628af05b5528aa5e3318bb30d6b2e53cadaf5b8fe9e12c4b69af23f
@@ -9208,17 +9189,6 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"postcss@npm:7.0.14":
-  version: 7.0.14
-  resolution: "postcss@npm:7.0.14"
-  dependencies:
-    chalk: ^2.4.2
-    source-map: ^0.6.1
-    supports-color: ^6.1.0
-  checksum: 2b7c4b623fcf96f7417422c501f7dead6e59d522dd5ba22226aaae68f1d16945192843d690e9ef88776d1076e08cfb0899b4a889aae4addd4e129754776e2d60
-  languageName: node
-  linkType: hard
-
 "postcss@npm:8.3.11, postcss@npm:^8.3":
   version: 8.3.11
   resolution: "postcss@npm:8.3.11"
@@ -9942,13 +9912,6 @@ fsevents@~2.3.2:
     ajv-formats: ^2.1.1
     ajv-keywords: ^5.0.0
   checksum: c843e92fdd1a5c145dbb6ffdae33e501867f9703afac67bdf35a685e49f85b1dcc10ea250033175a64bd9d31f0555bc6785b8359da0c90bcea30cf6dfbb55a8f
-  languageName: node
-  linkType: hard
-
-"selector-set@npm:^1.1.5":
-  version: 1.1.5
-  resolution: "selector-set@npm:1.1.5"
-  checksum: 025d3f8b98a6a43730ef39a00e2f3f5f478eb75fd783667e8ddd1066c6fd24c510c03bc104c4b15180ba037f8ef300918b929eb3a207f61b6592a75234fd6097
   languageName: node
   linkType: hard
 
@@ -11253,7 +11216,6 @@ fsevents@~2.3.2:
     css-loader: 6.5.1
     css-minimizer-webpack-plugin: 3.1.4
     del: 6.0.0
-    delegated-events: 1.1.2
     eslint: 8.2.0
     eslint-plugin-import: 2.25.3
     eslint-plugin-svelte3: ^3.2.1
@@ -11261,7 +11223,6 @@ fsevents@~2.3.2:
     focus-visible: ^5.2.0
     gulp: 4.0.2
     lodash: 4.17.21
-    lost: 8.3.1
     mini-css-extract-plugin: 2.4.5
     normalize.css: 8.0.1
     postcss: 8.3.11
