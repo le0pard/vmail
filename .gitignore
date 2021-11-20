@@ -7,10 +7,6 @@
 # Ignore bundler config
 /.bundle
 
-# ignore credentials
-/.credentials.json
-/.credentials.google_token.yml
-
 # Ignore the build directory
 /build
 /.tmp
