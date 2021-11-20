@@ -36,12 +36,12 @@ export default class extends Controller {
           webWorkerObject
         }
       })
-    }).catch((e) => {
+    }).catch((err) => {
       this.errorComponent = new ErrorComponent({
         target: this.appContainerTarget,
         props: {
           title: 'Error to load web worker',
-          message: e.toString()
+          message: err.toString()
         }
       })
     })
