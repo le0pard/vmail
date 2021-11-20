@@ -1,7 +1,15 @@
 import {Controller} from '@hotwired/stimulus'
-
+import {wrap} from 'comlink'
+import {memoize} from 'utils/memoize'
 import AppComponent from 'components/App'
 import ErrorComponent from 'components/Error'
+
+const getWebWorker = memoize((url) => (
+  new Promise((resolve) => {
+    const webWorker = new Worker(url)
+    return resolve(wrap(webWorker))
+  })
+))
 
 export default class extends Controller {
   static values = {
@@ -21,11 +29,21 @@ export default class extends Controller {
       return
     }
 
-    this.appComponent = new AppComponent({
-      target: this.appContainerTarget,
-      props: {
-        workerURL: this.workerUrlValue
-      }
+    getWebWorker(this.workerUrlValue).then((webWorkerObject) => {
+      this.appComponent = new AppComponent({
+        target: this.appContainerTarget,
+        props: {
+          webWorkerObject
+        }
+      })
+    }).catch((e) => {
+      this.errorComponent = new ErrorComponent({
+        target: this.appContainerTarget,
+        props: {
+          title: 'Error to load web worker',
+          message: e.toString()
+        }
+      })
     })
   }
 
