@@ -84,7 +84,6 @@ let config = {
     },
     modules: [
       path.join(__dirname, 'webpack'),
-      path.join(__dirname, 'source/images'),
       path.join(__dirname, 'node_modules')
     ],
     extensions: ['.mjs', '.js', '.json', '.svelte'],
