@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:fb="http://ogp.me/ns/fb#">
 <head>
     <meta charset="utf-8" />
     <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><![endif]-->
@@ -20,6 +20,21 @@
     <link rel="manifest" href="/manifest.json" />
 
     <link rel="canonical" href="<%= full_url(current_page.url) %>" />
+
+    <!--card-->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="<%= default_title_helper %>" />
+    <meta property="og:url" content="<%= full_url(current_page.url) %>" />
+    <meta property="og:site_name" content="VMail" />
+    <meta property="og:image" content="/images/banner.png" />
+    <meta property="og:image:width" content="1280" />
+    <meta property="og:image:height" content="640" />
+    <meta name="twitter:creator" content="@leopard_me" />
+    <meta name="twitter:title" content="<%= default_title_helper %>" />
+    <meta name="twitter:description" content="<%= default_description_helper %>" />
+    <meta name="twitter:image" content="/images/banner.png" />
+    <meta name="twitter:image:alt" content="<%= default_title_helper %>" />
+    <meta name="twitter:card" content="summary_large_image" />
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-CWKXJRGZ81"></script>
