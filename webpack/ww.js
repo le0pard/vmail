@@ -5,15 +5,22 @@ import {expose} from 'comlink'
 import {clientsListWithStats} from 'lib/reportHelpers'
 
 const getGlobal = () => {
-  if (typeof self !== 'undefined') {return self}
-  if (typeof window !== 'undefined') {return window}
-  if (typeof global !== 'undefined') {return global}
+  if (typeof self !== 'undefined') {
+    return self
+  }
+  if (typeof window !== 'undefined') {
+    return window
+  }
+  if (typeof global !== 'undefined') {
+    return global
+  }
   throw new Error('unable to locate global object')
 }
 
 const globals = getGlobal()
 
-if (!globals.WebAssembly.instantiateStreaming) { // wasm instantiateStreaming polyfill
+if (!globals.WebAssembly.instantiateStreaming) {
+  // wasm instantiateStreaming polyfill
   globals.WebAssembly.instantiateStreaming = async (resp, importObject) => {
     const source = await (await resp).arrayBuffer()
     return await globals.WebAssembly.instantiate(source, importObject)
@@ -28,9 +35,7 @@ const loadWasmParser = memoize(async () => {
   return instance
 })
 
-const processHTML = (html) => (
-  loadWasmParser().then(() => globals.VMail(html))
-)
+const processHTML = (html) => loadWasmParser().then(() => globals.VMail(html))
 
 expose({
   processHTML,

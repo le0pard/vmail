@@ -11,16 +11,10 @@ const createBasicStore = () => {
     switchTheme: (isDarkThemeActive) => {
       const activeTheme = isDarkThemeActive ? APP_THEMES_DARK : APP_THEMES_LIGHT
       set(activeTheme)
-      LocalStorage.setItem(
-        'theme',
-        activeTheme
-      )
+      LocalStorage.setItem('theme', activeTheme)
     }
   }
 }
 
 export const theme = createBasicStore()
-export const isDarkThemeON = derived(
-  theme,
-  $theme => $theme === APP_THEMES_DARK
-)
+export const isDarkThemeON = derived(theme, ($theme) => $theme === APP_THEMES_DARK)

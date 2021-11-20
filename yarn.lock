@@ -9240,6 +9240,25 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
+"prettier-plugin-svelte@npm:^2.5.0":
+  version: 2.5.0
+  resolution: "prettier-plugin-svelte@npm:2.5.0"
+  peerDependencies:
+    prettier: ^1.16.4 || ^2.0.0
+    svelte: ^3.2.0
+  checksum: 0c9bf251c330f354aeda12e67ccf0a424345980a50a5cac2a99b87d50adceefd558719692b79e3274ee42e40aa4e0b44c8a9fa6b6908297b3ea7006b2ebcd90b
+  languageName: node
+  linkType: hard
+
+"prettier@npm:^2.4.1":
+  version: 2.4.1
+  resolution: "prettier@npm:2.4.1"
+  bin:
+    prettier: bin-prettier.js
+  checksum: cc6830588b401b0d742862fe9c46bc9118204fb307c3abe0e49e95b35ed23629573807ffdf9cdd65289c252a0bb51fc0171437f6626ee36378dea80f0ee80b91
+  languageName: node
+  linkType: hard
+
 "pretty-bytes@npm:^5.3.0, pretty-bytes@npm:^5.4.1":
   version: 5.6.0
   resolution: "pretty-bytes@npm:5.6.0"
@@ -11232,6 +11251,8 @@ fsevents@~2.3.2:
     postcss-loader: 6.2.0
     postcss-preset-env: 7.0.1
     postcss-reporter: 7.0.4
+    prettier: ^2.4.1
+    prettier-plugin-svelte: ^2.5.0
     rucksack-css: ^1.0.2
     sass: 1.43.4
     sass-loader: 12.3.0

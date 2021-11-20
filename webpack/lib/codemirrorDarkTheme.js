@@ -21,79 +21,84 @@ const chalky = '#e5c07b',
   cursor = '#528bff'
 
 /// The editor theme styles for One Dark.
-export const oneDarkTheme = EditorView.theme({
-  '&': {
-    color: ivory,
-    backgroundColor: background
-  },
+export const oneDarkTheme = EditorView.theme(
+  {
+    '&': {
+      color: ivory,
+      backgroundColor: background
+    },
 
-  '&.cm-editor': {
-    fontSize: '0.9rem',
-    height: '100%'
-  },
+    '&.cm-editor': {
+      fontSize: '0.9rem',
+      height: '100%'
+    },
 
-  '.cm-content': {
-    caretColor: cursor
-  },
+    '.cm-content': {
+      caretColor: cursor
+    },
 
-  '&.cm-focused .cm-cursor': {borderLeftColor: cursor},
-  '&.cm-focused .cm-selectionBackground, .cm-selectionBackground, .cm-content ::selection': {backgroundColor: selection},
+    '&.cm-focused .cm-cursor': {borderLeftColor: cursor},
+    '&.cm-focused .cm-selectionBackground, .cm-selectionBackground, .cm-content ::selection': {
+      backgroundColor: selection
+    },
 
-  '.cm-panels': {backgroundColor: darkBackground, color: ivory},
-  '.cm-panels.cm-panels-top': {borderBottom: '2px solid black'},
-  '.cm-panels.cm-panels-bottom': {borderTop: '2px solid black'},
+    '.cm-panels': {backgroundColor: darkBackground, color: ivory},
+    '.cm-panels.cm-panels-top': {borderBottom: '2px solid black'},
+    '.cm-panels.cm-panels-bottom': {borderTop: '2px solid black'},
 
-  '.cm-searchMatch': {
-    backgroundColor: '#72a1ff59',
-    outline: '1px solid #457dff'
-  },
-  '.cm-searchMatch.cm-searchMatch-selected': {
-    backgroundColor: '#6199ff2f'
-  },
+    '.cm-searchMatch': {
+      backgroundColor: '#72a1ff59',
+      outline: '1px solid #457dff'
+    },
+    '.cm-searchMatch.cm-searchMatch-selected': {
+      backgroundColor: '#6199ff2f'
+    },
 
-  '.cm-activeLine': {backgroundColor: highlightBackground},
-  '.cm-selectionMatch': {backgroundColor: '#aafe661a'},
+    '.cm-activeLine': {backgroundColor: highlightBackground},
+    '.cm-selectionMatch': {backgroundColor: '#aafe661a'},
 
-  '&.cm-focused .cm-matchingBracket, &.cm-focused .cm-nonmatchingBracket': {
-    backgroundColor: '#bad0f847',
-    outline: '1px solid #515a6b'
-  },
+    '&.cm-focused .cm-matchingBracket, &.cm-focused .cm-nonmatchingBracket': {
+      backgroundColor: '#bad0f847',
+      outline: '1px solid #515a6b'
+    },
 
-  '.cm-gutters': {
-    backgroundColor: background,
-    color: stone,
-    border: 'none'
-  },
+    '.cm-gutters': {
+      backgroundColor: background,
+      color: stone,
+      border: 'none'
+    },
 
-  '.cm-activeLineGutter': {
-    backgroundColor: highlightBackground
-  },
+    '.cm-activeLineGutter': {
+      backgroundColor: highlightBackground
+    },
 
-  '.cm-foldPlaceholder': {
-    backgroundColor: 'transparent',
-    border: 'none',
-    color: '#ddd'
-  },
+    '.cm-foldPlaceholder': {
+      backgroundColor: 'transparent',
+      border: 'none',
+      color: '#ddd'
+    },
 
-  '.cm-tooltip': {
-    border: 'none',
-    backgroundColor: tooltipBackground
-  },
-  '.cm-tooltip .cm-tooltip-arrow:before': {
-    borderTopColor: 'transparent',
-    borderBottomColor: 'transparent'
-  },
-  '.cm-tooltip .cm-tooltip-arrow:after': {
-    borderTopColor: tooltipBackground,
-    borderBottomColor: tooltipBackground
-  },
-  '.cm-tooltip-autocomplete': {
-    '& > ul > li[aria-selected]': {
-      backgroundColor: highlightBackground,
-      color: ivory
+    '.cm-tooltip': {
+      border: 'none',
+      backgroundColor: tooltipBackground
+    },
+    '.cm-tooltip .cm-tooltip-arrow:before': {
+      borderTopColor: 'transparent',
+      borderBottomColor: 'transparent'
+    },
+    '.cm-tooltip .cm-tooltip-arrow:after': {
+      borderTopColor: tooltipBackground,
+      borderBottomColor: tooltipBackground
+    },
+    '.cm-tooltip-autocomplete': {
+      '& > ul > li[aria-selected]': {
+        backgroundColor: highlightBackground,
+        color: ivory
+      }
     }
-  }
-}, {dark: true})
+  },
+  {dark: true}
+)
 
 /// The highlighting style for code in the One Dark theme.
 export const oneDarkHighlightStyle = HighlightStyle.define([
@@ -118,7 +123,16 @@ export const oneDarkHighlightStyle = HighlightStyle.define([
     color: ivory
   },
   {
-    tag: [t.typeName, t.className, t.number, t.changed, t.annotation, t.modifier, t.self, t.namespace],
+    tag: [
+      t.typeName,
+      t.className,
+      t.number,
+      t.changed,
+      t.annotation,
+      t.modifier,
+      t.self,
+      t.namespace
+    ],
     color: chalky
   },
   {

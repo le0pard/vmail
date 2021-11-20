@@ -8,18 +8,18 @@ const createBasicStore = () => {
     visible: initialVisibility
   }
   const {subscribe, set, update} = writable(initialValue)
-  const toggleFn = (state) => () => update((currentVal) => ({
-    visible: (
-      screenSizeMinMedia.matches ? state : (
-        currentVal.visible === initialVisibility ? state : initialVisibility
-      )
-    )
-  }))
-  const toggleForMobileFn = (state) => () => set({
-    visible: (
-      screenSizeMinMedia.matches ? state : initialVisibility
-    )
-  })
+  const toggleFn = (state) => () =>
+    update((currentVal) => ({
+      visible: screenSizeMinMedia.matches
+        ? state
+        : currentVal.visible === initialVisibility
+        ? state
+        : initialVisibility
+    }))
+  const toggleForMobileFn = (state) => () =>
+    set({
+      visible: screenSizeMinMedia.matches ? state : initialVisibility
+    })
 
   return {
     subscribe,

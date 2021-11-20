@@ -53,10 +53,7 @@ const createBasicStore = (initialVal = null) => {
 export const reportLoading = createBasicStore(false)
 export const reportError = createBasicStore(null)
 export const report = createBasicStore({})
-export const linesAndSelectors = derived(
-  report,
-  $report => selectLinesAndSelectors($report)
-)
+export const linesAndSelectors = derived(report, ($report) => selectLinesAndSelectors($report))
 export const isReportReady = derived(
   [reportError, report],
   ([$reportError, $report]) => !$reportError && Object.keys($report).length > 0

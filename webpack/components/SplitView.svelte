@@ -19,30 +19,9 @@
   onMount(() => {
     onScreenSizeMinMediaChange(screenSizeMinMedia)
     screenSizeMinMedia.addEventListener('change', onScreenSizeMinMediaChange)
-    return () =>
-      screenSizeMinMedia.removeEventListener(
-        'change',
-        onScreenSizeMinMediaChange
-      )
+    return () => screenSizeMinMedia.removeEventListener('change', onScreenSizeMinMediaChange)
   })
 </script>
-
-<div class="split-container">
-  <div
-    on:click|preventDefault={handleHideLeft}
-    class="split-left"
-    class:split-hidden={$splitState.visible === 'right'}
-  >
-    <i class="arrow-left" />
-  </div>
-  <div
-    on:click|preventDefault={handleHideRight}
-    class="split-right"
-    class:split-hidden={$splitState.visible === 'left'}
-  >
-    <i class="arrow-right" />
-  </div>
-</div>
 
 <style>
   .split-container {
@@ -107,3 +86,20 @@
     display: none;
   }
 </style>
+
+<div class="split-container">
+  <div
+    on:click|preventDefault="{handleHideLeft}"
+    class="split-left"
+    class:split-hidden="{$splitState.visible === 'right'}"
+  >
+    <i class="arrow-left"></i>
+  </div>
+  <div
+    on:click|preventDefault="{handleHideRight}"
+    class="split-right"
+    class:split-hidden="{$splitState.visible === 'left'}"
+  >
+    <i class="arrow-right"></i>
+  </div>
+</div>
