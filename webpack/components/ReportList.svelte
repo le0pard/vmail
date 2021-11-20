@@ -40,7 +40,7 @@
     setTimeout(() => {
       scrollElement.scrollIntoView({
         behavior: 'auto',
-        block: 'start',
+        block: 'center',
         inline: 'nearest'
       })
     }, 0)
