@@ -12,13 +12,17 @@
   } from 'lib/constants'
   import ReportItemComponent from './ReportItem'
 
-  const genElementID = ([reportInfo, itemName, itemVal]) => (
-    camelize(['item', reportInfo.key, itemName, itemVal].join('_')).replace(/_/g, '')
-  )
+  const genElementID = ([reportInfo, itemName, itemVal]) =>
+    camelize(['item', reportInfo.key, itemName, itemVal].join('_')).replace(
+      /_/g,
+      ''
+    )
 
   const handleLineClick = (line) => {
     splitState.switchToLeftOnMobile()
-    window.dispatchEvent(new window.CustomEvent(EVENT_LINE_TO_EDITOR, {detail: {line}}))
+    window.dispatchEvent(
+      new window.CustomEvent(EVENT_LINE_TO_EDITOR, {detail: {line}})
+    )
   }
 
   const handleEditorLineClickEvent = (e) => {
@@ -48,17 +52,13 @@
 
   onMount(() => {
     window.addEventListener(EVENT_LINE_TO_REPORT, handleEditorLineClickEvent)
-    return () => window.removeEventListener(EVENT_LINE_TO_REPORT, handleEditorLineClickEvent)
+    return () =>
+      window.removeEventListener(
+        EVENT_LINE_TO_REPORT,
+        handleEditorLineClickEvent
+      )
   })
 </script>
-
-<style>
-  .report-list {
-    list-style-type: none;
-    padding: 0;
-    margin: 0.5rem 0.5rem 1rem 0.5rem;
-  }
-</style>
 
 <ul class="report-list">
   {#each MULTI_LEVEL_REPORT_KEYS as reportInfo (reportInfo.key)}
@@ -66,12 +66,12 @@
       {#each Object.keys($report[reportInfo.key]).sort() as itemName (itemName)}
         {#each Object.keys($report[reportInfo.key][itemName]).sort() as itemVal (itemVal)}
           <ReportItemComponent
-            reportInfo={reportInfo}
-            itemName={itemName}
-            itemVal={itemVal}
+            {reportInfo}
+            {itemName}
+            {itemVal}
             elementID={genElementID([reportInfo, itemName, itemVal])}
             report={$report[reportInfo.key][itemName][itemVal]}
-            handleLineClick={handleLineClick}
+            {handleLineClick}
           />
         {/each}
       {/each}
@@ -85,7 +85,7 @@
       itemVal={''}
       elementID={genElementID([REPORT_CSS_VARIABLES, '', ''])}
       report={$report[REPORT_CSS_VARIABLES.key]}
-      handleLineClick={handleLineClick}
+      {handleLineClick}
     />
   {/if}
 
@@ -93,14 +93,22 @@
     {#if $report[reportInfo.key]}
       {#each Object.keys($report[reportInfo.key]).sort() as itemName (itemName)}
         <ReportItemComponent
-          reportInfo={reportInfo}
-          itemName={itemName}
+          {reportInfo}
+          {itemName}
           itemVal={''}
           elementID={genElementID([reportInfo, itemName, ''])}
           report={$report[reportInfo.key][itemName]}
-          handleLineClick={handleLineClick}
+          {handleLineClick}
         />
       {/each}
     {/if}
   {/each}
 </ul>
+
+<style>
+  .report-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0.5rem 0.5rem 1rem 0.5rem;
+  }
+</style>

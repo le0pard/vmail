@@ -39,14 +39,32 @@
 	})
 </script>
 
+<div class="parser-view">
+	<div
+		class="parser-editor"
+		class:parser-editor-hidden={$splitState.visible === 'right'}
+	>
+		<EditorHeaderComponent />
+		<EditorViewComponent />
+	</div>
+	<SplitViewComponent />
+	<div
+		class="parser-report"
+		class:parser-report-hidden={$splitState.visible === 'left'}
+	>
+		<ReportHeaderComponent />
+		<ReportViewComponent />
+	</div>
+</div>
+
 <style>
 	.parser-view {
 		display: flex;
 		position: absolute;
 		bottom: 0;
-    left: 0;
-    right: 0;
-    top: 0;
+		left: 0;
+		right: 0;
+		top: 0;
 	}
 
 	.parser-editor {
@@ -65,19 +83,8 @@
 		flex-direction: column;
 	}
 
-	.parser-editor-hidden, .parser-report-hidden {
+	.parser-editor-hidden,
+	.parser-report-hidden {
 		display: none;
 	}
 </style>
-
-<div class="parser-view">
-	<div class="parser-editor" class:parser-editor-hidden="{$splitState.visible === 'right'}">
-		<EditorHeaderComponent />
-		<EditorViewComponent />
-	</div>
-	<SplitViewComponent />
-	<div class="parser-report"  class:parser-report-hidden="{$splitState.visible === 'left'}">
-		<ReportHeaderComponent />
-		<ReportViewComponent />
-	</div>
-</div>

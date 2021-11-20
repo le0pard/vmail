@@ -2,11 +2,11 @@
   import {onMount} from 'svelte'
   import {splitState, screenSizeMinMedia} from 'stores/split'
 
-	const onScreenSizeMinMediaChange = (e) => {
-		if (e.matches) {
-			splitState.hideForceRight()
-		}
-	}
+  const onScreenSizeMinMediaChange = (e) => {
+    if (e.matches) {
+      splitState.hideForceRight()
+    }
+  }
 
   const handleHideLeft = () => {
     splitState.hideLeft()
@@ -19,17 +19,39 @@
   onMount(() => {
     onScreenSizeMinMediaChange(screenSizeMinMedia)
     screenSizeMinMedia.addEventListener('change', onScreenSizeMinMediaChange)
-    return () => screenSizeMinMedia.removeEventListener('change', onScreenSizeMinMediaChange)
+    return () =>
+      screenSizeMinMedia.removeEventListener(
+        'change',
+        onScreenSizeMinMediaChange
+      )
   })
 </script>
 
+<div class="split-container">
+  <div
+    on:click|preventDefault={handleHideLeft}
+    class="split-left"
+    class:split-hidden={$splitState.visible === 'right'}
+  >
+    <i class="arrow-left" />
+  </div>
+  <div
+    on:click|preventDefault={handleHideRight}
+    class="split-right"
+    class:split-hidden={$splitState.visible === 'left'}
+  >
+    <i class="arrow-right" />
+  </div>
+</div>
+
 <style>
   .split-container {
-		display: flex;
-		width: 30px;
-	}
+    display: flex;
+    width: 30px;
+  }
 
-  .split-left, .split-right {
+  .split-left,
+  .split-right {
     align-items: center;
     background-color: var(--splitBgColor);
     color: var(--splitColor);
@@ -37,7 +59,7 @@
     display: flex;
     flex: 1;
     justify-content: center;
-    transition: background-color .3s ease-in-out;
+    transition: background-color 0.3s ease-in-out;
   }
 
   .split-left {
@@ -49,15 +71,18 @@
     border-right: 1px solid var(--splitBorderColor);
   }
 
-  .split-left:hover, .split-right:hover {
+  .split-left:hover,
+  .split-right:hover {
     background-color: var(--splitBgHoverColor);
   }
 
-  .split-left:active, .split-right:active {
+  .split-left:active,
+  .split-right:active {
     background-color: var(--splitBgHoverColor);
   }
 
-  .arrow-left, .arrow-right {
+  .arrow-left,
+  .arrow-right {
     border-style: solid;
     border-color: var(--splitColor);
     border-width: 0 2px 2px 0;
@@ -65,7 +90,8 @@
     padding: 2px;
   }
 
-  .split-left:hover .arrow-left, .split-right:hover .arrow-right {
+  .split-left:hover .arrow-left,
+  .split-right:hover .arrow-right {
     border-color: var(--splitHoverColor);
   }
 
@@ -81,12 +107,3 @@
     display: none;
   }
 </style>
-
-<div class="split-container">
-  <div on:click|preventDefault={handleHideLeft} class="split-left" class:split-hidden="{$splitState.visible === 'right'}">
-    <i class="arrow-left"></i>
-  </div>
-  <div on:click|preventDefault={handleHideRight} class="split-right" class:split-hidden="{$splitState.visible === 'left'}">
-    <i class="arrow-right"></i>
-  </div>
-</div>

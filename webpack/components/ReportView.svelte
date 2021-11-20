@@ -6,25 +6,23 @@
   import ReportErrorComponent from './ReportError'
 </script>
 
-<style>
-  .parser-report-area {
-		flex-grow: 1;
-		position: relative;
-		overflow: scroll;
-    padding: 1rem;
-	}
-</style>
-
 <div class="parser-report-area">
   {#if $reportError}
     <ReportErrorComponent error={$reportError} />
   {:else if $reportLoading}
     <ReportLoadingComponent />
+  {:else if $isReportReady}
+    <ReportListComponent />
   {:else}
-    {#if $isReportReady}
-      <ReportListComponent />
-    {:else}
-      <ReportEmptyComponent />
-    {/if}
+    <ReportEmptyComponent />
   {/if}
 </div>
+
+<style>
+  .parser-report-area {
+    flex-grow: 1;
+    position: relative;
+    overflow: scroll;
+    padding: 1rem;
+  }
+</style>

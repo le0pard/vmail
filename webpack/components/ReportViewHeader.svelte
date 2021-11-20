@@ -2,13 +2,31 @@
 	import ThemeSwitcherComponent from './ThemeSwitcher'
 </script>
 
+<div class="report-header">
+	<div class="report-header-item">
+		<ThemeSwitcherComponent />
+	</div>
+	<div class="report-header-item">
+		<a
+			class="report-header-github-link"
+			href="https://github.com/le0pard/vmail"
+			target="_blank"
+			rel="noopener noreferrer"
+		>
+			<svg class="report-header-github">
+				<use href="#github-svg-icon" />
+			</svg>
+		</a>
+	</div>
+</div>
+
 <style>
-  .report-header {
+	.report-header {
 		display: flex;
 		background-color: var(--headBgColor);
 		flex-shrink: 0;
 		overflow: hidden;
-    white-space: nowrap;
+		white-space: nowrap;
 		box-shadow: 0 10px 30px 0 rgb(82 63 105 / 8%);
 		border-bottom: 1px solid var(--headBorderColor);
 		justify-content: flex-end;
@@ -38,16 +56,3 @@
 		fill: var(--mutedButtonHoverColor);
 	}
 </style>
-
-<div class="report-header">
-	<div class="report-header-item">
-		<ThemeSwitcherComponent />
-	</div>
-  <div class="report-header-item">
-		<a class="report-header-github-link" href="https://github.com/le0pard/vmail" target="_blank" rel="noopener noreferrer">
-			<svg class="report-header-github">
-				<use href="#github-svg-icon" />
-			</svg>
-		</a>
-	</div>
-</div>

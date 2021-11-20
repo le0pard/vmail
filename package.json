@@ -10,7 +10,7 @@
   "scripts": {
     "assets:watch": "webpack --watch --color",
     "assets:build": "gulp cleanup:assets && NODE_ENV=production webpack --bail",
-    "eslint": "eslint --ext .jsx,.js webpack/"
+    "eslint": "eslint --ext .svelte,.js webpack/"
   },
   "dependencies": {
     "@babel/core": "7.16.0",

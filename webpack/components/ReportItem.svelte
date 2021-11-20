@@ -3,7 +3,11 @@
   import {createNotesStore} from 'stores/notes'
   import ClientListComponent from './ClientList'
   import NotesListComponent from './NotesList'
-  import {normalizeItemName, normalizeItemVal, clientsListWithStats} from 'lib/reportHelpers'
+  import {
+    normalizeItemName,
+    normalizeItemVal,
+    clientsListWithStats
+  } from 'lib/reportHelpers'
 
   export let elementID
   export let reportInfo
@@ -28,6 +32,85 @@
     }
   })
 </script>
+
+<li id={elementID} class="report-item">
+  <div class="report-item-container">
+    <div class="report-item-header">
+      <div class="report-item-header-info">
+        <div class="report-item-header-type">
+          {reportInfo.title}
+        </div>
+        <div class="report-item-header-name">
+          {#if itemName}
+            {normalizeItemName(reportInfo.key, itemName)}
+            {#if itemVal.length > 0}
+              {normalizeItemVal(itemVal)}
+            {/if}
+          {/if}
+        </div>
+        {#if report.rules?.url}
+          <div class="report-item-header-link">
+            <a
+              class="report-item-header-more-link"
+              href={report.rules.url}
+              target="_blank"
+              rel="noopener noreferrer">More info</a
+            >
+          </div>
+        {/if}
+      </div>
+      {#if report.rules?.description}
+        <div class="report-item-header-description">
+          {report.rules?.description}
+        </div>
+      {/if}
+      <div class="report-header-main-lines">
+        <div class="report-header-main-lines-title">Found on lines:</div>
+        {#each report.lines as line, i}
+          <button
+            on:click|preventDefault={() => handleLineClick(line)}
+            class="report-line-button"
+          >
+            {line}
+          </button>
+        {/each}
+        {#if report.more_lines}<div>and more...</div>{/if}
+      </div>
+    </div>
+    {#if clientsWithStats}
+      {#if clientsWithStats.unsupported.length > 0}
+        <ClientListComponent
+          title="Unsupported clients"
+          bullet="error"
+          clients={clientsWithStats.unsupported}
+          percentage={clientsWithStats.unsupportedPercentage}
+          {notesStore}
+        />
+      {/if}
+      {#if clientsWithStats.mitigated.length > 0}
+        <ClientListComponent
+          title="Partially supported clients"
+          bullet="warning"
+          clients={clientsWithStats.mitigated}
+          percentage={clientsWithStats.mitigatedPercentage}
+          {notesStore}
+        />
+      {/if}
+      {#if clientsWithStats.supported.length > 0}
+        <ClientListComponent
+          title="Supported clients"
+          bullet="success"
+          clients={clientsWithStats.supported}
+          percentage={clientsWithStats.supportedPercentage}
+          {notesStore}
+        />
+      {/if}
+    {/if}
+    {#if report.rules?.notes}
+      <NotesListComponent notes={report.rules.notes} {notesStore} />
+    {/if}
+  </div>
+</li>
 
 <style>
   .report-item {
@@ -89,7 +172,8 @@
     font-size: 0.8rem;
   }
 
-  .report-item-header-more-link:hover, .report-item-header-more-link:active {
+  .report-item-header-more-link:hover,
+  .report-item-header-more-link:active {
     color: var(--linkHoverColor);
   }
 
@@ -129,85 +213,12 @@
     margin-right: 0.2rem;
     margin-bottom: 0.2rem;
     cursor: pointer;
-		user-select: none;
+    user-select: none;
   }
 
-  .report-line-button:hover, .report-line-button:active {
+  .report-line-button:hover,
+  .report-line-button:active {
     color: var(--successColor);
     background-color: var(--successBgColor);
   }
 </style>
-
-<li id={elementID} class="report-item">
-  <div class="report-item-container">
-    <div class="report-item-header">
-      <div class="report-item-header-info">
-        <div class="report-item-header-type">
-          {reportInfo.title}
-        </div>
-        <div class="report-item-header-name">
-          {#if itemName}
-            {normalizeItemName(reportInfo.key, itemName)}
-            {#if itemVal.length > 0}
-              {normalizeItemVal(itemVal)}
-            {/if}
-          {/if}
-        </div>
-        {#if report.rules?.url}
-          <div class="report-item-header-link">
-            <a class="report-item-header-more-link" href="{report.rules.url}" target="_blank" rel="noopener noreferrer">More info</a>
-          </div>
-        {/if}
-      </div>
-      {#if report.rules?.description}
-        <div class="report-item-header-description">
-          {report.rules?.description}
-        </div>
-      {/if}
-      <div class="report-header-main-lines">
-        <div class="report-header-main-lines-title">Found on lines:</div>
-        {#each report.lines as line, i}
-          <button on:click|preventDefault={() => handleLineClick(line)} class="report-line-button">
-            {line}
-          </button>
-        {/each}
-        {#if report.more_lines}<div>and more...</div>{/if}
-      </div>
-    </div>
-    {#if clientsWithStats}
-      {#if clientsWithStats.unsupported.length > 0}
-        <ClientListComponent
-          title="Unsupported clients"
-          bullet="error"
-          clients={clientsWithStats.unsupported}
-          percentage={clientsWithStats.unsupportedPercentage}
-          notesStore={notesStore}
-        />
-      {/if}
-      {#if clientsWithStats.mitigated.length > 0}
-        <ClientListComponent
-          title="Partially supported clients"
-          bullet="warning"
-          clients={clientsWithStats.mitigated}
-          percentage={clientsWithStats.mitigatedPercentage}
-          notesStore={notesStore}
-        />
-      {/if}
-      {#if clientsWithStats.supported.length > 0}
-        <ClientListComponent
-          title="Supported clients"
-          bullet="success"
-          clients={clientsWithStats.supported}
-          percentage={clientsWithStats.supportedPercentage}
-          notesStore={notesStore}
-        />
-      {/if}
-    {/if}
-    {#if report.rules?.notes}
-      <NotesListComponent
-        notes={report.rules.notes}
-        notesStore={notesStore}
-      />
-    {/if}
-  </div>
-</li>

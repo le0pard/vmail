@@ -6,6 +6,49 @@
   export let notesStore
 </script>
 
+<div class="client-list">
+  <span
+    class="client-bullet"
+    class:client-bullet-error={bullet === 'error'}
+    class:client-bullet-warning={bullet === 'warning'}
+    class:client-bullet-success={bullet === 'success'}
+  />
+
+  <div class="client-list-body">
+    <div class="client-list-title">{title}</div>
+    <div class="client-list-items">
+      {#each clients as client}
+        <div class="client-list-client">
+          <span>{client.title}</span>
+          {#if client.notes}
+            {#each client.notes as noteKey}
+              <button
+                class="client-list-line"
+                class:client-list-line-active={$notesStore.line === noteKey}
+                on:focus={() => notesStore.setLine(noteKey)}
+                on:mouseover={() => notesStore.setLine(noteKey)}
+                on:blur={() => notesStore.reset()}
+                on:mouseout={() => notesStore.reset()}
+              >
+                {noteKey}
+              </button>
+            {/each}
+          {/if}
+        </div>
+      {/each}
+    </div>
+  </div>
+
+  <div
+    class="client-list-percentage"
+    class:client-list-percentage-error={bullet === 'error'}
+    class:client-list-percentage-warning={bullet === 'warning'}
+    class:client-list-percentage-success={bullet === 'success'}
+  >
+    {percentage}&#37;
+  </div>
+</div>
+
 <style>
   .client-list {
     display: flex;
@@ -70,10 +113,11 @@
     border-radius: 0.4rem;
     margin-right: 0.2rem;
     cursor: pointer;
-		user-select: none;
+    user-select: none;
   }
 
-  .client-list-line:hover, .client-list-line:active {
+  .client-list-line:hover,
+  .client-list-line:active {
     color: var(--mutedButtonHoverColor);
     background-color: var(--mutedButtonHoverBgColor);
   }
@@ -109,49 +153,3 @@
     background-color: var(--successBgColor);
   }
 </style>
-
-<div class="client-list">
-  <span
-    class="client-bullet"
-    class:client-bullet-error="{bullet === 'error'}"
-    class:client-bullet-warning="{bullet === 'warning'}"
-    class:client-bullet-success="{bullet === 'success'}"
-  ></span>
-
-  <div class="client-list-body">
-    <div class="client-list-title">{title}</div>
-    <div class="client-list-items">
-      {#each clients as client}
-        <div class="client-list-client">
-          <span>{client.title}</span>
-          {#if client.notes}
-            {#each client.notes as noteKey}
-              <button
-                class="client-list-line"
-                class:client-list-line-active="{$notesStore.line === noteKey}"
-                on:focus={() => notesStore.setLine(noteKey)}
-                on:mouseover={() => notesStore.setLine(noteKey)}
-                on:blur={() => notesStore.reset()}
-                on:mouseout={() => notesStore.reset()}
-              >
-                {noteKey}
-              </button>
-            {/each}
-          {/if}
-        </div>
-      {/each}
-    </div>
-  </div>
-
-  <div
-    class="client-list-percentage"
-    class:client-list-percentage-error="{bullet === 'error'}"
-    class:client-list-percentage-warning="{bullet === 'warning'}"
-    class:client-list-percentage-success="{bullet === 'success'}"
-  >
-    {percentage}&#37;
-  </div>
-</div>
-
-
-

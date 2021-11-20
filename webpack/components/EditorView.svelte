@@ -1,29 +1,42 @@
 <script>
-  import {onMount, onDestroy, getContext} from 'svelte'
-  import {EditorState, EditorSelection} from '@codemirror/state'
+	import {onMount, onDestroy, getContext} from 'svelte'
+	import {EditorState, EditorSelection} from '@codemirror/state'
 	import {EditorView, keymap} from '@codemirror/view'
 	import {defaultKeymap} from '@codemirror/commands'
 	import {history, historyKeymap} from '@codemirror/history'
-	import {lineNumbers, highlightActiveLineGutter, gutter} from '@codemirror/gutter'
+	import {
+		lineNumbers,
+		highlightActiveLineGutter,
+		gutter
+	} from '@codemirror/gutter'
 	import {defaultHighlightStyle} from '@codemirror/highlight'
 	import {html} from '@codemirror/lang-html'
 	import {oneDarkTheme, oneDarkHighlightStyle} from 'lib/codemirrorDarkTheme'
 	import {isDarkThemeON} from 'stores/theme'
-	import {report, reportLoading, reportError, linesAndSelectors} from 'stores/report'
+	import {
+		report,
+		reportLoading,
+		reportError,
+		linesAndSelectors
+	} from 'stores/report'
 	import {splitState} from 'stores/split'
 	import {
 		validationErrorsMarker,
 		validationErrorsEffect,
 		validationErrorsState
 	} from 'lib/codemirrorValidationErrors'
-  import {EVENT_LINE_TO_EDITOR, EVENT_LINE_TO_REPORT, EVENT_SUBMIT_EXAMPLE} from 'lib/constants'
+	import {
+		EVENT_LINE_TO_EDITOR,
+		EVENT_LINE_TO_REPORT,
+		EVENT_SUBMIT_EXAMPLE
+	} from 'lib/constants'
 	import {loadSampleContent} from 'lib/sampleHelpers'
 	import {getTooltipText} from 'lib/reportHelpers'
 
 	const TOOLTIP_SHIFT_PX = 20
 
-  let editorElement
-  let editorView = null
+	let editorElement
+	let editorView = null
 	let tooltipElement = null
 	let tooltipTextElement = null
 
@@ -32,10 +45,7 @@
 	const getEditorState = (doc = '') => {
 		const [eTheme, eThemeHighLight] = (() => {
 			if ($isDarkThemeON) {
-				return [
-					oneDarkTheme,
-					oneDarkHighlightStyle
-				]
+				return [oneDarkTheme, oneDarkHighlightStyle]
 			}
 
 			return [
@@ -55,8 +65,14 @@
 			}
 
 			const line = view.state.doc.lineAt(edLine.from)
-			if (line?.number && $linesAndSelectors[line.number] && $linesAndSelectors[line.number].length > 0) {
-				tooltipTextElement.textContent = getTooltipText($linesAndSelectors[line.number])
+			if (
+				line?.number &&
+				$linesAndSelectors[line.number] &&
+				$linesAndSelectors[line.number].length > 0
+			) {
+				tooltipTextElement.textContent = getTooltipText(
+					$linesAndSelectors[line.number]
+				)
 				tooltipElement.style.top = `${event.clientY + TOOLTIP_SHIFT_PX}px`
 				tooltipElement.style.left = `${event.clientX + TOOLTIP_SHIFT_PX}px`
 				tooltipElement.style.opacity = '1'
@@ -79,10 +95,9 @@
 			if (line?.number) {
 				splitState.switchToRightOnMobile()
 				window.dispatchEvent(
-					new window.CustomEvent(
-						EVENT_LINE_TO_REPORT,
-						{detail: {line: line.number}}
-					)
+					new window.CustomEvent(EVENT_LINE_TO_REPORT, {
+						detail: {line: line.number}
+					})
 				)
 			}
 		}
@@ -105,8 +120,12 @@
 								return true
 							}
 
-							tooltipElement.style.top = `${event.clientY + TOOLTIP_SHIFT_PX}px`
-							tooltipElement.style.left = `${event.clientX + TOOLTIP_SHIFT_PX}px`
+							tooltipElement.style.top = `${
+								event.clientY + TOOLTIP_SHIFT_PX
+							}px`
+							tooltipElement.style.left = `${
+								event.clientX + TOOLTIP_SHIFT_PX
+							}px`
 							return true
 						},
 						mouseout() {
@@ -132,10 +151,7 @@
 				highlightActiveLineGutter(),
 				history(),
 				eThemeHighLight,
-				keymap.of([
-					...defaultKeymap,
-					...historyKeymap
-				]),
+				keymap.of([...defaultKeymap, ...historyKeymap]),
 				html(),
 				eTheme
 			]
@@ -148,54 +164,62 @@
 			const editorContent = editorView.state.doc.toString()
 			const webWorker = getWebWorker()
 			if (webWorker?.processHTML) {
-				webWorker.processHTML(editorContent).then((data) => {
-					report.set(data)
-					resolve()
-				}).catch((err) => reject(err))
+				webWorker
+					.processHTML(editorContent)
+					.then((data) => {
+						report.set(data)
+						resolve()
+					})
+					.catch((err) => reject(err))
 			} else {
 				reject(new Error('Web worker is not available'))
 			}
 		})
 	}
 
-  const handleReportLineClickEvent = (e) => {
-    if (!editorView || !e.detail?.line) {
-      return
-    }
+	const handleReportLineClickEvent = (e) => {
+		if (!editorView || !e.detail?.line) {
+			return
+		}
 
-    const {line} = e.detail
-    const editorLine = editorView.state.doc.line(line)
+		const {line} = e.detail
+		const editorLine = editorView.state.doc.line(line)
 		const selection = EditorSelection.cursor(editorLine.from)
-		editorView.dispatch({effects: EditorView.centerOn.of(selection), selection})
+		editorView.dispatch({
+			effects: EditorView.centerOn.of(selection),
+			selection
+		})
 		editorView.focus()
-  }
+	}
 
 	const handleLoadSample = () => {
 		reportError.set(null)
 		reportLoading.set(true)
 
-		loadSampleContent().then((sampleContent) => {
-			if (!sampleContent) {
-				return
-			}
-
-			const currentEditorValue = editorView.state.doc.toString()
-			const endPosition = currentEditorValue.length
-
-			editorView.dispatch({
-				changes: {
-					from: 0,
-					to: endPosition,
-					insert: sampleContent
+		loadSampleContent()
+			.then((sampleContent) => {
+				if (!sampleContent) {
+					return Promise.resolve()
 				}
-			})
 
-			return runHtmlAnalyze()
-		}).catch((err) => reportError.set(err))
+				const currentEditorValue = editorView.state.doc.toString()
+				const endPosition = currentEditorValue.length
+
+				editorView.dispatch({
+					changes: {
+						from: 0,
+						to: endPosition,
+						insert: sampleContent
+					}
+				})
+
+				return runHtmlAnalyze()
+			})
+			.catch((err) => reportError.set(err))
 			.finally(() => reportLoading.set(false))
 	}
 
-  const onSubmitHtml = () => {
+	const onSubmitHtml = () => {
 		reportError.set(null)
 		reportLoading.set(true)
 
@@ -206,19 +230,22 @@
 
 	const applyErrorGutters = (linesSelector) => {
 		if (!editorView) {
-      return
-    }
+			return
+		}
 
 		editorView.dispatch({
 			effects: validationErrorsEffect.of({type: 'empty'})
 		})
 		Object.keys(linesSelector).forEach((line) => {
 			const editorLine = editorView.state.doc.line(line)
-      if (editorLine?.from) {
-        editorView.dispatch({
-          effects: validationErrorsEffect.of({pos: editorLine.from, selector: linesSelector[line]})
-        })
-      }
+			if (editorLine?.from) {
+				editorView.dispatch({
+					effects: validationErrorsEffect.of({
+						pos: editorLine.from,
+						selector: linesSelector[line]
+					})
+				})
+			}
 		})
 	}
 
@@ -236,60 +263,78 @@
 		}
 	}
 
-  const unsubscribeLinesReport = linesAndSelectors.subscribe((linesSelector) => {
-		applyErrorGutters(linesSelector)
-  })
+	const unsubscribeLinesReport = linesAndSelectors.subscribe(
+		(linesSelector) => {
+			applyErrorGutters(linesSelector)
+		}
+	)
 
 	const unsubscribeIsDarkTheme = isDarkThemeON.subscribe(() => {
 		if (!editorView) {
 			return
 		}
 
-		const html = editorView.state.doc.toString()
+		const htmlContent = editorView.state.doc.toString()
 		destroyEditor()
-		createEditor(html)
+		createEditor(htmlContent)
 		applyErrorGutters($linesAndSelectors)
 	})
 
-  onMount(() => {
+	onMount(() => {
 		createEditor()
 		return destroyEditor
 	})
 
-  onMount(() => {
-    window.addEventListener(EVENT_LINE_TO_EDITOR, handleReportLineClickEvent)
+	onMount(() => {
+		window.addEventListener(EVENT_LINE_TO_EDITOR, handleReportLineClickEvent)
 		window.addEventListener(EVENT_SUBMIT_EXAMPLE, handleLoadSample)
-    return () => {
-			window.removeEventListener(EVENT_LINE_TO_EDITOR, handleReportLineClickEvent)
+		return () => {
+			window.removeEventListener(
+				EVENT_LINE_TO_EDITOR,
+				handleReportLineClickEvent
+			)
 			window.removeEventListener(EVENT_SUBMIT_EXAMPLE, handleLoadSample)
 		}
-  })
+	})
 
-  onDestroy(unsubscribeLinesReport)
+	onDestroy(unsubscribeLinesReport)
 	onDestroy(unsubscribeIsDarkTheme)
 </script>
 
+<div class="editor-area">
+	<div class="editor-area-edit" bind:this={editorElement} />
+</div>
+<div class="editor-footer">
+	<button class="editor-area-btn" on:click|preventDefault={onSubmitHtml}
+		>Check email HTML and CSS</button
+	>
+</div>
+<!-- tooltip -->
+<div class="editor-tooltip" bind:this={tooltipElement}>
+	<div class="editor-tooltip-message" bind:this={tooltipTextElement} />
+</div>
+
 <style>
-  .editor-area {
+	.editor-area {
 		flex-grow: 1;
 		position: relative;
 	}
 
 	.editor-area-edit {
 		height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
 		overflow: scroll;
 	}
 
-  .editor-footer {
+	.editor-footer {
 		background-color: var(--bgColor);
 		flex-shrink: 0;
 		overflow: hidden;
-    white-space: nowrap;
+		white-space: nowrap;
 		padding: 0.3rem 0;
 		box-shadow: 0 -10px 30px 0 rgb(82 63 105 / 8%);
 	}
@@ -323,7 +368,7 @@
 		opacity: 0;
 		position: fixed;
 		z-index: 100;
-    max-width: 25rem;
+		max-width: 25rem;
 		white-space: pre-wrap;
 		overflow: hidden;
 		border-radius: 0.4rem;
@@ -337,17 +382,6 @@
 
 	.editor-tooltip-message {
 		background-position: top left;
-  	background-repeat: no-repeat;
+		background-repeat: no-repeat;
 	}
 </style>
-
-<div class="editor-area">
-  <div class="editor-area-edit" bind:this={editorElement}></div>
-</div>
-<div class="editor-footer">
-  <button class="editor-area-btn" on:click|preventDefault={onSubmitHtml}>Check email HTML and CSS</button>
-</div>
-<!-- tooltip -->
-<div class="editor-tooltip" bind:this={tooltipElement}>
-	<div class="editor-tooltip-message" bind:this={tooltipTextElement}></div>
-</div>

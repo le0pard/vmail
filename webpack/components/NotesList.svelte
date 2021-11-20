@@ -3,6 +3,30 @@
   export let notesStore
 </script>
 
+<div class="notes-list-title">Notes:</div>
+{#each Object.keys(notes).sort() as noteKey}
+  <div
+    class="notes-list-item"
+    tabindex="0"
+    on:focus={() => notesStore.setLine(noteKey)}
+    on:mouseover={() => notesStore.setLine(noteKey)}
+    on:blur={() => notesStore.reset()}
+    on:mouseout={() => notesStore.reset()}
+  >
+    <button
+      class="notes-list-button"
+      class:notes-list-button-active={$notesStore.line === noteKey}
+      on:focus={() => notesStore.setLine(noteKey)}
+      on:mouseover={() => notesStore.setLine(noteKey)}
+      on:blur={() => notesStore.reset()}
+      on:mouseout={() => notesStore.reset()}
+    >
+      {noteKey}
+    </button>
+    <div>{notes[noteKey]}</div>
+  </div>
+{/each}
+
 <style>
   .notes-list-title {
     font-size: 1rem;
@@ -35,10 +59,11 @@
     border-radius: 0.4rem;
     margin-right: 0.2rem;
     cursor: pointer;
-		user-select: none;
+    user-select: none;
   }
 
-  .notes-list-button:hover, .notes-list-button:active {
+  .notes-list-button:hover,
+  .notes-list-button:active {
     color: var(--mutedButtonHoverColor);
     background-color: var(--mutedButtonHoverBgColor);
   }
@@ -48,27 +73,3 @@
     background-color: var(--mutedButtonHoverBgColor);
   }
 </style>
-
-<div class="notes-list-title">Notes:</div>
-{#each Object.keys(notes).sort() as noteKey}
-  <div
-    class="notes-list-item"
-    tabindex="0"
-    on:focus={() => notesStore.setLine(noteKey)}
-    on:mouseover={() => notesStore.setLine(noteKey)}
-    on:blur={() => notesStore.reset()}
-    on:mouseout={() => notesStore.reset()}
-  >
-    <button
-      class="notes-list-button"
-      class:notes-list-button-active="{$notesStore.line === noteKey}"
-      on:focus={() => notesStore.setLine(noteKey)}
-      on:mouseover={() => notesStore.setLine(noteKey)}
-      on:blur={() => notesStore.reset()}
-      on:mouseout={() => notesStore.reset()}
-    >
-      {noteKey}
-    </button>
-    <div>{notes[noteKey]}</div>
-  </div>
-{/each}

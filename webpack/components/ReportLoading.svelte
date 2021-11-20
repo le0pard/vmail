@@ -2,6 +2,22 @@
   const items = [...Array(5).keys()]
 </script>
 
+{#each items as _item}
+  <li class="loader-item">
+    <div class="loader-item-container">
+      <div class="loader-item-header">
+        <div class="loader-item-header-info">
+          <div class="loader-item-header-type loader-block" />
+          <div class="loader-item-header-name loader-block" />
+          <div class="loader-item-header-link loader-block" />
+        </div>
+        <div class="loader-item-header-description loader-block" />
+        <div class="loader-header-main-lines loader-block" />
+      </div>
+    </div>
+  </li>
+{/each}
+
 <style>
   @keyframes gradient-animation {
     from {
@@ -26,7 +42,12 @@
     top: 0;
     height: 100%;
     width: 50px;
-    background: linear-gradient(to right, var(--mutedButtonBgColor) 25%, var(--mutedButtonHoverBgColor) 50%, var(--mutedButtonBgColor) 100%);
+    background: linear-gradient(
+      to right,
+      var(--mutedButtonBgColor) 25%,
+      var(--mutedButtonHoverBgColor) 50%,
+      var(--mutedButtonBgColor) 100%
+    );
     animation-name: gradient-animation;
     animation-duration: 2s;
     animation-iteration-count: infinite;
@@ -108,19 +129,3 @@
     padding-bottom: 0.3rem;
   }
 </style>
-
-{#each items as _item}
-  <li class="loader-item">
-    <div class="loader-item-container">
-      <div class="loader-item-header">
-        <div class="loader-item-header-info">
-          <div class="loader-item-header-type loader-block"></div>
-          <div class="loader-item-header-name loader-block"></div>
-          <div class="loader-item-header-link loader-block"></div>
-        </div>
-        <div class="loader-item-header-description loader-block"></div>
-        <div class="loader-header-main-lines loader-block"></div>
-      </div>
-    </div>
-  </li>
-{/each}
