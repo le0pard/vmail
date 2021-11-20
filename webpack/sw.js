@@ -28,21 +28,22 @@ cleanupOutdatedCaches()
 const cachedAssets = self.__WB_MANIFEST
 
 sha256(JSON.stringify(cachedAssets)).then((rev) => {
+  const revision = `${rev}-v1`
   precacheAndRoute([
     // favicons
-    {url: '/icon-192x192.png', revision: `${rev}-v1`},
-    {url: '/icon-512x512.png', revision: `${rev}-v1`},
-    {url: '/maskable_icon.png', revision: `${rev}-v1`},
-    {url: '/favicon.svg', revision: `${rev}-v1`},
-    {url: '/favicon.ico', revision: `${rev}-v1`},
+    {url: '/icon-192x192.png', revision},
+    {url: '/icon-512x512.png', revision},
+    {url: '/maskable_icon.png', revision},
+    {url: '/favicon.svg', revision},
+    {url: '/favicon.ico', revision},
     // wasm
-    {url: '/parser.wasm', revision: `${rev}-v1`},
+    {url: '/parser.wasm', revision},
     // root page
-    {url: '/index.html', revision: `${rev}-v1`},
+    {url: '/index.html', revision},
     // faq page
-    {url: '/faq.html', revision: `${rev}-v1`},
+    {url: '/faq.html', revision},
     // manifest
-    {url: '/manifest.json', revision: `${rev}-v1`}
+    {url: '/manifest.json', revision}
   ])
 })
 
