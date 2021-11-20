@@ -31,7 +31,7 @@
       Vmail (Validate Email) check HTML & CSS email template content in search of problematic elements. For each it finds, it displays the list of email clients that lack support for it or support it only partially.
     </p>
     <p class="empty-report-text">
-      Submit your HTML email template at left side and get report about it is possible issues in different email clients
+      Submit your HTML email template and get report about it is possible issues in different email clients
     </p>
   </div>
 </div>
