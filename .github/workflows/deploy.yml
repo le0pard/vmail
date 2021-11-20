@@ -55,16 +55,16 @@ jobs:
         run: yarn install --immutable
 
       - name: Run rubocop linter
-        run: bundle exec rubocop -c .rubocop.yml
+        run: bundle exec rubocop
 
       - name: Run eslint linter
         run: yarn eslint
 
-      - name: Run tests for parser
+      - name: Run tests for GO parser
         run: go test -v
         working-directory: wasm/parser
 
-      - name: Compile wasm
+      - name: Compile WASM
         run: bundle exec rake wasm:compile
 
       - name: Build website
