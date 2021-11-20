@@ -2,7 +2,7 @@
 
 [![Build and Deploy](https://github.com/le0pard/vmail/actions/workflows/deploy.yml/badge.svg?branch=main)](https://github.com/le0pard/vmail/actions/workflows/deploy.yml)
 
-![VMail](https://user-images.githubusercontent.com/98444/142698496-ee804d5e-1108-47a0-95ba-6eedd72e7144.png)
+[![VMail](https://user-images.githubusercontent.com/98444/142698496-ee804d5e-1108-47a0-95ba-6eedd72e7144.png)](https://vmail.leopard.in.ua/)
 
 Email clients use different rendering standards. This is why your email can be displayed not as you designed it. You need to check that your message code won't cause rendering issues.
 

@@ -23,10 +23,16 @@
 
 <div class="empty-report">
   <div class="empty-report-body">
-    <h3>Submit your HTML</h3>
-    <div class="empty-report-text">
-      Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-    </div>
+    <h3>VMail - check HTML & CSS compatibility with email clients</h3>
+    <p class="empty-report-text">
+      Email clients use different rendering standards. This is why your email can be displayed not as you designed it. You need to check that your message code won't cause rendering issues.
+    </p>
+    <p class="empty-report-text">
+      Vmail (Validate Email) check HTML & CSS email template content in search of problematic elements. For each it finds, it displays the list of email clients that lack support for it or support it only partially.
+    </p>
+    <p class="empty-report-text">
+      Submit your HTML email template at left side and get report about it is possible issues in different email clients
+    </p>
   </div>
 </div>
 
