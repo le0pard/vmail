@@ -1,3 +1,5 @@
+<svelte:options immutable={true} />
+
 <script>
   import {onMount, onDestroy, getContext} from 'svelte'
   import {EditorState, EditorSelection} from '@codemirror/state'

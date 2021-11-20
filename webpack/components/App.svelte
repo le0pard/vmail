@@ -1,3 +1,5 @@
+<svelte:options immutable={true} />
+
 <script>
   import {wrap, releaseProxy} from 'comlink'
   import {onMount, onDestroy, setContext} from 'svelte'

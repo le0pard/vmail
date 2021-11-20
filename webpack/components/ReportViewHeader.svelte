@@ -1,3 +1,5 @@
+<svelte:options immutable={true} />
+
 <script>
   import ThemeSwitcherComponent from './ThemeSwitcher'
 </script>

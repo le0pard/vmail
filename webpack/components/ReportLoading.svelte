@@ -1,3 +1,5 @@
+<svelte:options immutable={true} />
+
 <script>
   const items = [...Array(5).keys()]
 </script>

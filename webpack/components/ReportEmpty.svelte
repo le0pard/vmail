@@ -1,3 +1,5 @@
+<svelte:options immutable={true} />
+
 <style>
   .empty-report {
     border: 0;

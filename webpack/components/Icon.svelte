@@ -1,3 +1,5 @@
+<svelte:options immutable={true} />
+
 <style>
   :global(html.dark) .path1 {
     fill: #282c34;

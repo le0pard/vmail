@@ -1,3 +1,5 @@
+<svelte:options immutable={true} />
+
 <script>
   import {onMount} from 'svelte'
   import {splitState, screenSizeMinMedia} from 'stores/split'

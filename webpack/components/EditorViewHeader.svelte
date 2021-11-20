@@ -1,3 +1,5 @@
+<svelte:options immutable={true} />
+
 <script>
   import {EVENT_SUBMIT_EXAMPLE} from 'lib/constants'
   import IconComponent from './Icon'

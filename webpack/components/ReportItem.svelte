@@ -1,3 +1,5 @@
+<svelte:options immutable={true} />
+
 <script>
   import {onMount, getContext} from 'svelte'
   import {createNotesStore} from 'stores/notes'
