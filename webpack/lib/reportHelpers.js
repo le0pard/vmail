@@ -72,7 +72,12 @@ export const getTooltipText = (matches) =>
     )
     .join(', ')
 
-const sortClientsByTitle = (a, b) => (a.title > b.title ? 1 : b.title > a.title ? -1 : 0)
+const searchCollator = new Intl.Collator('en', {
+  usage: 'sort',
+  sensitivity: 'base',
+  numeric: true
+})
+const sortClientsByTitle = (a, b) => searchCollator.compare(a.title, b.title)
 
 export const clientsListWithStats = (rules) => {
   const reducedData = Object.keys(rules.stats).reduce(

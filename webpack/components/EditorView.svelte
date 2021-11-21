@@ -141,8 +141,8 @@
     })
   }
 
-  const runHtmlAnalyze = () => {
-    return new Promise((resolve, reject) => {
+  const runHtmlAnalyze = () => (
+    new Promise((resolve, reject) => {
       splitState.switchToRightOnMobile()
       const editorContent = editorView.state.doc.toString()
       const webWorker = getWebWorker()
@@ -153,12 +153,12 @@
             report.set(data)
             resolve()
           })
-          .catch((err) => reject(err))
+          .catch(reject)
       } else {
-        reject(new Error('Web worker is not available'))
+        reject(new Error('Web Worker is not available'))
       }
     })
-  }
+  )
 
   const handleReportLineClickEvent = (e) => {
     if (!editorView || !e.detail?.line) {
