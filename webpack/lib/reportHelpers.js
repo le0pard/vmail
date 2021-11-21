@@ -77,14 +77,16 @@ const searchCollator = new Intl.Collator('en', {
   sensitivity: 'base',
   numeric: true
 })
-const sortClientsByTitle = (a, b) => searchCollator.compare(a.title, b.title)
+const sortAlphabeticallyFun = searchCollator.compare
+const sortClientsByTitleFun = (a, b) => searchCollator.compare(a.title, b.title)
 
 export const clientsListWithStats = (rules) => {
-  const reducedData = Object.keys(rules.stats).reduce(
+  const reducedData = Object.keys(rules.stats).sort(sortAlphabeticallyFun).reduce(
     (agg, family) => {
-      Object.keys(rules.stats[family]).forEach((platform) => {
-        const versionsCount = Object.keys(rules.stats[family][platform]).length
-        Object.keys(rules.stats[family][platform]).forEach((version) => {
+      Object.keys(rules.stats[family]).sort(sortAlphabeticallyFun).forEach((platform) => {
+        const versions = Object.keys(rules.stats[family][platform]).sort(sortAlphabeticallyFun)
+        const versionsCount = versions.length
+        versions.forEach((version) => {
           const [state, ...notes] = rules.stats[family][platform][version]
           const clientData = {
             title: `${getFamily(family)} ${getPlatform(platform)}${
@@ -131,9 +133,9 @@ export const clientsListWithStats = (rules) => {
 
   return {
     ...reducedData,
-    supported: reducedData.supported.sort(sortClientsByTitle),
-    mitigated: reducedData.mitigated.sort(sortClientsByTitle),
-    unsupported: reducedData.unsupported.sort(sortClientsByTitle),
+    supported: reducedData.supported.sort(sortClientsByTitleFun),
+    mitigated: reducedData.mitigated.sort(sortClientsByTitleFun),
+    unsupported: reducedData.unsupported.sort(sortClientsByTitleFun),
     supportedPercentage: round((reducedData.supportedCount * 100) / countAll),
     mitigatedPercentage: round((reducedData.mitigatedCount * 100) / countAll),
     unsupportedPercentage: round((reducedData.unsupportedCount * 100) / countAll)
