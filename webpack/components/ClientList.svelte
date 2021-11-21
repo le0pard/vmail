@@ -3,7 +3,8 @@
 <script>
   export let title
   export let clients
-  export let percentage
+  export let count = 0
+  export let percentage = '0.00'
   export let bullet = 'success'
   export let notesStore
 </script>
@@ -127,7 +128,7 @@
     class:client-bullet-success="{bullet === 'success'}"></span>
 
   <div class="client-list-body">
-    <div class="client-list-title">{title}</div>
+    <div class="client-list-title">{title} ({count})</div>
     <div class="client-list-items">
       {#each clients as client}
         <div class="client-list-client">

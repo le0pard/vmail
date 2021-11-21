@@ -199,6 +199,7 @@
           title="Unsupported clients"
           bullet="error"
           clients="{clientsWithStats.unsupported}"
+          count="{clientsWithStats.unsupportedCount}"
           percentage="{clientsWithStats.unsupportedPercentage}"
           notesStore="{notesStore}"
         />
@@ -208,6 +209,7 @@
           title="Partially supported clients"
           bullet="warning"
           clients="{clientsWithStats.mitigated}"
+          count="{clientsWithStats.mitigatedCount}"
           percentage="{clientsWithStats.mitigatedPercentage}"
           notesStore="{notesStore}"
         />
@@ -217,6 +219,7 @@
           title="Supported clients"
           bullet="success"
           clients="{clientsWithStats.supported}"
+          count="{clientsWithStats.supportedCount}"
           percentage="{clientsWithStats.supportedPercentage}"
           notesStore="{notesStore}"
         />
