@@ -3,6 +3,8 @@
 title: "FAQ"
 ---
 
+<%- link_campaign_query = '?utm_source=vmail&utm_medium=referral' -%>
+
 <div class="faq-header">
 	<div class="faq-header-logo-container">
 		<a class="faq-header-logo-link" href="/">
@@ -55,10 +57,10 @@ title: "FAQ"
 				<p class="faq-answer">Nope, VMail cannot do this. It is using database with email clients limitations about different HTML and CSS rules. Based on this database it parse your HTML template and provide report for it</p>
 
 				<h4 class="faq-question">Where VMail get informations about email clients limitations?</h4>
-				<p class="faq-answer">VMail collect the data on support for particular HTML & CSS rules from <a href="https://www.caniemail.com/">Caniemail.com</a></p>
+				<p class="faq-answer">VMail collect the data on support for particular HTML & CSS rules from <a href="https://www.caniemail.com/<%= link_campaign_query %>">Caniemail.com</a></p>
 
 				<h4 class="faq-question">What to do, if I have EML/RAW message (a files containing the email header and body with attachments)?</h4>
-				<p class="faq-answer">VMail do not designed to parse <a href="https://en.wikipedia.org/wiki/Email#Filename_extensions">EML</a>/RAW email message to get HTML content from it. For this purpose you need to use separate service, which can do this job for you. One of the best option is <a href="https://mailtrap.io/">Mailtrap</a>: it provide similar report functionality for emails on FREE plan (you need to use Mailtrap SMTP server to send this emails for check). More info you can read in <a href="https://help.mailtrap.io/article/20-test-email-template">this article</a></p>
+				<p class="faq-answer">VMail do not designed to parse <a href="https://en.wikipedia.org/wiki/Email#Filename_extensions">EML</a>/RAW email message to get HTML content from it. For this purpose you need to use separate service, which can do this job for you. One of the best option is <a href="https://mailtrap.io/<%= link_campaign_query %>">Mailtrap</a>: it provide similar report functionality for emails on FREE plan (you need to use Mailtrap SMTP server to send this emails for check). More info you can read in <a href="https://help.mailtrap.io/article/20-test-email-template<%= link_campaign_query %>">this article</a></p>
 
 				<h4 class="faq-question">Why does VMail ignore external stylesheets?</h4>
 				<p class="faq-answer-middle">There are three ways to include styles within an email: using external stylesheets, embedded styles, or inline styles. While external stylesheets are a great option for web design, they aren't the best option for email design—many webmail clients block links to external stylesheets</p>
@@ -66,16 +68,16 @@ title: "FAQ"
 				<p class="faq-answer-middle">Inline styles are applied directly to HTML elements in each line of HTML—and are generally the safest way to ensure rendering compatibility across various email clients. However, inline styles can be time-consuming to write and a bit challenging to manage</p>
 				<p class="faq-answer-middle">While it's entirely possible to hand code inlined CSS from the start, it’s time consuming and difficult to maintain. Luckily, there are some solutions</p>
 				<ul>
-					<li><a href="https://alter.email/">Alter.Email</a></li>
-					<li><a href="https://app.postdrop.io/">Postdrop</a></li>
-					<li><a href="http://premailer.dialect.ca/">Premailer</a></li>
-					<li><a href="https://premailer.io/">Premailer.io</a></li>
-					<li><a href="https://putsmail.com/inliner">PutsMail CSS Inliner</a></li>
-					<li><a href="https://templates.mailchimp.com/resources/inline-css/">MailChimp's CSS Inliner</a></li>
-					<li><a href="https://www.campaignmonitor.com/resources/tools/css-inliner/">Campaign Monitor's CSS Inliner</a></li>
-					<li><a href="https://get.foundation/emails/inliner.html">Zurb's Responsive Email Inliner</a></li>
+					<li><a href="https://alter.email/<%= link_campaign_query %>">Alter.Email</a></li>
+					<li><a href="https://app.postdrop.io/<%= link_campaign_query %>">Postdrop</a></li>
+					<li><a href="http://premailer.dialect.ca/<%= link_campaign_query %>">Premailer</a></li>
+					<li><a href="https://premailer.io/<%= link_campaign_query %>">Premailer.io</a></li>
+					<li><a href="https://putsmail.com/inliner<%= link_campaign_query %>">PutsMail CSS Inliner</a></li>
+					<li><a href="https://templates.mailchimp.com/resources/inline-css/<%= link_campaign_query %>">MailChimp's CSS Inliner</a></li>
+					<li><a href="https://www.campaignmonitor.com/resources/tools/css-inliner/<%= link_campaign_query %>">Campaign Monitor's CSS Inliner</a></li>
+					<li><a href="https://get.foundation/emails/inliner.html<%= link_campaign_query %>">Zurb's Responsive Email Inliner</a></li>
 				</ul>
-				<p class="faq-answer">More info how to build email template you can get from <a href="https://www.smashingmagazine.com/2021/04/complete-guide-html-email-templates-tools/">this article</a></p>
+				<p class="faq-answer">More info how to build email template you can get from <a href="https://www.smashingmagazine.com/2021/04/complete-guide-html-email-templates-tools/<%= link_campaign_query %>">this article</a></p>
 
 				<h4 class="faq-question">Does VMail have API?</h4>
 				<p class="faq-answer">Nope, it doesn't. VMail fully work in your browser and do not have any backend/server to process your API requests</p>
