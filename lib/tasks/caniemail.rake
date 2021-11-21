@@ -38,6 +38,7 @@ class CaniuseGenerator
     'html-rt' => [['rt', '']],
     'html-ruby' => [['ruby', '']],
     'html-select' => [['select', '']],
+    'html-small' => [['small', '']],
     'html-span' => [['span', '']],
     'html-strike' => [['strike', '']],
     'html-strong' => [['strong', '']],
@@ -50,6 +51,7 @@ class CaniuseGenerator
   }.freeze
 
   HTML_ATTRIBUTES_MAPS = {
+    'html-align' => [['align', '']],
     'html-aria-describedby' => [['aria-describedby', '']],
     'html-aria-hidden' => [['aria-hidden', '']],
     'html-aria-label' => [['aria-label', '']],
@@ -264,9 +266,26 @@ class CaniuseGenerator
     }
 
     File.open(file, 'w') { |f| f.write JSON.dump(rules) }
+    warn_about_now_covered_rules
   end
 
   private
+
+  def warn_about_now_covered_rules
+    rules_without_apply = data.filter do |r|
+      r['slug'] != 'css-variables' &&
+        !HTML_TAGS_MAPS.key?(r['slug']) &&
+        !HTML_ATTRIBUTES_MAPS.key?(r['slug']) &&
+        !CSS_PROPERTIES_MAPS.key?(r['slug']) &&
+        !CSS_SELECTOR_TYPES_MAPS.key?(r['slug']) &&
+        !CSS_DIMENTIONS_MAPS.key?(r['slug']) &&
+        !CSS_FUNCTIONS_MAPS.key?(r['slug']) &&
+        !CSS_PSEUDO_SELECTORS_MAPS.key?(r['slug']) &&
+        !AT_RULE_CSS_STATEMENTS_MAPS.key?(r['slug']) &&
+        !IMG_FORMATS_MAPS.key?(r['slug'])
+    end
+    $stdout.puts "WARN, This rules was skipped: #{rules_without_apply.map { |r| r['slug'] }.join(', ')}"
+  end
 
   def generate_html_tags
     generate_multi_level_maps(HTML_TAGS_MAPS)
@@ -385,6 +404,6 @@ namespace :caniemail do
   desc 'Generate JSON doc from caniemail data'
   task :generate do |_t, _args|
     CaniuseGenerator.new.generate(File.expand_path('../../wasm/parser/caniuse.json', __dir__))
-    puts 'Work done'
+    $stdout.puts 'Work done'
   end
 end

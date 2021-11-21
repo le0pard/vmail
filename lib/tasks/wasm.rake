@@ -23,6 +23,6 @@ namespace :wasm do
       exception: true,
       chdir: wasm_dir
     )
-    puts 'Finished'
+    $stdout.puts 'Finished'
   end
 end

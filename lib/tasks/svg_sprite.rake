@@ -67,6 +67,6 @@ namespace :svg_sprite do
       File.expand_path('../svg', __dir__),
       File.expand_path('../../source/svg', __dir__)
     ).generate('sprite.svg')
-    puts 'Work done'
+    $stdout.puts 'Work done'
   end
 end
