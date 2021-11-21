@@ -80,6 +80,9 @@
   --splitBgHoverColor: #1c3238
   --splitBorderColor: #323248
 
+*:focus:not(:focus-visible)
+  outline: none
+
 html
   font-size: responsive 14px 18px
   font-range: 420px 1440px
@@ -121,9 +124,6 @@ a
 
 .parser-container
   height: 100%
-
-.js-focus-visible :focus:not(.focus-visible)
-  outline: none
 
 @import "svg_icons"
 @import "codemirror"
