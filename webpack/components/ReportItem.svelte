@@ -78,6 +78,7 @@
     flex: 3;
     font-size: 1.2rem;
     font-weight: 600;
+    padding: 0 1rem;
   }
 
   .report-item-header-link {
