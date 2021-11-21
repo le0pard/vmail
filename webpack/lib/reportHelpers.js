@@ -81,52 +81,56 @@ const sortAlphabeticallyFun = searchCollator.compare
 const sortClientsByTitleFun = (a, b) => searchCollator.compare(a.title, b.title)
 
 export const clientsListWithStats = (rules) => {
-  const reducedData = Object.keys(rules.stats).sort(sortAlphabeticallyFun).reduce(
-    (agg, family) => {
-      Object.keys(rules.stats[family]).sort(sortAlphabeticallyFun).forEach((platform) => {
-        const versions = Object.keys(rules.stats[family][platform]).sort(sortAlphabeticallyFun)
-        const versionsCount = versions.length
-        versions.forEach((version) => {
-          const [state, ...notes] = rules.stats[family][platform][version]
-          const clientData = {
-            title: `${getFamily(family)} ${getPlatform(platform)}${
-              versionsCount > 1 ? `(${version})` : ''
-            }`,
-            notes
-          }
-          if (state === 'y') {
-            agg = {
-              ...agg,
-              supported: [...agg.supported, clientData],
-              supportedCount: agg.supportedCount + 1
-            }
-          } else if (state === 'n') {
-            agg = {
-              ...agg,
-              unsupported: [...agg.unsupported, clientData],
-              unsupportedCount: agg.unsupportedCount + 1
-            }
-          } else {
-            agg = {
-              ...agg,
-              mitigated: [...agg.mitigated, clientData],
-              mitigatedCount: agg.mitigatedCount + 1
-            }
-          }
-        })
-      })
+  const reducedData = Object.keys(rules.stats)
+    .sort(sortAlphabeticallyFun)
+    .reduce(
+      (agg, family) => {
+        Object.keys(rules.stats[family])
+          .sort(sortAlphabeticallyFun)
+          .forEach((platform) => {
+            const versions = Object.keys(rules.stats[family][platform]).sort(sortAlphabeticallyFun)
+            const versionsCount = versions.length
+            versions.forEach((version) => {
+              const [state, ...notes] = rules.stats[family][platform][version]
+              const clientData = {
+                title: `${getFamily(family)} ${getPlatform(platform)}${
+                  versionsCount > 1 ? `(${version})` : ''
+                }`,
+                notes
+              }
+              if (state === 'y') {
+                agg = {
+                  ...agg,
+                  supported: [...agg.supported, clientData],
+                  supportedCount: agg.supportedCount + 1
+                }
+              } else if (state === 'n') {
+                agg = {
+                  ...agg,
+                  unsupported: [...agg.unsupported, clientData],
+                  unsupportedCount: agg.unsupportedCount + 1
+                }
+              } else {
+                agg = {
+                  ...agg,
+                  mitigated: [...agg.mitigated, clientData],
+                  mitigatedCount: agg.mitigatedCount + 1
+                }
+              }
+            })
+          })
 
-      return agg
-    },
-    {
-      supported: [],
-      supportedCount: 0,
-      mitigated: [],
-      mitigatedCount: 0,
-      unsupported: [],
-      unsupportedCount: 0
-    }
-  )
+        return agg
+      },
+      {
+        supported: [],
+        supportedCount: 0,
+        mitigated: [],
+        mitigatedCount: 0,
+        unsupported: [],
+        unsupportedCount: 0
+      }
+    )
 
   const countAll =
     reducedData.supportedCount + reducedData.mitigatedCount + reducedData.unsupportedCount
