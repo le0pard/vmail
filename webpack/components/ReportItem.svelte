@@ -86,7 +86,7 @@
     text-align: right;
   }
 
-  @media only screen and (max-width:480px) {
+  @media only screen and (max-width: 480px) {
     .report-item-header-link {
       display: none;
     }

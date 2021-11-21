@@ -112,7 +112,7 @@
     background-color: var(--successBgColor);
   }
 
-  @media only screen and (max-width:480px) {
+  @media only screen and (max-width: 480px) {
     .client-list-percentage {
       display: none;
     }
