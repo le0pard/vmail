@@ -38,6 +38,13 @@ class CaniuseGenerator
     'html-rt' => [['rt', '']],
     'html-ruby' => [['ruby', '']],
     'html-select' => [['select', '']],
+    'html-semantics' => [
+      ['article', ''], ['aside', ''], ['details', ''],
+      ['figcaption', ''], ['figure', ''], ['footer', ''],
+      ['header', ''], ['main', ''], ['mark', ''],
+      ['nav', ''], ['section', ''], ['summary', ''],
+      ['time', '']
+    ],
     'html-small' => [['small', '']],
     'html-span' => [['span', '']],
     'html-strike' => [['strike', '']],
