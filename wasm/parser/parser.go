@@ -47,8 +47,8 @@ const (
 )
 
 var (
-	numbersRe = regexp.MustCompile(`\d`)
-	cssUrlRe  = regexp.MustCompile(`url\(['"\s]?(.*?)['"\s]?\)`)
+	dimentionsRe = regexp.MustCompile(`(\+|-)?(\d(\.\d)?|\.\d)`) // based https://developer.mozilla.org/en-US/docs/Web/CSS/dimension
+	cssUrlRe     = regexp.MustCompile(`url\(['"\s]?(.*?)['"\s]?\)`)
 )
 
 func (d CssSelectorType) String() string {
@@ -517,7 +517,7 @@ func (prs *ParserEngine) saveToReportCssDimention(dimentionValue string, positio
 }
 
 func (prs *ParserEngine) checkCssDimention(dimentionValue string, position int) {
-	dimentionValue = strings.ToLower(strings.Trim(numbersRe.ReplaceAllString(dimentionValue, ""), WHITESPACE))
+	dimentionValue = strings.ToLower(strings.Trim(dimentionsRe.ReplaceAllString(dimentionValue, ""), WHITESPACE))
 	if cssDimentionsData, ok := rulesDB.CssDimentions[dimentionValue]; ok {
 		prs.saveToReportCssDimention(dimentionValue, position, cssDimentionsData)
 	}

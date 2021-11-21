@@ -415,3 +415,51 @@ func TestReportFromHTMLNestedMedia(t *testing.T) {
 		})
 	}
 }
+
+func TestReportFromHTMLDifferentDimentionsFormat(t *testing.T) {
+	html := `<html><body>
+	<style>
+	  .one-class {
+			padding: 1rem;
+		}
+		.two-class {
+			padding: 1.5rem;
+		}
+		.another-class {
+			padding: .56rem;
+		}
+		.another-class {
+			padding: 100.5343546456rem;
+		}
+		.another2-class {
+			padding: -100rem;
+		}
+		.another3-class {
+			padding: +123.123rem;
+		}
+	</style>
+</body></html>`
+	report, err := ReportFromHTML([]byte(html))
+	if err != nil {
+		t.Fatalf(`ReportFromHTML("%s"), %v`, html, err)
+	}
+
+	// log.Printf("report: %v\n", report)
+
+	var tests = []struct {
+		checkType string
+		got       map[int]bool
+		want      map[int]bool
+	}{
+		{"CssDimentions rm", report.CssDimentions["rem"].Lines, map[int]bool{4: true, 7: true, 10: true, 13: true, 16: true, 19: true}},
+	}
+
+	for _, tt := range tests {
+		testname := tt.checkType
+		t.Run(testname, func(t *testing.T) {
+			if !reflect.DeepEqual(tt.got, tt.want) {
+				t.Errorf("%s: got %v, want %v", tt.checkType, tt.got, tt.want)
+			}
+		})
+	}
+}
