@@ -72,6 +72,8 @@ export const getTooltipText = (matches) =>
     )
     .join(', ')
 
+const sortClientsByTitle = (a, b) => (a.title > b.title ? 1 : b.title > a.title ? -1 : 0)
+
 export const clientsListWithStats = (rules) => {
   const reducedData = Object.keys(rules.stats).reduce(
     (agg, family) => {
@@ -124,6 +126,9 @@ export const clientsListWithStats = (rules) => {
 
   return {
     ...reducedData,
+    supported: reducedData.supported.sort(sortClientsByTitle),
+    mitigated: reducedData.mitigated.sort(sortClientsByTitle),
+    unsupported: reducedData.unsupported.sort(sortClientsByTitle),
     supportedPercentage: round((reducedData.supportedCount * 100) / countAll),
     mitigatedPercentage: round((reducedData.mitigatedCount * 100) / countAll),
     unsupportedPercentage: round((reducedData.unsupportedCount * 100) / countAll)
