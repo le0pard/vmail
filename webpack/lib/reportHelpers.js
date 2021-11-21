@@ -36,8 +36,7 @@ const PLATFORM_MAP = {
 const getFamily = (family) => FAMILY_MAP[family] ?? family
 const getPlatform = (platform) => PLATFORM_MAP[platform] ?? platform
 
-const round = (num, precision = 2) =>
-  Math.round((num + Number.EPSILON) * Math.pow(10, precision)) / Math.pow(10, precision)
+const roundNumToStr = (num, precision = 2) => num.toFixed(precision) // return string
 
 export const camelize = (str) =>
   str.replace(/([-_][a-z])/gi, ($1) => $1.toUpperCase().replace('-', '').replace('_', ''))
@@ -135,13 +134,19 @@ export const clientsListWithStats = (rules) => {
   const countAll =
     reducedData.supportedCount + reducedData.mitigatedCount + reducedData.unsupportedCount
 
+  const unsupportedPercentage = roundNumToStr((reducedData.unsupportedCount * 100) / countAll)
+  const mitigatedPercentage = roundNumToStr((reducedData.mitigatedCount * 100) / countAll)
+  const supportedPercentage = roundNumToStr(
+    100 - Number(unsupportedPercentage) - Number(mitigatedPercentage)
+  ) // supported calculate from unsupported and mitigated, so sum will be 100% in the end
+
   return {
     ...reducedData,
     supported: reducedData.supported.sort(sortClientsByTitleFun),
     mitigated: reducedData.mitigated.sort(sortClientsByTitleFun),
     unsupported: reducedData.unsupported.sort(sortClientsByTitleFun),
-    supportedPercentage: round((reducedData.supportedCount * 100) / countAll),
-    mitigatedPercentage: round((reducedData.mitigatedCount * 100) / countAll),
-    unsupportedPercentage: round((reducedData.unsupportedCount * 100) / countAll)
+    supportedPercentage,
+    mitigatedPercentage,
+    unsupportedPercentage
   }
 }
