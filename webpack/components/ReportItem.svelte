@@ -225,7 +225,7 @@
         />
       {/if}
     {/if}
-    {#if report.rules?.notes}
+    {#if report.rules?.notes && Object.keys(report.rules.notes || {}).length > 0}
       <NotesListComponent notes="{report.rules.notes}" notesStore="{notesStore}" />
     {/if}
   </div>

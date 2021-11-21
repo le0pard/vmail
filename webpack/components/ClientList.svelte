@@ -133,7 +133,7 @@
       {#each clients as client}
         <div class="client-list-client">
           <span>{client.title}</span>
-          {#if client.notes}
+          {#if client.notes && client.notes.length > 0}
             {#each client.notes as noteKey}
               <button
                 class="client-list-line"
