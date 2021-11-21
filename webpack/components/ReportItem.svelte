@@ -86,6 +86,12 @@
     text-align: right;
   }
 
+  @media only screen and (max-width:480px) {
+    .report-item-header-link {
+      display: none;
+    }
+  }
+
   .report-item-header-more-link {
     color: var(--linkColor);
     text-decoration: none;
