@@ -5,37 +5,52 @@ import {
   REPORT_CSS_VARIABLES
 } from 'lib/constants'
 
+const searchCollator = new Intl.Collator('en', {
+  usage: 'sort',
+  sensitivity: 'base',
+  numeric: true
+})
+const sortAlphabeticallyFun = searchCollator.compare
+
 const selectLinesAndSelectors = (report) => {
   let lineToSelector = {}
   MULTI_LEVEL_REPORT_KEYS.forEach((reportInfo) => {
     if (report[reportInfo.key]) {
-      Object.keys(report[reportInfo.key]).forEach((name) => {
-        Object.keys(report[reportInfo.key][name]).forEach((value) => {
-          report[reportInfo.key][name][value].lines.forEach((line) => {
-            lineToSelector[line] ||= []
-            lineToSelector[line] = [...lineToSelector[line], [reportInfo, name, value]]
-          })
+      Object.keys(report[reportInfo.key])
+        .sort(sortAlphabeticallyFun)
+        .forEach((name) => {
+          Object.keys(report[reportInfo.key][name])
+            .sort(sortAlphabeticallyFun)
+            .forEach((value) => {
+              report[reportInfo.key][name][value].lines.forEach((line) => {
+                lineToSelector[line] ||= []
+                lineToSelector[line] = [...lineToSelector[line], [reportInfo, name, value]]
+              })
+            })
         })
-      })
     }
   })
   SINGLE_LEVEL_REPORT_KEYS.forEach((reportInfo) => {
     if (report[reportInfo.key]) {
-      Object.keys(report[reportInfo.key]).forEach((name) => {
-        report[reportInfo.key][name].lines.forEach((line) => {
-          lineToSelector[line] ||= []
-          lineToSelector[line] = [...lineToSelector[line], [reportInfo, name, '']]
+      Object.keys(report[reportInfo.key])
+        .sort(sortAlphabeticallyFun)
+        .forEach((name) => {
+          report[reportInfo.key][name].lines.forEach((line) => {
+            lineToSelector[line] ||= []
+            lineToSelector[line] = [...lineToSelector[line], [reportInfo, name, '']]
+          })
         })
-      })
     }
   })
   if (report[REPORT_CSS_VARIABLES.key]) {
-    Object.keys(report[REPORT_CSS_VARIABLES.key]).forEach((name) => {
-      report[REPORT_CSS_VARIABLES.key][name].lines.forEach((line) => {
-        lineToSelector[line] ||= []
-        lineToSelector[line] = [...lineToSelector[line], [REPORT_CSS_VARIABLES, '', '']]
+    Object.keys(report[REPORT_CSS_VARIABLES.key])
+      .sort(sortAlphabeticallyFun)
+      .forEach((name) => {
+        report[REPORT_CSS_VARIABLES.key][name].lines.forEach((line) => {
+          lineToSelector[line] ||= []
+          lineToSelector[line] = [...lineToSelector[line], [REPORT_CSS_VARIABLES, '', '']]
+        })
       })
-    })
   }
   return lineToSelector
 }
