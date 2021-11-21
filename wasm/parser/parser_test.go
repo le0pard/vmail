@@ -451,7 +451,7 @@ func TestReportFromHTMLDifferentDimentionsFormat(t *testing.T) {
 		got       map[int]bool
 		want      map[int]bool
 	}{
-		{"CssDimentions rm", report.CssDimentions["rem"].Lines, map[int]bool{4: true, 7: true, 10: true, 13: true, 16: true, 19: true}},
+		{"CssDimentions rem", report.CssDimentions["rem"].Lines, map[int]bool{4: true, 7: true, 10: true, 13: true, 16: true, 19: true}},
 	}
 
 	for _, tt := range tests {

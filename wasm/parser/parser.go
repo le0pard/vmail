@@ -47,7 +47,7 @@ const (
 )
 
 var (
-	dimentionsRe = regexp.MustCompile(`(\+|-)?(\d(\.\d)?|\.\d)`) // based https://developer.mozilla.org/en-US/docs/Web/CSS/dimension
+	dimentionsRe = regexp.MustCompile(`(\+|-)?(\d(\.\d)?|\.\d)`) // based on https://developer.mozilla.org/en-US/docs/Web/CSS/dimension
 	cssUrlRe     = regexp.MustCompile(`url\(['"\s]?(.*?)['"\s]?\)`)
 )
 
