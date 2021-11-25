@@ -62,10 +62,10 @@ jobs:
 
       - name: Run tests for GO parser
         run: go test -v
-        working-directory: wasm/parser
+        working-directory: wasm_parser/parser
 
-      - name: Compile WASM
-        run: bundle exec rake wasm:compile
+      - name: Compile WASM parser
+        run: bundle exec rake wasm:parser
 
       - name: Build website
         run: bundle exec middleman build
