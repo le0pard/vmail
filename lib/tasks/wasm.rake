@@ -9,12 +9,11 @@ def compile_wasm(wasm_dir, out_file)
       'GOOS' => 'js',
       'GOARCH' => 'wasm'
     },
-    'go',
-    'build',
-    *command_args,
-    '-o',
-    out_file,
-    unsetenv_others: false, exception: true, chdir: wasm_dir
+    'go', 'build', *command_args,
+    '-o', out_file,
+    chdir: wasm_dir,
+    unsetenv_others: false,
+    exception: true
   )
 end
 
