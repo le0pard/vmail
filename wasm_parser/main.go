@@ -12,8 +12,8 @@ import (
 
 // Main function: it sets up our Wasm application
 func main() {
-	// Define the function "VMail" in the JavaScript scope
-	js.Global().Set("VMail", VMail())
+	// Define the function "VMailParser" in the JavaScript scope
+	js.Global().Set("VMailParser", VMailParser())
 	// Prevent the function from returning, which is required in a wasm module
 	select {}
 }
@@ -375,8 +375,8 @@ func normalizeReportForPromise(report *parser.ParseReport) map[string]interface{
 	return newReport
 }
 
-// VMail returns a JavaScript function
-func VMail() js.Func {
+// VMailParser returns a JavaScript function
+func VMailParser() js.Func {
 	return js.FuncOf(func(this js.Value, args []js.Value) interface{} {
 		// Get the HTML as argument
 		// args[0] is a js.Value, so we need to get a string out of it

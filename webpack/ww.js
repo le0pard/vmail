@@ -27,15 +27,15 @@ if (!globals.WebAssembly.instantiateStreaming) {
   }
 }
 
-const loadWasmParser = memoize(async () => {
+const loadWasmModule = memoize(async (wasmUrl) => {
   const go = new globals.Go()
-  const fetchPromise = globals.fetch('/parser.wasm')
+  const fetchPromise = globals.fetch(wasmUrl)
   const {instance} = await globals.WebAssembly.instantiateStreaming(fetchPromise, go.importObject)
   go.run(instance) // do not wait for this promise, it never return result
   return instance
 })
 
-const processHTML = (html) => loadWasmParser().then(() => globals.VMail(html))
+const processHTML = (html) => loadWasmModule('/parser.wasm').then(() => globals.VMailParser(html))
 
 expose({
   processHTML,
