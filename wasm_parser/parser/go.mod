@@ -1,4 +1,4 @@
-module github.com/le0pard/vmail/wasm/parser
+module github.com/le0pard/vmail/wasm_parser/parser
 
 go 1.17
 

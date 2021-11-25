@@ -410,7 +410,7 @@ end
 namespace :caniemail do
   desc 'Generate JSON doc from caniemail data'
   task :generate do |_t, _args|
-    CaniuseGenerator.new.generate(File.expand_path('../../wasm/parser/caniuse.json', __dir__))
+    CaniuseGenerator.new.generate(File.expand_path('../../wasm_parser/parser/caniuse.json', __dir__))
     $stdout.puts 'Work done'
   end
 end

@@ -17,14 +17,14 @@ Web app build on top of [middleman](http://middlemanapp.com/). To start it in de
 ```bash
 $ bundle # get all ruby deps
 $ yarn # get all node.js deps
-$ bundle exec rake wasm:compile # build wasm module
+$ bundle exec rake wasm:parser # build wasm module
 $ bundle exec middleman server # start server on 4567 port
 ```
 
 ### Build wasm file from Go files
 
 ```bash
-bundle exec rake wasm:compile
+bundle exec rake wasm:parser
 ```
 
 ### Format svelte components

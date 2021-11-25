@@ -4,8 +4,8 @@ require 'shellwords'
 
 namespace :wasm do
   desc 'Generate wasm file'
-  task :compile do |_t, _args|
-    wasm_dir = File.expand_path('../../wasm', __dir__)
+  task :parser do |_t, _args|
+    wasm_dir = File.expand_path('../../wasm_parser', __dir__)
     out_file = File.expand_path('../../source/parser.wasm', __dir__)
     command_args = Shellwords.split('-ldflags="-s -w"')
 

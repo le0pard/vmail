@@ -7,7 +7,7 @@ import (
 	"sync"
 	"syscall/js"
 
-	"github.com/le0pard/vmail/wasm/parser"
+	"github.com/le0pard/vmail/wasm_parser/parser"
 )
 
 // Main function: it sets up our Wasm application
