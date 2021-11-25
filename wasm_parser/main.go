@@ -392,7 +392,7 @@ func VMailParser() js.Func {
 
 				report, err := parser.ReportFromHTML([]byte(htmlBody))
 				if err != nil {
-					rejectWithError(reject, "Error to parser HTML")
+					rejectWithError(reject, err.Error())
 					return
 				}
 
