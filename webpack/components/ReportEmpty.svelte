@@ -24,13 +24,13 @@
 
 <div class="empty-report">
   <div class="empty-report-body">
-    <h3>VMail - check HTML & CSS compatibility with email clients</h3>
+    <h3>VMail - check the markup (HTML, CSS) of HTML email template compatibility with email clients</h3>
     <p class="empty-report-text">
       Email clients use different rendering standards. This is why your email can be displayed not
       as you designed it. You need to check that your message code won't cause rendering issues.
     </p>
     <p class="empty-report-text">
-      Vmail (Validate Email) check HTML & CSS email template content in search of problematic
+      Vmail (Validate Email) check the markup (HTML, CSS) of HTML email template content in search of problematic
       elements. For each it finds, it displays the list of email clients that lack support for it or
       support it only partially.
     </p>

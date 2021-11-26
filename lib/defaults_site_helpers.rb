@@ -3,7 +3,7 @@
 module DefaultSiteHelpers
 
   def default_title_helper
-    'VMail - check HTML & CSS compatibility with email clients'
+    'VMail - check the markup (HTML, CSS) of HTML email template compatibility with email clients'
   end
 
   def default_keywords_helper
@@ -11,7 +11,7 @@ module DefaultSiteHelpers
   end
 
   def default_description_helper
-    'VMail - check HTML & CSS compatibility with email clients'
+    'VMail - check the markup (HTML, CSS) of HTML email template compatibility with email clients'
   end
 
   def full_url(url)
