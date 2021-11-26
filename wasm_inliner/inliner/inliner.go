@@ -3,8 +3,8 @@ package inliner
 import (
 	"bytes"
 	"errors"
+	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"net/url"
 	"regexp"
@@ -16,7 +16,9 @@ import (
 	css "github.com/tdewolff/parse/v2/css"
 
 	"github.com/andybalholm/cascadia"
+
 	"golang.org/x/net/html"
+	a "golang.org/x/net/html/atom"
 )
 
 const (
@@ -26,12 +28,23 @@ const (
 var (
 	mediaSplitInlineRe = regexp.MustCompile(`(?i)[\s]+|,`)
 	mediaInlineRe      = regexp.MustCompile(`(?i)(screen|handheld|all)`)
+	resetSelectors     = regexp.MustCompile(`(?i)^(\#outlook|body|\.ReadMsgBody|\.ExternalClass|img|\#backgroundTable)[,|\s+]?.*`)
 )
 
 type StylesheetsTags struct {
 	Parent  *html.Node
 	Node    *html.Node
 	Content string
+}
+
+type CSSGroupSelectors struct {
+	Key      string
+	NotApply bool
+}
+
+type CSSSelectors struct {
+	Selectors  []CSSGroupSelectors
+	Attributes map[string]string
 }
 
 type InlineEngine struct {
@@ -45,10 +58,12 @@ func InitInliner() *InlineEngine {
 	return &InlineEngine{}
 }
 
-func extractStylesheets(doc *html.Node) (string, error) {
+func extractHeadBodyAndStylesheets(doc *html.Node) (*html.Node, *html.Node, string, error) {
 	var (
 		externalStylesheets []StylesheetsTags
 		contents            []string
+		head                *html.Node = nil
+		body                *html.Node = nil
 		crawler             func(*html.Node)
 		netClient           = &http.Client{
 			Timeout: 5 * time.Second,
@@ -57,6 +72,13 @@ func extractStylesheets(doc *html.Node) (string, error) {
 
 	crawler = func(node *html.Node) {
 		if node.Type == html.ElementNode {
+			if node.Data == "head" && head == nil {
+				head = node
+			}
+			if node.Data == "body" && body == nil {
+				body = node
+			}
+
 			if node.Data == "style" {
 				var (
 					isMediaGood bool = true
@@ -156,28 +178,278 @@ func extractStylesheets(doc *html.Node) (string, error) {
 		item.Parent.RemoveChild(item.Node)
 	}
 
-	return strings.Join(contents, "\n"), nil
+	return head, body, strings.Join(contents, "\n"), nil
 }
 
-func (inlr *InlineEngine) inlineStyleSheetContent(doc *html.Node, sheetContent string) error {
+func (inlr *InlineEngine) collectStyles(p *css.Parser) (string, error) {
+	var (
+		collectedCSS      string = ""
+		countClosedStyles int    = 0
+	)
+
+	for {
+		gt, _, data := p.Next()
+
+		// log.Printf("[collectStyles]: %v - %v - %v\n", gt, string(data), p.Values())
+
+		if gt == css.ErrorGrammar {
+			if p.Err() == io.EOF {
+				return collectedCSS, nil
+			}
+			return collectedCSS, errors.New("Error to parse CSS")
+		}
+
+		switch gt {
+		case css.BeginRulesetGrammar, css.BeginAtRuleGrammar:
+			countClosedStyles += 1
+			collectedCSS += string(data)
+			for _, val := range p.Values() {
+				collectedCSS += string(val.Data)
+			}
+			collectedCSS += "{"
+		case css.QualifiedRuleGrammar:
+			collectedCSS += string(data)
+			for _, val := range p.Values() {
+				collectedCSS += string(val.Data)
+			}
+			collectedCSS += ","
+		case css.EndRulesetGrammar, css.EndAtRuleGrammar:
+			if countClosedStyles <= 0 {
+				return collectedCSS, nil
+			} else {
+				collectedCSS += string(data)
+				countClosedStyles -= 1
+			}
+		case css.DeclarationGrammar, css.CustomPropertyGrammar:
+			collectedCSS += fmt.Sprintf("%s:", string(data))
+			for _, val := range p.Values() {
+				collectedCSS += string(val.Data)
+			}
+			collectedCSS += ";"
+		}
+	}
+}
+
+func converCssAttributesToString(attrs map[string]string) string {
+	output := ""
+	for key, val := range attrs {
+		output += key
+		output += ":"
+		output += strings.ReplaceAll(val, "!important", "")
+		output += ";"
+	}
+	return output
+}
+
+func converCssSelectorToString(selector string, attrs map[string]string) string {
+	output := selector
+	output += "{"
+	output += converCssAttributesToString(attrs)
+	output += "}"
+	return output
+}
+
+func (inlr *InlineEngine) inlineRulesetToTags(doc *html.Node, cssStore CSSSelectors) (string, error) {
+	var (
+		additionalCSS string = ""
+	)
+
+	for _, selectorGroup := range cssStore.Selectors {
+		if selectorGroup.NotApply {
+			additionalCSS += converCssSelectorToString(selectorGroup.Key, cssStore.Attributes)
+			continue
+		}
+
+		selector, err := cascadia.ParseGroup(selectorGroup.Key)
+		if err != nil {
+			continue
+		}
+
+		// log.Printf("[selector]: %v\n", selector)
+
+		for _, node := range cascadia.Selector(selector.Match).MatchAll(doc) {
+			// switch node.DataAtom {
+			// case a.Style:
+			// }
+
+			stylesStr := ""
+			newAttr := []html.Attribute{}
+			for _, attr := range node.Attr {
+				if strings.ToLower(attr.Key) == "style" {
+					stylesStr = attr.Val
+				} else {
+					newAttr = append(newAttr, attr)
+				}
+			}
+
+			if len(stylesStr) == 0 {
+				newAttr = append(newAttr, html.Attribute{
+					Key: "style",
+					Val: converCssAttributesToString(cssStore.Attributes),
+				})
+				node.Attr = newAttr
+				continue
+			}
+
+			p := css.NewParser(parse.NewInput(bytes.NewBufferString(stylesStr)), true)
+			applyAttrs := make(map[string]string, len(cssStore.Attributes))
+			for k, v := range cssStore.Attributes {
+				applyAttrs[k] = v
+			}
+			newAttrStr := ""
+			for {
+				gt, _, data := p.Next()
+
+				if gt == css.ErrorGrammar {
+					if p.Err() == io.EOF {
+						for lastKey, lastValue := range applyAttrs {
+							newAttrStr += lastKey
+							newAttrStr += ":"
+							newAttrStr += strings.ReplaceAll(lastValue, "!important", "")
+							newAttrStr += ";"
+						}
+					}
+					break
+				} else if gt == css.AtRuleGrammar || gt == css.BeginAtRuleGrammar || gt == css.BeginRulesetGrammar {
+					newAttrStr += strings.ToLower(string(data))
+					for _, val := range p.Values() {
+						newAttrStr += strings.ToLower(string(val.Data))
+					}
+					if gt == css.BeginAtRuleGrammar || gt == css.BeginRulesetGrammar {
+						newAttrStr += "{"
+					} else if gt == css.AtRuleGrammar {
+						newAttrStr += ";"
+					}
+				} else if gt == css.DeclarationGrammar {
+					attrKey := strings.ToLower(string(data))
+					if newVal, ok := applyAttrs[attrKey]; ok {
+						newAttrStr += attrKey
+						newAttrStr += ":"
+						newAttrStr += newVal
+						newAttrStr += ";"
+						delete(applyAttrs, attrKey)
+						continue
+					}
+
+					newAttrStr += attrKey
+					newAttrStr += ":"
+					for _, val := range p.Values() {
+						newAttrStr += strings.ToLower(string(val.Data))
+					}
+					newAttrStr += ";"
+				} else {
+					newAttrStr += strings.ToLower(string(data))
+				}
+			}
+
+			newAttr = append(newAttr, html.Attribute{
+				Key: "style",
+				Val: newAttrStr,
+			})
+			node.Attr = newAttr
+		}
+	}
+
+	return additionalCSS, nil
+}
+
+func (inlr *InlineEngine) inlineStyleSheetContent(doc *html.Node, sheetContent string) (string, error) {
+	var (
+		cssStore CSSSelectors = CSSSelectors{
+			Selectors:  []CSSGroupSelectors{},
+			Attributes: make(map[string]string),
+		}
+		notAppliedCss string = ""
+	)
+
 	// log.Printf("[sheetContent]: %v\n", sheetContent)
 
 	p := css.NewParser(parse.NewInput(bytes.NewBufferString(sheetContent)), false)
 	for {
 		gt, _, data := p.Next()
 
-		log.Printf("[inlineStyleSheetContent]: %v - %v - %v\n", gt, string(data), p.Values())
+		// log.Printf("[inlineStyleSheetContent]: %v - %v - %v\n", gt, string(data), p.Values())
 
 		if gt == css.ErrorGrammar {
 			if p.Err() == io.EOF {
-				return nil
+				return notAppliedCss, nil
 			}
-			return errors.New("Error to parse CSS")
+			return notAppliedCss, errors.New("Error to parse CSS")
 		}
 
-		// prs.checkCssParsedToken(p, gt, data, position)
+		switch gt {
+		case css.AtRuleGrammar:
+			notAppliedCss += string(data)
+			for _, val := range p.Values() {
+				notAppliedCss += string(val.Data)
+			}
+			notAppliedCss += ";"
+		case css.BeginAtRuleGrammar:
+			notAppliedCss += string(data)
+			for _, val := range p.Values() {
+				notAppliedCss += string(val.Data)
+			}
+			notAppliedCss += "{"
+			additionalCss, err := inlr.collectStyles(p)
+			if err == nil {
+				notAppliedCss += additionalCss
+			}
+			notAppliedCss += "}"
+		case css.QualifiedRuleGrammar, css.BeginRulesetGrammar:
+			qselector := string(data)
+			notApply := false
+			for _, val := range p.Values() {
+				qselector += string(val.Data)
+				if val.TokenType == css.ColonToken {
+					notApply = true
+				}
+			}
+			cssStore.Selectors = append(cssStore.Selectors, CSSGroupSelectors{
+				Key:      qselector,
+				NotApply: notApply,
+			})
+		case css.DeclarationGrammar, css.CustomPropertyGrammar:
+			cssval := ""
+			for _, val := range p.Values() {
+				cssval += string(val.Data)
+			}
+			cssStore.Attributes[strings.ToLower(string(data))] = strings.ToLower(cssval)
+		case css.EndRulesetGrammar:
+			if len(cssStore.Selectors) > 0 {
+				additionalCss, err := inlr.inlineRulesetToTags(doc, cssStore)
+				if err == nil {
+					notAppliedCss += additionalCss
+				}
+			}
+			cssStore = CSSSelectors{
+				Selectors:  []CSSGroupSelectors{},
+				Attributes: make(map[string]string),
+			}
+		}
 	}
-	return nil
+	return notAppliedCss, nil
+}
+
+func (inlr *InlineEngine) addNonAppliedCssToDom(doc *html.Node, sheetContent string) {
+	styleContent := &html.Node{
+		Type: html.TextNode,
+		Data: sheetContent,
+	}
+
+	styleTag := &html.Node{
+		Type:     html.ElementNode,
+		Data:     "style",
+		DataAtom: a.Style,
+		Attr: []html.Attribute{
+			html.Attribute{
+				Key: "type",
+				Val: "text/css",
+			},
+		},
+	}
+
+	styleTag.AppendChild(styleContent)
+	doc.AppendChild(styleTag)
 }
 
 func (inlr *InlineEngine) InlineCss(htmlDoc []byte) ([]byte, error) {
@@ -190,25 +462,36 @@ func (inlr *InlineEngine) InlineCss(htmlDoc []byte) ([]byte, error) {
 		return []byte{}, err
 	}
 
-	stylesheetContents, err := extractStylesheets(doc)
+	head, body, stylesheetContents, err := extractHeadBodyAndStylesheets(doc)
 	if err != nil {
 		return []byte{}, err
 	}
 
-	err = inlr.inlineStyleSheetContent(doc, stylesheetContents)
+	if head == nil {
+		head = doc // no head, use html as root
+	}
+
+	if body == nil {
+		body = doc // no body, use html as root
+	}
+
+	notAppliedCss, err := inlr.inlineStyleSheetContent(body, stylesheetContents)
 	if err != nil {
 		return []byte{}, err
 	}
 
-	_, err = cascadia.ParseGroup(".body .title")
-	if err != nil {
-		log.Printf("invalid selector %s", ".body .title")
-		return []byte{}, err
-	}
+	inlr.addNonAppliedCssToDom(head, notAppliedCss)
 
 	inlr.wg.Wait() // wait all jobs
 
-	return []byte{}, nil
+	buf := new(bytes.Buffer)
+	if err = html.Render(buf, doc); err != nil {
+		return []byte{}, err
+	}
+
+	fmt.Printf("html: %v\n", string(buf.Bytes()))
+
+	return buf.Bytes(), nil
 }
 
 func InlineCssInHTML(htmlDoc []byte) ([]byte, error) {
