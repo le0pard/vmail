@@ -260,6 +260,11 @@ func (inlr *InlineEngine) inlineRulesetToTags(doc *html.Node, cssStore CSSSelect
 			continue
 		}
 
+		if resetSelectors.MatchString(selectorGroup.Key) {
+			additionalCSS += converCssSelectorToString(selectorGroup.Key, cssStore.Attributes)
+			continue
+		}
+
 		selector, err := cascadia.ParseGroup(selectorGroup.Key)
 		if err != nil {
 			continue
