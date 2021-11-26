@@ -2,10 +2,18 @@ package inliner
 
 import (
 	"bytes"
+	"errors"
+	"io"
 	"log"
+	"net/http"
+	"net/url"
 	"regexp"
 	"strings"
 	"sync"
+	"time"
+
+	parse "github.com/tdewolff/parse/v2"
+	css "github.com/tdewolff/parse/v2/css"
 
 	"github.com/andybalholm/cascadia"
 	"golang.org/x/net/html"
@@ -20,15 +28,13 @@ var (
 	mediaInlineRe      = regexp.MustCompile(`(?i)(screen|handheld|all)`)
 )
 
-type ExternalStylesheetsTags struct {
-	Parent *html.Node
-	Node   *html.Node
-	url    string
+type StylesheetsTags struct {
+	Parent  *html.Node
+	Node    *html.Node
+	Content string
 }
 
 type InlineEngine struct {
-	// array for bytes -> lines
-	bytesToLine []int
 	// group for parallel processing
 	wg sync.WaitGroup
 	// lock for report
@@ -39,51 +45,104 @@ func InitInliner() *InlineEngine {
 	return &InlineEngine{}
 }
 
-func extractStylesheets(doc *html.Node) ([]string, error) {
+func extractStylesheets(doc *html.Node) (string, error) {
 	var (
-		externalStylesheets []ExternalStylesheetsTags
-		urls                []string
+		externalStylesheets []StylesheetsTags
+		contents            []string
 		crawler             func(*html.Node)
+		netClient           = &http.Client{
+			Timeout: 5 * time.Second,
+		}
 	)
 
 	crawler = func(node *html.Node) {
-		if node.Type == html.ElementNode && node.Data == "link" {
-			var (
-				isStylesheet bool   = false
-				isMediaGood  bool   = true
-				foundedHref  string = ""
-			)
+		if node.Type == html.ElementNode {
+			if node.Data == "style" {
+				var (
+					isMediaGood bool = true
+				)
 
-			for _, v := range node.Attr {
-				key := strings.ToLower(strings.Trim(v.Key, WHITESPACE))
-				val := strings.Trim(v.Val, WHITESPACE)
+				for _, v := range node.Attr {
+					key := strings.ToLower(strings.Trim(v.Key, WHITESPACE))
+					val := strings.Trim(v.Val, WHITESPACE)
 
-				if key == "rel" && strings.ToLower(val) == "stylesheet" {
-					isStylesheet = true
-				}
-
-				if key == "media" {
-					if len(val) > 0 {
-						isMediaGood = false
-						for _, mediaPart := range mediaSplitInlineRe.Split(strings.ToLower(val), -1) {
-							if mediaInlineRe.MatchString(strings.Trim(mediaPart, WHITESPACE)) {
-								isMediaGood = true
+					if key == "media" {
+						if len(val) > 0 {
+							isMediaGood = false
+							for _, mediaPart := range mediaSplitInlineRe.Split(strings.ToLower(val), -1) {
+								if mediaInlineRe.MatchString(strings.Trim(mediaPart, WHITESPACE)) {
+									isMediaGood = true
+								}
 							}
 						}
 					}
 				}
 
-				if key == "href" {
-					foundedHref = val
+				if isMediaGood && node.FirstChild.Type == html.TextNode && len(node.FirstChild.Data) > 0 {
+					externalStylesheets = append(externalStylesheets, StylesheetsTags{
+						Parent:  node.Parent,
+						Node:    node,
+						Content: node.FirstChild.Data,
+					})
 				}
 			}
 
-			if isStylesheet && isMediaGood {
-				externalStylesheets = append(externalStylesheets, ExternalStylesheetsTags{
-					Parent: node.Parent,
-					Node:   node,
-					url:    foundedHref,
-				})
+			if node.Data == "link" {
+				var (
+					isStylesheet bool   = false
+					isMediaGood  bool   = true
+					foundedHref  string = ""
+				)
+
+				for _, v := range node.Attr {
+					key := strings.ToLower(strings.Trim(v.Key, WHITESPACE))
+					val := strings.Trim(v.Val, WHITESPACE)
+
+					if key == "rel" && strings.ToLower(val) == "stylesheet" {
+						isStylesheet = true
+					}
+
+					if key == "media" {
+						if len(val) > 0 {
+							isMediaGood = false
+							for _, mediaPart := range mediaSplitInlineRe.Split(strings.ToLower(val), -1) {
+								if mediaInlineRe.MatchString(strings.Trim(mediaPart, WHITESPACE)) {
+									isMediaGood = true
+								}
+							}
+						}
+					}
+
+					if key == "href" {
+						foundedHref = val
+					}
+				}
+
+				if isStylesheet && isMediaGood && len(foundedHref) > 0 {
+					sheetUrl, err := url.ParseRequestURI(foundedHref)
+					if err != nil {
+						return
+					}
+
+					resp, err := netClient.Get(sheetUrl.String())
+					if err != nil {
+						return
+					}
+					defer resp.Body.Close()
+
+					body, err := io.ReadAll(resp.Body)
+					if err != nil {
+						return
+					}
+
+					if len(body) > 0 {
+						externalStylesheets = append(externalStylesheets, StylesheetsTags{
+							Parent:  node.Parent,
+							Node:    node,
+							Content: string(body),
+						})
+					}
+				}
 			}
 		}
 		for child := node.FirstChild; child != nil; child = child.NextSibling {
@@ -93,11 +152,32 @@ func extractStylesheets(doc *html.Node) ([]string, error) {
 	crawler(doc)
 
 	for _, item := range externalStylesheets {
-		urls = append(urls, item.url)
+		contents = append(contents, item.Content)
 		item.Parent.RemoveChild(item.Node)
 	}
 
-	return urls, nil
+	return strings.Join(contents, "\n"), nil
+}
+
+func (inlr *InlineEngine) inlineStyleSheetContent(doc *html.Node, sheetContent string) error {
+	// log.Printf("[sheetContent]: %v\n", sheetContent)
+
+	p := css.NewParser(parse.NewInput(bytes.NewBufferString(sheetContent)), false)
+	for {
+		gt, _, data := p.Next()
+
+		log.Printf("[inlineStyleSheetContent]: %v - %v - %v\n", gt, string(data), p.Values())
+
+		if gt == css.ErrorGrammar {
+			if p.Err() == io.EOF {
+				return nil
+			}
+			return errors.New("Error to parse CSS")
+		}
+
+		// prs.checkCssParsedToken(p, gt, data, position)
+	}
+	return nil
 }
 
 func (inlr *InlineEngine) InlineCss(htmlDoc []byte) ([]byte, error) {
@@ -110,12 +190,15 @@ func (inlr *InlineEngine) InlineCss(htmlDoc []byte) ([]byte, error) {
 		return []byte{}, err
 	}
 
-	stylesheetUrls, err := extractStylesheets(doc)
+	stylesheetContents, err := extractStylesheets(doc)
 	if err != nil {
 		return []byte{}, err
 	}
 
-	log.Printf("[stylesheetUrls]: %v\n", stylesheetUrls)
+	err = inlr.inlineStyleSheetContent(doc, stylesheetContents)
+	if err != nil {
+		return []byte{}, err
+	}
 
 	_, err = cascadia.ParseGroup(".body .title")
 	if err != nil {
