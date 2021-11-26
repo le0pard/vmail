@@ -301,14 +301,7 @@ func (inlr *InlineEngine) inlineRulesetToTags(doc *html.Node, cssStore CSSSelect
 				gt, _, data := p.Next()
 
 				if gt == css.ErrorGrammar {
-					if p.Err() == io.EOF {
-						for lastKey, lastValue := range applyAttrs {
-							newAttrStr += lastKey
-							newAttrStr += ":"
-							newAttrStr += strings.ReplaceAll(lastValue, "!important", "")
-							newAttrStr += ";"
-						}
-					}
+					newAttrStr += converCssAttributesToString(applyAttrs)
 					break
 				} else if gt == css.AtRuleGrammar || gt == css.BeginAtRuleGrammar || gt == css.BeginRulesetGrammar {
 					newAttrStr += strings.ToLower(string(data))
@@ -323,10 +316,9 @@ func (inlr *InlineEngine) inlineRulesetToTags(doc *html.Node, cssStore CSSSelect
 				} else if gt == css.DeclarationGrammar {
 					attrKey := strings.ToLower(string(data))
 					if newVal, ok := applyAttrs[attrKey]; ok {
-						newAttrStr += attrKey
-						newAttrStr += ":"
-						newAttrStr += newVal
-						newAttrStr += ";"
+						newAttrStr += converCssAttributesToString(map[string]string{
+							attrKey: newVal,
+						})
 						delete(applyAttrs, attrKey)
 						continue
 					}
