@@ -2,7 +2,6 @@ package inliner
 
 import (
 	"bytes"
-	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -193,10 +192,7 @@ func (inlr *InlineEngine) collectStyles(p *css.Parser) (string, error) {
 		// log.Printf("[collectStyles]: %v - %v - %v\n", gt, string(data), p.Values())
 
 		if gt == css.ErrorGrammar {
-			if p.Err() == io.EOF {
-				return collectedCSS, nil
-			}
-			return collectedCSS, errors.New("Error to parse CSS")
+			return collectedCSS, nil
 		}
 
 		switch gt {
@@ -368,10 +364,7 @@ func (inlr *InlineEngine) inlineStyleSheetContent(doc *html.Node, sheetContent s
 		// log.Printf("[inlineStyleSheetContent]: %v - %v - %v\n", gt, string(data), p.Values())
 
 		if gt == css.ErrorGrammar {
-			if p.Err() == io.EOF {
-				return notAppliedCss, nil
-			}
-			return notAppliedCss, errors.New("Error to parse CSS")
+			return notAppliedCss, nil
 		}
 
 		switch gt {

@@ -1,57 +1,10 @@
 package inliner
 
 import (
+	"regexp"
+	"strings"
 	"testing"
 )
-
-// htmlDoc := `<html>
-// <head>
-// 	<title>Email</title>
-// 	<link href="https://getbootstrap.com/docs/5.1/dist/css/bootstrap.css" rel="stylesheet" />
-// 	<link href="https://getbootstrap.com/docs/5.1/assets/css/docs.css" rel="stylesheet" media="screen and (max-width: 600px)" />
-// 	<link href="https://getbootstrap.com/docs/5.1/assets/css/docs2.css" rel="stylesheet" media="print" />
-// 	<link href="https://getbootstrap.com/docs/5.1/assets/css/docs3.css" rel="stylesheet" media="(min-width: 400px)" />
-// 	<style type="text/css">
-// 		/* Client-specific Styles */
-// 		#outlook a{padding:0;} /* Force Outlook to provide a "view in browser" button. */
-// 		body{width:100% !important;} .ReadMsgBody{width:100%;} .ExternalClass{width:100%;} /* Force Hotmail to display emails at full width */
-// 		body{-webkit-text-size-adjust:none;} /* Prevent Webkit platforms from changing default text sizes. */
-
-// 		/* Reset Styles */
-// 		body{margin:0; padding:0;}
-// 		img{border:0; height:auto; line-height:100%; outline:none; text-decoration:none;}
-// 		table td{border-collapse:collapse;}
-// 		#backgroundTable{height:100% !important; margin:0; padding:0; width:100% !important;}
-
-// 		body, #backgroundTable{
-// 			/*@editable*/ background-color:#FAFAFA;
-// 		}
-
-// 		#templateContainer{
-// 			/*@editable*/ border: 1px solid #DDDDDD;
-// 		}
-
-// 		h1, .h1, .h1-header {
-// 			color:#202020;
-// 			display:block;
-// 			font-family:Arial;
-// 			font-size:34px;
-// 			font-weight:bold;
-// 			line-height:100%;
-// 			margin-top:0 !important;
-// 			margin-right:0 !important;
-// 			margin-bottom:10px !important;
-// 			margin-left:0 !important;
-// 			text-align:left;
-// 		}
-// 	</style>
-// </head>
-// <body>
-// 	<div>
-// 		<h2>Title</h2>
-// 	</div>
-// </body>
-// </html>`
 
 func TestInlineCssInHTMLSimple(t *testing.T) {
 	htmlDoc := `<html>
@@ -120,9 +73,75 @@ func TestInlineCssInHTMLSimple(t *testing.T) {
 	</div>
 </body>
 </html>`
-	_, err := InlineCssInHTML([]byte(htmlDoc))
+	htmlResult, err := InlineCssInHTML([]byte(htmlDoc))
 	if err != nil {
 		t.Fatalf(`InlineCssInHTML("%s"), %v`, htmlDoc, err)
 	}
-	// log.Printf("report: %v\n", report)
+
+	htmlResultStr := string(htmlResult)
+
+	// log.Printf("report: %v\n", string(htmlResult))
+	if !strings.Contains(htmlResultStr, "<style type=\"text/css\">@media(prefers-reduced-motion:no-preference){:root{scroll-behavior:smooth;}") {
+		t.Errorf("InlineCssInHTML not found inlined style tag in %v", htmlResultStr)
+	}
+
+	colorRe := regexp.MustCompile(`(?i)<h1.*style=".*color:#000;.*"`)
+	if !colorRe.MatchString(htmlResultStr) {
+		t.Errorf("InlineCssInHTML not found inlined color property in h1 tag in %v", htmlResultStr)
+	}
+	lineHeightRe := regexp.MustCompile(`(?i)<h1.*style=".*line-height:100%;.*"`)
+	if !lineHeightRe.MatchString(htmlResultStr) {
+		t.Errorf("InlineCssInHTML not found inlined line-height property in h1 tag in %v", htmlResultStr)
+	}
+	marginRightRe := regexp.MustCompile(`(?i)<h1.*style=".*margin-right:0;.*"`)
+	if !marginRightRe.MatchString(htmlResultStr) {
+		t.Errorf("InlineCssInHTML not found inlined margin-right property in h1 tag in %v", htmlResultStr)
+	}
+}
+
+func TestInlineCssInUrls(t *testing.T) {
+	htmlDoc := `<html>
+<head>
+	<title>Email</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+	<link href="docs/5.1/assets/css/docs.css" rel="stylesheet" media="screen and (max-width: 600px)" />
+	<link href="https://getbootstrap.com/not-exists-css-file.css" rel="stylesheet" media="all" />
+	<link href="https://example.com/skipped.css" rel="stylesheet" media="print" />
+	<link href="https://example.com/skipped.css" rel="stylesheet" media="(min-width: 400px)" />
+	<link href="/url-not-works.css" rel="stylesheet" media="all" />
+</head>
+<body>
+	<div class="container">
+		<h2>
+			Title
+			<small class="text-muted">With faded secondary text</small>
+		</h2>
+	</div>
+</body>
+</html>`
+	htmlResult, err := InlineCssInHTML([]byte(htmlDoc))
+	if err != nil {
+		t.Fatalf(`InlineCssInHTML("%s"), %v`, htmlDoc, err)
+	}
+
+	htmlResultStr := string(htmlResult)
+
+	// log.Printf("report: %v\n", string(htmlResult))
+	stylesRe := regexp.MustCompile(`(?i)<style.*>.*@charset "UTF-8";:root{.*"`)
+	if !stylesRe.MatchString(htmlResultStr) {
+		t.Errorf("InlineCssInHTML not found inlined style tag in %v", htmlResultStr)
+	}
+
+	divRe := regexp.MustCompile(`(?i)<div.*style=".*box-sizing:border-box;.*"`)
+	if !divRe.MatchString(htmlResultStr) {
+		t.Errorf("InlineCssInHTML not found inlined box-sizing property in div tag in %v", htmlResultStr)
+	}
+	h2Re := regexp.MustCompile(`(?i)<h2.*style=".*line-height:1.2;.*"`)
+	if !h2Re.MatchString(htmlResultStr) {
+		t.Errorf("InlineCssInHTML not found inlined line-height property in h2 tag in %v", htmlResultStr)
+	}
+	smallRe := regexp.MustCompile(`(?i)<small.*style=".*font-size:.875em;.*"`)
+	if !smallRe.MatchString(htmlResultStr) {
+		t.Errorf("InlineCssInHTML not found inlined font-size property in small tag in %v", htmlResultStr)
+	}
 }
