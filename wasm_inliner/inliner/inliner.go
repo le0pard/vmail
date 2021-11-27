@@ -28,7 +28,7 @@ const (
 var (
 	mediaSplitInlineRe = regexp.MustCompile(`(?i)[\s]+|,`)
 	mediaInlineRe      = regexp.MustCompile(`(?i)(screen|handheld|all)`)
-	resetSelectors     = regexp.MustCompile(`(?i)^(\#outlook|body|\.ReadMsgBody|\.ExternalClass|img|\#backgroundTable)[,|\s+]?.*`)
+	resetSelectors     = regexp.MustCompile(`(?i)^(\#outlook|body.*|\.ReadMsgBody|\.ExternalClass|img|table|td|p|\#backgroundTable|\#bodyTable)`) // email reset styles
 )
 
 type StylesheetsTags struct {
