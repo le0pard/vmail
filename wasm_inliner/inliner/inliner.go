@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/url"
 	"regexp"
+	"sort"
 	"strings"
 	"sync"
 	"time"
@@ -228,10 +229,16 @@ func (inlr *InlineEngine) collectStyles(p *css.Parser) (string, error) {
 
 func converCssAttributesToString(attrs map[string]string) string {
 	output := ""
-	for key, val := range attrs {
-		output += key
+	keys := make([]string, 0, len(attrs))
+	for k := range attrs {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	for _, k := range keys {
+		output += k
 		output += ":"
-		output += strings.ReplaceAll(val, "!important", "")
+		output += strings.ReplaceAll(attrs[k], "!important", "")
 		output += ";"
 	}
 	return output
