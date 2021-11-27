@@ -64,8 +64,15 @@ jobs:
         run: go test -v
         working-directory: wasm_parser/parser
 
+      - name: Run tests for GO inliner
+        run: go test -v
+        working-directory: wasm_inliner/inliner
+
       - name: Compile WASM parser
         run: bundle exec rake wasm:parser
+
+      - name: Compile WASM inliner
+        run: bundle exec rake wasm:inliner
 
       - name: Build website
         run: bundle exec middleman build
