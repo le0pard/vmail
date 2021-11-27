@@ -43,14 +43,10 @@ const selectLinesAndSelectors = (report) => {
     }
   })
   if (report[REPORT_CSS_VARIABLES.key]) {
-    Object.keys(report[REPORT_CSS_VARIABLES.key])
-      .sort(sortAlphabeticallyFun)
-      .forEach((name) => {
-        report[REPORT_CSS_VARIABLES.key][name].lines.forEach((line) => {
-          lineToSelector[line] ||= []
-          lineToSelector[line] = [...lineToSelector[line], [REPORT_CSS_VARIABLES, '', '']]
-        })
-      })
+    report[REPORT_CSS_VARIABLES.key].lines.forEach((line) => {
+      lineToSelector[line] ||= []
+      lineToSelector[line] = [...lineToSelector[line], [REPORT_CSS_VARIABLES, '', '']]
+    })
   }
   return lineToSelector
 }

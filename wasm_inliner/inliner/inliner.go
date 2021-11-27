@@ -455,6 +455,10 @@ func (inlr *InlineEngine) InlineCss(htmlDoc []byte) ([]byte, error) {
 		err error
 	)
 
+	if len(htmlDoc) == 0 {
+		return htmlDoc, nil // empty doc
+	}
+
 	if doc, err = html.Parse(bytes.NewReader(htmlDoc)); err != nil {
 		return []byte{}, err
 	}
@@ -477,7 +481,9 @@ func (inlr *InlineEngine) InlineCss(htmlDoc []byte) ([]byte, error) {
 		return []byte{}, err
 	}
 
-	inlr.addNonAppliedCssToDom(head, notAppliedCss)
+	if len(notAppliedCss) > 0 {
+		inlr.addNonAppliedCssToDom(head, notAppliedCss)
+	}
 
 	inlr.wg.Wait() // wait all jobs
 
@@ -485,8 +491,6 @@ func (inlr *InlineEngine) InlineCss(htmlDoc []byte) ([]byte, error) {
 	if err = html.Render(buf, doc); err != nil {
 		return []byte{}, err
 	}
-
-	fmt.Printf("html: %v\n", string(buf.Bytes()))
 
 	return buf.Bytes(), nil
 }

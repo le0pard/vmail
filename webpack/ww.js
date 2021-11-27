@@ -36,8 +36,10 @@ const loadWasmModule = memoize(async (wasmUrl) => {
 })
 
 const processHTML = (html) => loadWasmModule('/parser.wasm').then(() => globals.VMailParser(html))
+const inlineCSS = (html) => loadWasmModule('/inliner.wasm').then(() => globals.VMailInliner(html))
 
 expose({
   processHTML,
+  inlineCSS,
   clientsListWithStats
 })

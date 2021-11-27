@@ -12,13 +12,19 @@
   import {oneDarkTheme, oneDarkHighlightStyle} from 'lib/codemirrorDarkTheme'
   import {isDarkThemeON} from 'stores/theme'
   import {report, reportLoading, reportError, linesAndSelectors} from 'stores/report'
+  import {inlinerLoading, inlinerError} from 'stores/inliner'
   import {splitState} from 'stores/split'
   import {
     validationErrorsMarker,
     validationErrorsEffect,
     validationErrorsState
   } from 'lib/codemirrorValidationErrors'
-  import {EVENT_LINE_TO_EDITOR, EVENT_LINE_TO_REPORT, EVENT_SUBMIT_EXAMPLE} from 'lib/constants'
+  import {
+    EVENT_LINE_TO_EDITOR,
+    EVENT_LINE_TO_REPORT,
+    EVENT_SUBMIT_EXAMPLE,
+    EVENT_INLINE_CSS
+  } from 'lib/constants'
   import {loadSampleContent} from 'lib/sampleHelpers'
   import {getTooltipText} from 'lib/reportHelpers'
 
@@ -141,10 +147,14 @@
     })
   }
 
-  const runHtmlAnalyze = () =>
-    new Promise((resolve, reject) => {
+  const runHtmlAnalyze = () => {
+    const editorContent = editorView.state.doc.toString()
+    if (!editorContent || !editorContent.length) {
+      return Promise.resolve()
+    }
+
+    return new Promise((resolve, reject) => {
       splitState.switchToRightOnMobile()
-      const editorContent = editorView.state.doc.toString()
       const webWorker = getWebWorker()
       if (webWorker?.processHTML) {
         webWorker
@@ -158,6 +168,7 @@
         reject(new Error('Web Worker is not available'))
       }
     })
+  }
 
   const handleReportLineClickEvent = (e) => {
     if (!editorView || !e.detail?.line) {
@@ -172,6 +183,44 @@
       selection
     })
     editorView.focus()
+  }
+
+  const handleInlineCss = () => {
+    const editorContent = editorView.state.doc.toString()
+    if (!editorContent || !editorContent.length) {
+      return
+    }
+
+    inlinerError.set(null)
+    inlinerLoading.set(true)
+
+    const webWorker = getWebWorker()
+    if (webWorker?.inlineCSS) {
+      webWorker
+        .inlineCSS(editorContent)
+        .then((data) => {
+          const currentEditorValue = editorView.state.doc.toString()
+          const endPosition = currentEditorValue.length
+
+          editorView.dispatch({
+            changes: {
+              from: 0,
+              to: endPosition,
+              insert: data
+            }
+          })
+          setTimeout(() => runHtmlAnalyze(), 0)
+        })
+        .catch((err) => {
+          inlinerError.set(err)
+        })
+        .finally(() => {
+          inlinerLoading.set(false)
+        })
+    } else {
+      inlinerError.set(new Error('Web Worker is not available'))
+      inlinerLoading.set(false)
+    }
   }
 
   const handleLoadSample = () => {
@@ -267,9 +316,11 @@
 
   onMount(() => {
     window.addEventListener(EVENT_LINE_TO_EDITOR, handleReportLineClickEvent)
+    window.addEventListener(EVENT_INLINE_CSS, handleInlineCss)
     window.addEventListener(EVENT_SUBMIT_EXAMPLE, handleLoadSample)
     return () => {
       window.removeEventListener(EVENT_LINE_TO_EDITOR, handleReportLineClickEvent)
+      window.removeEventListener(EVENT_INLINE_CSS, handleInlineCss)
       window.removeEventListener(EVENT_SUBMIT_EXAMPLE, handleLoadSample)
     }
   })

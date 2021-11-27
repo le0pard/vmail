@@ -38,6 +38,7 @@ sha256(JSON.stringify(cachedAssets)).then((rev) => {
     {url: '/favicon.ico', revision},
     // wasm
     {url: '/parser.wasm', revision},
+    {url: '/inliner.wasm', revision},
     // root page
     {url: '/index.html', revision},
     // faq page

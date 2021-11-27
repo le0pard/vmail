@@ -1,12 +1,25 @@
 <svelte:options immutable="{true}" />
 
 <script>
-  import {EVENT_SUBMIT_EXAMPLE} from 'lib/constants'
+  import {onDestroy} from 'svelte'
+  import {EVENT_SUBMIT_EXAMPLE, EVENT_INLINE_CSS} from 'lib/constants'
+  import {inlinerLoading, inlinerError} from 'stores/inliner'
   import IconComponent from './Icon'
 
   const genAndSubmitSample = () => {
     window.dispatchEvent(new window.CustomEvent(EVENT_SUBMIT_EXAMPLE, {detail: {}}))
   }
+  const inlineCssInHTML = () => {
+    window.dispatchEvent(new window.CustomEvent(EVENT_INLINE_CSS, {detail: {}}))
+  }
+
+  const unsubscribeInlinerError = inlinerError.subscribe((errorValue) => {
+    if (errorValue) {
+      setTimeout(() => inlinerError.set(null), 3000)
+    }
+  })
+
+  onDestroy(unsubscribeInlinerError)
 </script>
 
 <style>
@@ -67,6 +80,100 @@
     margin: 0 0.5rem;
   }
 
+  .editor-header-inline-button {
+    color: var(--buttonColor);
+    display: inline-block;
+    background-color: var(--buttonBgColor);
+    line-height: 1.25;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: 0.3rem;
+    font-size: 1rem;
+    width: 100%;
+  }
+
+  .editor-header-inline-button-hidden {
+    display: none;
+  }
+
+  .editor-header-inline-button-error {
+    color: var(--errorColor);
+    background-color: var(--errorBgColor);
+    cursor: default;
+    pointer-events: none;
+  }
+
+  .editor-header-inline-button:hover {
+    background-color: var(--buttonBgHoverColor);
+  }
+
+  .editor-header-inline-button:active {
+    background-color: var(--buttonBgActiveColor);
+  }
+
+  .editor-header-inline-button-error:hover,
+  .editor-header-inline-button-error:hover {
+    background-color: var(--errorBgColor);
+  }
+
+  @keyframes inline-loader {
+    0%,
+    80%,
+    100% {
+      box-shadow: 0 0;
+      height: 4em;
+    }
+    40% {
+      box-shadow: 0 -2em;
+      height: 5em;
+    }
+  }
+
+  .editor-header-inline-loader {
+    display: none;
+  }
+
+  .editor-header-inline-loader,
+  .editor-header-inline-loader:before,
+  .editor-header-inline-loader:after {
+    background: var(--cardBaseColor);
+    -webkit-animation: inline-loader 1s infinite ease-in-out;
+    animation: inline-loader 1s infinite ease-in-out;
+    width: 1em;
+    height: 4em;
+  }
+
+  .editor-header-inline-loader-show {
+    display: block;
+  }
+
+  .editor-header-inline-loader {
+    color: var(--cardBaseColor);
+    text-indent: -9999em;
+    margin: 0 2rem;
+    position: relative;
+    font-size: 0.25rem;
+    transform: translateZ(0);
+    animation-delay: -0.16s;
+  }
+  .editor-header-inline-loader:before,
+  .editor-header-inline-loader:after {
+    position: absolute;
+    top: 0;
+    content: '';
+  }
+  .editor-header-inline-loader:before {
+    left: -0.5rem;
+    animation-delay: -0.32s;
+  }
+  .editor-header-inline-loader:after {
+    left: 0.5rem;
+  }
+
   .editor-header-sample-button {
     color: var(--mutedButtonColor);
     border: 1px solid var(--buttonBgColor);
@@ -75,6 +182,7 @@
     padding: 0.2rem;
     margin: 0 1rem;
     cursor: pointer;
+    user-select: none;
     font-size: 0.9rem;
   }
 
@@ -102,6 +210,22 @@
     <a class="editor-header-link" href="/faq.html">FAQ</a>
   </div>
   <div class="editor-header-item-full"></div>
+  <div class="editor-header-item">
+    <button
+      class="editor-header-inline-button"
+      class:editor-header-inline-button-hidden="{$inlinerLoading === true}"
+      class:editor-header-inline-button-error="{$inlinerError !== null}"
+      on:click|preventDefault="{inlineCssInHTML}"
+    >
+      {$inlinerError ? 'Inlining error' : 'Inline CSS'}
+    </button>
+    <div
+      class="editor-header-inline-loader"
+      class:editor-header-inline-loader-show="{$inlinerLoading === true}"
+    >
+      Loading...
+    </div>
+  </div>
   <div class="editor-header-item">
     <button class="editor-header-sample-button" on:click|preventDefault="{genAndSubmitSample}">
       Sample HTML/CSS

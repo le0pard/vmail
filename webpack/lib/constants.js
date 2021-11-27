@@ -84,6 +84,7 @@ export const CSS_SELECTORS_MAP = {
   }
 }
 
-export const EVENT_LINE_TO_EDITOR = 'line-to-editor'
-export const EVENT_LINE_TO_REPORT = 'line-to-report'
-export const EVENT_SUBMIT_EXAMPLE = 'submit-example-for-editor'
+export const EVENT_LINE_TO_EDITOR = 'vmail:line-to-editor'
+export const EVENT_LINE_TO_REPORT = 'vmail:line-to-report'
+export const EVENT_INLINE_CSS = 'vmail:inline-css-in-html'
+export const EVENT_SUBMIT_EXAMPLE = 'vmail:submit-example-for-editor'
