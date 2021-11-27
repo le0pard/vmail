@@ -104,7 +104,7 @@ func TestInlineCssInHTMLSimple(t *testing.T) {
 		}
 
 		.h1 {
-			color: #FFF;
+			color: #000;
 			line-height:100%;
 			margin-top:0 !important;
 			margin-right:0 !important;
