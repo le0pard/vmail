@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"net/url"
 	"regexp"
-	"sort"
 	"strings"
 	"sync"
 	"time"
@@ -43,8 +42,9 @@ type CSSGroupSelectors struct {
 }
 
 type CSSSelectors struct {
-	Selectors  []CSSGroupSelectors
-	Attributes map[string]string
+	Selectors       []CSSGroupSelectors
+	Attributes      map[string]string
+	AttributesOrder []string
 }
 
 type InlineEngine struct {
@@ -56,6 +56,15 @@ type InlineEngine struct {
 
 func InitInliner() *InlineEngine {
 	return &InlineEngine{}
+}
+
+func indexOf(data []string, element string) int {
+	for i, v := range data {
+		if element == v {
+			return i
+		}
+	}
+	return -1 //not found
 }
 
 func extractHeadBodyAndStylesheets(doc *html.Node) (*html.Node, *html.Node, string, error) {
@@ -227,15 +236,9 @@ func (inlr *InlineEngine) collectStyles(p *css.Parser) (string, error) {
 	}
 }
 
-func converCssAttributesToString(attrs map[string]string) string {
+func converCssAttributesToString(attrKeys []string, attrs map[string]string) string {
 	output := ""
-	keys := make([]string, 0, len(attrs))
-	for k := range attrs {
-		keys = append(keys, k)
-	}
-	sort.Strings(keys)
-
-	for _, k := range keys {
+	for _, k := range attrKeys {
 		output += k
 		output += ":"
 		output += strings.ReplaceAll(attrs[k], "!important", "")
@@ -244,10 +247,10 @@ func converCssAttributesToString(attrs map[string]string) string {
 	return output
 }
 
-func converCssSelectorToString(selector string, attrs map[string]string) string {
+func converCssSelectorToString(selector string, attrKeys []string, attrs map[string]string) string {
 	output := selector
 	output += "{"
-	output += converCssAttributesToString(attrs)
+	output += converCssAttributesToString(attrKeys, attrs)
 	output += "}"
 	return output
 }
@@ -259,12 +262,12 @@ func (inlr *InlineEngine) inlineRulesetToTags(doc *html.Node, cssStore CSSSelect
 
 	for _, selectorGroup := range cssStore.Selectors {
 		if selectorGroup.NotApply {
-			additionalCSS += converCssSelectorToString(selectorGroup.Key, cssStore.Attributes)
+			additionalCSS += converCssSelectorToString(selectorGroup.Key, cssStore.AttributesOrder, cssStore.Attributes)
 			continue
 		}
 
 		if resetSelectors.MatchString(selectorGroup.Key) {
-			additionalCSS += converCssSelectorToString(selectorGroup.Key, cssStore.Attributes)
+			additionalCSS += converCssSelectorToString(selectorGroup.Key, cssStore.AttributesOrder, cssStore.Attributes)
 			continue
 		}
 
@@ -293,23 +296,25 @@ func (inlr *InlineEngine) inlineRulesetToTags(doc *html.Node, cssStore CSSSelect
 			if len(stylesStr) == 0 {
 				newAttr = append(newAttr, html.Attribute{
 					Key: "style",
-					Val: converCssAttributesToString(cssStore.Attributes),
+					Val: converCssAttributesToString(cssStore.AttributesOrder, cssStore.Attributes),
 				})
 				node.Attr = newAttr
 				continue
 			}
 
 			p := css.NewParser(parse.NewInput(bytes.NewBufferString(stylesStr)), true)
-			applyAttrs := make(map[string]string, len(cssStore.Attributes))
-			for k, v := range cssStore.Attributes {
-				applyAttrs[k] = v
+			applyOrders := []string{}
+			applyAttrs := make(map[string]string, len(cssStore.AttributesOrder))
+			for _, k := range cssStore.AttributesOrder {
+				applyOrders = append(applyOrders, k)
+				applyAttrs[k] = cssStore.Attributes[k]
 			}
 			newAttrStr := ""
 			for {
 				gt, _, data := p.Next()
 
 				if gt == css.ErrorGrammar {
-					newAttrStr += converCssAttributesToString(applyAttrs)
+					newAttrStr += converCssAttributesToString(applyOrders, applyAttrs)
 					break
 				} else if gt == css.AtRuleGrammar || gt == css.BeginAtRuleGrammar || gt == css.BeginRulesetGrammar {
 					newAttrStr += strings.ToLower(string(data))
@@ -324,10 +329,24 @@ func (inlr *InlineEngine) inlineRulesetToTags(doc *html.Node, cssStore CSSSelect
 				} else if gt == css.DeclarationGrammar {
 					attrKey := strings.ToLower(string(data))
 					if newVal, ok := applyAttrs[attrKey]; ok {
-						newAttrStr += converCssAttributesToString(map[string]string{
-							attrKey: newVal,
-						})
-						delete(applyAttrs, attrKey)
+						applyOrderIndex := indexOf(applyOrders, attrKey)
+
+						if applyOrderIndex >= 0 {
+							newAttrStr += converCssAttributesToString(
+								[]string{
+									attrKey,
+								},
+								map[string]string{
+									attrKey: newVal,
+								},
+							)
+
+							applyOrders = append(
+								applyOrders[:applyOrderIndex],
+								applyOrders[applyOrderIndex+1:]...,
+							)
+							delete(applyAttrs, attrKey)
+						}
 						continue
 					}
 
@@ -356,8 +375,9 @@ func (inlr *InlineEngine) inlineRulesetToTags(doc *html.Node, cssStore CSSSelect
 func (inlr *InlineEngine) inlineStyleSheetContent(doc *html.Node, sheetContent string) (string, error) {
 	var (
 		cssStore CSSSelectors = CSSSelectors{
-			Selectors:  []CSSGroupSelectors{},
-			Attributes: make(map[string]string),
+			Selectors:       []CSSGroupSelectors{},
+			Attributes:      make(map[string]string),
+			AttributesOrder: []string{},
 		}
 		notAppliedCss string = ""
 	)
@@ -406,11 +426,13 @@ func (inlr *InlineEngine) inlineStyleSheetContent(doc *html.Node, sheetContent s
 				NotApply: notApply,
 			})
 		case css.DeclarationGrammar, css.CustomPropertyGrammar:
-			cssval := ""
+			cssKey := strings.ToLower(string(data))
+			cssVal := ""
 			for _, val := range p.Values() {
-				cssval += string(val.Data)
+				cssVal += string(val.Data)
 			}
-			cssStore.Attributes[strings.ToLower(string(data))] = strings.ToLower(cssval)
+			cssStore.Attributes[cssKey] = strings.ToLower(cssVal)
+			cssStore.AttributesOrder = append(cssStore.AttributesOrder, cssKey)
 		case css.EndRulesetGrammar:
 			if len(cssStore.Selectors) > 0 {
 				additionalCss, err := inlr.inlineRulesetToTags(doc, cssStore)
@@ -419,8 +441,9 @@ func (inlr *InlineEngine) inlineStyleSheetContent(doc *html.Node, sheetContent s
 				}
 			}
 			cssStore = CSSSelectors{
-				Selectors:  []CSSGroupSelectors{},
-				Attributes: make(map[string]string),
+				Selectors:       []CSSGroupSelectors{},
+				Attributes:      make(map[string]string),
+				AttributesOrder: []string{},
 			}
 		}
 	}
