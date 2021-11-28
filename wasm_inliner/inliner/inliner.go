@@ -236,9 +236,9 @@ func (inlr *InlineEngine) collectStyles(p *css.Parser) (string, error) {
 	}
 }
 
-func converCssAttributesToString(attrKeys []string, attrs map[string]string) string {
+func converCssAttributesToString(orderKeys []string, attrs map[string]string) string {
 	output := ""
-	for _, k := range attrKeys {
+	for _, k := range orderKeys {
 		output += k
 		output += ":"
 		output += strings.ReplaceAll(attrs[k], "!important", "")
@@ -247,10 +247,10 @@ func converCssAttributesToString(attrKeys []string, attrs map[string]string) str
 	return output
 }
 
-func converCssSelectorToString(selector string, attrKeys []string, attrs map[string]string) string {
+func converCssSelectorToString(selector string, orderKeys []string, attrs map[string]string) string {
 	output := selector
 	output += "{"
-	output += converCssAttributesToString(attrKeys, attrs)
+	output += converCssAttributesToString(orderKeys, attrs)
 	output += "}"
 	return output
 }
@@ -431,8 +431,8 @@ func (inlr *InlineEngine) inlineStyleSheetContent(doc *html.Node, sheetContent s
 			for _, val := range p.Values() {
 				cssVal += string(val.Data)
 			}
-			cssStore.Attributes[cssKey] = strings.ToLower(cssVal)
 			cssStore.AttributesOrder = append(cssStore.AttributesOrder, cssKey)
+			cssStore.Attributes[cssKey] = strings.ToLower(cssVal)
 		case css.EndRulesetGrammar:
 			if len(cssStore.Selectors) > 0 {
 				additionalCss, err := inlr.inlineRulesetToTags(doc, cssStore)
