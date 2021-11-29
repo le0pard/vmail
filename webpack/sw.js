@@ -1,7 +1,7 @@
 import {clientsClaim} from 'workbox-core'
 import {precacheAndRoute} from 'workbox-precaching'
 import {registerRoute} from 'workbox-routing'
-import {StaleWhileRevalidate} from 'workbox-strategies'
+import {NetworkFirst} from 'workbox-strategies'
 import {ExpirationPlugin} from 'workbox-expiration'
 import {cleanupOutdatedCaches} from 'workbox-precaching/cleanupOutdatedCaches'
 
@@ -31,7 +31,7 @@ cleanupOutdatedCaches()
 // wasm cache router
 registerRoute(
   new RegExp('/.*\\.wasm$', 'i'),
-  new StaleWhileRevalidate({
+  new NetworkFirst({
     cacheName: 'wasm-modules',
     networkTimeoutSeconds: 20,
     plugins: [
