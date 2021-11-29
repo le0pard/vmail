@@ -1,5 +1,8 @@
 import {clientsClaim} from 'workbox-core'
 import {precacheAndRoute} from 'workbox-precaching'
+import {registerRoute} from 'workbox-routing'
+import {StaleWhileRevalidate} from 'workbox-strategies'
+import {ExpirationPlugin} from 'workbox-expiration'
 import {cleanupOutdatedCaches} from 'workbox-precaching/cleanupOutdatedCaches'
 
 const sha256 = (message) => {
@@ -25,6 +28,22 @@ self.addEventListener('message', (event) => {
 clientsClaim()
 cleanupOutdatedCaches()
 
+// wasm cache router
+registerRoute(
+  new RegExp('/.*\\.wasm$', 'i'),
+  new StaleWhileRevalidate({
+    cacheName: 'wasm-modules',
+    networkTimeoutSeconds: 20,
+    plugins: [
+      new ExpirationPlugin({
+        maxEntries: 5,
+        maxAgeSeconds: 90 * 24 * 60 * 60, // 90 days
+        purgeOnQuotaError: true
+      })
+    ]
+  })
+)
+
 const cachedAssets = self.__WB_MANIFEST
 
 sha256(JSON.stringify(cachedAssets)).then((rev) => {
@@ -36,9 +55,6 @@ sha256(JSON.stringify(cachedAssets)).then((rev) => {
     {url: '/maskable_icon.png', revision},
     {url: '/favicon.svg', revision},
     {url: '/favicon.ico', revision},
-    // wasm
-    {url: '/parser.wasm', revision},
-    {url: '/inliner.wasm', revision},
     // root page
     {url: '/index.html', revision},
     // faq page
