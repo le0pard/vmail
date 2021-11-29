@@ -4361,10 +4361,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:3.19.1":
-  version: 3.19.1
-  resolution: "core-js@npm:3.19.1"
-  checksum: 2f669061788dc6fea823f0433d871deeaaaacc7d68ef2748859509522a34df5c83e648c3c6a1993fed0ab188081b3cf32b957b2a1f46156a2b20bd775961ade4
+"core-js@npm:3.19.2":
+  version: 3.19.2
+  resolution: "core-js@npm:3.19.2"
+  checksum: a605f7b0448a7aa13731fd9a13525460681e15ce60ec0e1ff45e88b18b71e74f6c625959200f0f8376ec0a1eb94b0f06e3d6807a01c5a46f3871d08a2c4f1d58
   languageName: node
   linkType: hard
 
@@ -9250,14 +9250,14 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"postcss@npm:8.4.3":
-  version: 8.4.3
-  resolution: "postcss@npm:8.4.3"
+"postcss@npm:8.4.4":
+  version: 8.4.4
+  resolution: "postcss@npm:8.4.4"
   dependencies:
     nanoid: ^3.1.30
     picocolors: ^1.0.0
     source-map-js: ^1.0.1
-  checksum: fbc0d43380c2d7ee905081577c79b18a341a3445d34211385c33d57cc38f3abe6859b2ad94b96f41bb4107133a1cd5f317d82bb3f603280433f1dcf5dc62acb5
+  checksum: 6cf3fe0ecdf5a0d2aeb5e8404938c7eab968704e2e29dc5421e90b4014eb1975c1c0ad828425f2428807ef6e3fcfadd71f988ab55cb06c28ac2866f22403255b
   languageName: node
   linkType: hard
 
@@ -11310,7 +11310,7 @@ fsevents@~2.3.2:
     "@hotwired/turbo": 7.1.0
     babel-loader: 8.2.3
     comlink: ^4.3.1
-    core-js: 3.19.1
+    core-js: 3.19.2
     css-loader: 6.5.1
     css-minimizer-webpack-plugin: 3.2.0
     del: 6.0.0
@@ -11323,7 +11323,7 @@ fsevents@~2.3.2:
     lodash: 4.17.21
     mini-css-extract-plugin: 2.4.5
     normalize.css: 8.0.1
-    postcss: 8.4.3
+    postcss: 8.4.4
     postcss-browser-reporter: 0.6.0
     postcss-import: 14.0.2
     postcss-load-config: ^3.1.0
