@@ -4,12 +4,20 @@ require 'faraday'
 require 'faraday_middleware'
 require 'active_support/all'
 
-class CaniuseGenerator
+class CaniuseGenerator # rubocop:disable Metrics/ClassLength
+
+  SINGLE_KEY_MAP = %w[
+    css-variables
+    css-important
+    html-doctype
+  ].freeze
 
   HTML_TAGS_MAPS = {
+    'amp' => [['html', '⚡4email'], %w[html amp4email]],
     'html-address' => [['address', '']],
     'html-audio' => [['audio', '']],
     'html-bdi' => [['bdi', '']],
+    'html-body' => [['body', '']],
     'html-blockquote' => [['blockquote', '']],
     'html-button-reset' => [['button', 'type||reset']],
     'html-button-submit' => [['button', 'type||submit']],
@@ -261,7 +269,7 @@ class CaniuseGenerator
     @data = conn.get('https://www.caniemail.com/api/data.json').body['data']
   end
 
-  def generate(file)
+  def generate(file) # rubocop:disable Metrics/MethodLength Metrics/AbcSize
     rules = {
       html_tags: generate_html_tags,
       html_attributes: generate_html_attributes,
@@ -272,7 +280,9 @@ class CaniuseGenerator
       css_pseudo_selectors: generate_css_pseudo_selectors,
       at_rule_css_statements: generate_at_rule_css_statements,
       img_formats: generate_img_formats,
-      css_variables: generate_css_variables
+      css_variables: generate_for_single_key('css-variables'),
+      css_important: generate_for_single_key('css-important'),
+      html5_doctype: generate_for_single_key('html-doctype')
     }
 
     File.open(file, 'w') { |f| f.write JSON.dump(rules) }
@@ -281,9 +291,9 @@ class CaniuseGenerator
 
   private
 
-  def warn_about_now_covered_rules
+  def warn_about_now_covered_rules # rubocop:disable Metrics/AbcSize
     rules_without_apply = data.filter do |r|
-      r['slug'] != 'css-variables' &&
+      !SINGLE_KEY_MAP.include?(r['slug']) &&
         !HTML_TAGS_MAPS.key?(r['slug']) &&
         !HTML_ATTRIBUTES_MAPS.key?(r['slug']) &&
         !CSS_PROPERTIES_MAPS.key?(r['slug']) &&
@@ -333,8 +343,8 @@ class CaniuseGenerator
     generate_one_level_maps(IMG_FORMATS_MAPS)
   end
 
-  def generate_css_variables
-    rule = data.detect { |r| r['slug'] == 'css-variables' }
+  def generate_for_single_key(key)
+    rule = data.detect { |r| r['slug'] == key }
     if rule.present?
       {
         notes: rule['notes_by_num'],

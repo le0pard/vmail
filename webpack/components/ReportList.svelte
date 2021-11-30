@@ -9,6 +9,8 @@
     MULTI_LEVEL_REPORT_KEYS,
     SINGLE_LEVEL_REPORT_KEYS,
     REPORT_CSS_VARIABLES,
+    REPORT_CSS_IMPORTANT,
+    REPORT_HTML5_DOCTYPE,
     EVENT_LINE_TO_EDITOR,
     EVENT_LINE_TO_REPORT
   } from 'lib/constants'
@@ -62,6 +64,17 @@
 </style>
 
 <ul class="report-list">
+  {#if $report[REPORT_HTML5_DOCTYPE.key] && $report[REPORT_HTML5_DOCTYPE.key].lines.length > 0}
+    <ReportItemComponent
+      reportInfo="{REPORT_HTML5_DOCTYPE}"
+      itemName="{''}"
+      itemVal="{''}"
+      elementID="{genElementID([REPORT_HTML5_DOCTYPE, '', ''])}"
+      report="{$report[REPORT_HTML5_DOCTYPE.key]}"
+      handleLineClick="{handleLineClick}"
+    />
+  {/if}
+
   {#each MULTI_LEVEL_REPORT_KEYS as reportInfo (reportInfo.key)}
     {#if $report[reportInfo.key]}
       {#each Object.keys($report[reportInfo.key]).sort() as itemName (itemName)}
@@ -78,6 +91,17 @@
       {/each}
     {/if}
   {/each}
+
+  {#if $report[REPORT_CSS_IMPORTANT.key] && $report[REPORT_CSS_IMPORTANT.key].lines.length > 0}
+    <ReportItemComponent
+      reportInfo="{REPORT_CSS_IMPORTANT}"
+      itemName="{''}"
+      itemVal="{''}"
+      elementID="{genElementID([REPORT_CSS_IMPORTANT, '', ''])}"
+      report="{$report[REPORT_CSS_IMPORTANT.key]}"
+      handleLineClick="{handleLineClick}"
+    />
+  {/if}
 
   {#if $report[REPORT_CSS_VARIABLES.key] && $report[REPORT_CSS_VARIABLES.key].lines.length > 0}
     <ReportItemComponent

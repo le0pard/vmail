@@ -61,7 +61,8 @@
 
       const line = view.state.doc.lineAt(edLine.from)
       if (
-        line?.number &&
+        line?.number !== null &&
+        line.number >= 0 &&
         $linesAndSelectors[line.number] &&
         $linesAndSelectors[line.number].length > 0
       ) {
@@ -85,7 +86,7 @@
 
     const clickMarker = (view, edLine) => {
       const line = view.state.doc.lineAt(edLine.from)
-      if (line?.number) {
+      if (line.number !== null && line?.number >= 0) {
         splitState.switchToRightOnMobile()
         window.dispatchEvent(
           new window.CustomEvent(EVENT_LINE_TO_REPORT, {
@@ -269,7 +270,7 @@
     })
     Object.keys(linesSelector).forEach((line) => {
       const editorLine = editorView.state.doc.line(line)
-      if (editorLine?.from) {
+      if (editorLine?.from !== null && editorLine.from >= 0) {
         editorView.dispatch({
           effects: validationErrorsEffect.of({
             pos: editorLine.from,

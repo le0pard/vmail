@@ -2,7 +2,9 @@ import {writable, derived} from 'svelte/store'
 import {
   MULTI_LEVEL_REPORT_KEYS,
   SINGLE_LEVEL_REPORT_KEYS,
-  REPORT_CSS_VARIABLES
+  REPORT_CSS_VARIABLES,
+  REPORT_CSS_IMPORTANT,
+  REPORT_HTML5_DOCTYPE
 } from 'lib/constants'
 
 const searchCollator = new Intl.Collator('en', {
@@ -14,6 +16,7 @@ const sortAlphabeticallyFun = searchCollator.compare
 
 const selectLinesAndSelectors = (report) => {
   let lineToSelector = {}
+
   MULTI_LEVEL_REPORT_KEYS.forEach((reportInfo) => {
     if (report[reportInfo.key]) {
       Object.keys(report[reportInfo.key])
@@ -30,6 +33,7 @@ const selectLinesAndSelectors = (report) => {
         })
     }
   })
+
   SINGLE_LEVEL_REPORT_KEYS.forEach((reportInfo) => {
     if (report[reportInfo.key]) {
       Object.keys(report[reportInfo.key])
@@ -42,12 +46,28 @@ const selectLinesAndSelectors = (report) => {
         })
     }
   })
+
   if (report[REPORT_CSS_VARIABLES.key]) {
     report[REPORT_CSS_VARIABLES.key].lines.forEach((line) => {
       lineToSelector[line] ||= []
       lineToSelector[line] = [...lineToSelector[line], [REPORT_CSS_VARIABLES, '', '']]
     })
   }
+
+  if (report[REPORT_CSS_IMPORTANT.key]) {
+    report[REPORT_CSS_IMPORTANT.key].lines.forEach((line) => {
+      lineToSelector[line] ||= []
+      lineToSelector[line] = [...lineToSelector[line], [REPORT_CSS_IMPORTANT, '', '']]
+    })
+  }
+
+  if (report[REPORT_HTML5_DOCTYPE.key]) {
+    report[REPORT_HTML5_DOCTYPE.key].lines.forEach((line) => {
+      lineToSelector[line] ||= []
+      lineToSelector[line] = [...lineToSelector[line], [REPORT_HTML5_DOCTYPE, '', '']]
+    })
+  }
+
   return lineToSelector
 }
 

@@ -47,8 +47,9 @@ const (
 )
 
 var (
-	dimentionsRe = regexp.MustCompile(`(\+|-)?(\d(\.\d)?|\.\d)`) // based on https://developer.mozilla.org/en-US/docs/Web/CSS/dimension
-	cssUrlRe     = regexp.MustCompile(`url\(['"\s]?(.*?)['"\s]?\)`)
+	html5DoctypeRe = regexp.MustCompile(`(?i)<!DOCTYPE\s+html>`)
+	dimentionsRe   = regexp.MustCompile(`(\+|-)?(\d(\.\d)?|\.\d)`) // based on https://developer.mozilla.org/en-US/docs/Web/CSS/dimension
+	cssUrlRe       = regexp.MustCompile(`url\(['"\s]?(.*?)['"\s]?\)`)
 )
 
 func (d CssSelectorType) String() string {
@@ -90,6 +91,8 @@ type CaniuseDB struct {
 	CssPseudoSelectors  map[string]interface{}            `json:"css_pseudo_selectors"`
 	ImgFormats          map[string]interface{}            `json:"img_formats"`
 	CssVariables        interface{}                       `json:"css_variables"`
+	CssImportant        interface{}                       `json:"css_important"`
+	Html5Doctype        interface{}                       `json:"html5_doctype"`
 }
 
 var rulesDB CaniuseDB
@@ -158,6 +161,18 @@ type CssVariablesReport struct {
 	MoreLines bool         `json:"more_lines"`
 }
 
+type CssImportantReport struct {
+	Rules     interface{}  `json:"rules"`
+	Lines     map[int]bool `json:"lines"`
+	MoreLines bool         `json:"more_lines"`
+}
+
+type Html5DoctypeReport struct {
+	Rules     interface{}  `json:"rules"`
+	Lines     map[int]bool `json:"lines"`
+	MoreLines bool         `json:"more_lines"`
+}
+
 type ParseReport struct {
 	HtmlTags            map[string]map[string]HTMLTagReport             `json:"html_tags"`
 	HtmlAttributes      map[string]map[string]HtmlAttributesReport      `json:"html_attributes"`
@@ -169,6 +184,8 @@ type ParseReport struct {
 	CssPseudoSelectors  map[string]CssPseudoSelectorsReport             `json:"css_pseudo_selectors"`
 	ImgFormats          map[string]ImgFormatsReport                     `json:"img_formats"`
 	CssVariables        CssVariablesReport                              `json:"css_variables"`
+	CssImportant        CssImportantReport                              `json:"css_important"`
+	Html5Doctype        Html5DoctypeReport                              `json:"html5_doctype"`
 }
 
 // result structure end
@@ -256,6 +273,44 @@ func (prs *ParserEngine) saveToReportCssVariables(position int) {
 
 		prs.pr.CssVariables = CssVariablesReport{
 			Rules:     rulesDB.CssVariables,
+			Lines:     lines,
+			MoreLines: false,
+		}
+	}
+}
+
+func (prs *ParserEngine) saveToReportCssImportant(position int) {
+	if len(prs.pr.CssImportant.Lines) > 0 {
+		if len(prs.pr.CssImportant.Lines) < LIMIT_REPORT_LINES {
+			prs.pr.CssImportant.Lines[position] = true
+		} else {
+			prs.pr.CssImportant.MoreLines = true
+		}
+	} else {
+		lines := make(map[int]bool)
+		lines[position] = true
+
+		prs.pr.CssImportant = CssImportantReport{
+			Rules:     rulesDB.CssImportant,
+			Lines:     lines,
+			MoreLines: false,
+		}
+	}
+}
+
+func (prs *ParserEngine) saveToReportHtml5Doctype(position int) {
+	if len(prs.pr.Html5Doctype.Lines) > 0 {
+		if len(prs.pr.Html5Doctype.Lines) < LIMIT_REPORT_LINES {
+			prs.pr.Html5Doctype.Lines[position] = true
+		} else {
+			prs.pr.Html5Doctype.MoreLines = true
+		}
+	} else {
+		lines := make(map[int]bool)
+		lines[position] = true
+
+		prs.pr.Html5Doctype = Html5DoctypeReport{
+			Rules:     rulesDB.Html5Doctype,
 			Lines:     lines,
 			MoreLines: false,
 		}
@@ -565,7 +620,7 @@ func (prs *ParserEngine) checkCssSelectorType(selectorType CssSelectorType, posi
 
 func (prs *ParserEngine) checkCssPropertyStyle(propertyKey, propertyVal string, position int) {
 	propertyKey = normalizeCssProp(strings.ToLower(strings.Trim(propertyKey, WHITESPACE)))
-	propertyVal = strings.Trim(strings.ReplaceAll(strings.ToLower(propertyVal), "!important", ""), WHITESPACE)
+	propertyVal = strings.Trim(strings.ReplaceAll(propertyVal, "!important", ""), WHITESPACE)
 
 	if cssKeyData, ok := rulesDB.CssProperties[propertyKey]; ok {
 		if cssValData, ok := cssKeyData[""]; ok {
@@ -721,6 +776,7 @@ func (prs *ParserEngine) checkCssParsedToken(p *css.Parser, gt css.GrammarType, 
 		}
 	case css.DeclarationGrammar:
 		propVal := ""
+		isPrevDelimCanBeImportant := false
 		for _, val := range p.Values() {
 			cssPropVal := strings.ToLower(strings.Trim(string(val.Data), WHITESPACE))
 
@@ -739,7 +795,11 @@ func (prs *ParserEngine) checkCssParsedToken(p *css.Parser, gt css.GrammarType, 
 			if val.TokenType == css.CustomPropertyNameToken {
 				prs.saveToReportCssVariables(position)
 			}
-			propVal += string(val.Data)
+			if isPrevDelimCanBeImportant && val.TokenType == css.IdentToken && cssPropVal == "important" {
+				prs.saveToReportCssImportant(position)
+			}
+			isPrevDelimCanBeImportant = (val.TokenType == css.DelimToken && cssPropVal == "!")
+			propVal += cssPropVal
 		}
 		prs.checkCssPropertyStyle(string(data), propVal, position)
 	}
@@ -931,6 +991,11 @@ func (prs *ParserEngine) processHtmlToken(htmlTokenizer *html.Tokenizer, token h
 	case html.SelfClosingTagToken:
 		// process html tag
 		prs.checkHtmlTags(token.Data, token.Attr, tagLine)
+	case html.DoctypeToken:
+		// check doctype
+		if html5DoctypeRe.MatchString(token.String()) {
+			prs.saveToReportHtml5Doctype(tagLine)
+		}
 	}
 }
 
@@ -989,6 +1054,8 @@ func (prs *ParserEngine) Report(document []byte) (*ParseReport, error) {
 				return nil, err
 			}
 		}
+
+		// log.Printf("[htmlTokenizer]: info: %v ; data: %v ; type: %v ; atom: %v; attr - %v \n", tt, tt.Data, tt.Type, tt.DataAtom, tt.Attr)
 
 		tagLine = prs.getLineFromOffset(tagLine, htmlBytesOffset)
 		prs.processHtmlToken(htmlTokenizer, tt, tagLine)

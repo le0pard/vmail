@@ -370,6 +370,64 @@ func normalizeReportForPromise(report *parser.ParseReport) map[string]interface{
 		}()
 	}
 
+	if len(report.CssImportant.Lines) > 0 {
+		wg.Add(1)
+
+		go func() {
+			defer wg.Done()
+			// hash to slice
+			lines := make([]int, 0, len(report.CssImportant.Lines))
+			for line, _ := range report.CssImportant.Lines {
+				lines = append(lines, line)
+			}
+			// sort slice with positions
+			sort.Ints(lines)
+
+			linesObj := make([]interface{}, len(lines))
+			for i, line := range lines {
+				linesObj[i] = line
+			}
+
+			cssImportantReports := map[string]interface{}{
+				"rules":      report.CssImportant.Rules,
+				"lines":      linesObj,
+				"more_lines": report.CssImportant.MoreLines,
+			}
+			mx.Lock()
+			defer mx.Unlock()
+			newReport["css_important"] = cssImportantReports
+		}()
+	}
+
+	if len(report.Html5Doctype.Lines) > 0 {
+		wg.Add(1)
+
+		go func() {
+			defer wg.Done()
+			// hash to slice
+			lines := make([]int, 0, len(report.Html5Doctype.Lines))
+			for line, _ := range report.Html5Doctype.Lines {
+				lines = append(lines, line)
+			}
+			// sort slice with positions
+			sort.Ints(lines)
+
+			linesObj := make([]interface{}, len(lines))
+			for i, line := range lines {
+				linesObj[i] = line
+			}
+
+			html5DoctypeReports := map[string]interface{}{
+				"rules":      report.Html5Doctype.Rules,
+				"lines":      linesObj,
+				"more_lines": report.Html5Doctype.MoreLines,
+			}
+			mx.Lock()
+			defer mx.Unlock()
+			newReport["html5_doctype"] = html5DoctypeReports
+		}()
+	}
+
 	wg.Wait()
 
 	return newReport

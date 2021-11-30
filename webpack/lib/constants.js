@@ -48,6 +48,16 @@ export const REPORT_CSS_VARIABLES = {
   title: 'CSS Variable'
 }
 
+export const REPORT_CSS_IMPORTANT = {
+  key: 'css_important',
+  title: 'CSS !important keyword'
+}
+
+export const REPORT_HTML5_DOCTYPE = {
+  key: 'html5_doctype',
+  title: 'HTML5 doctype'
+}
+
 export const CSS_SELECTORS_MAP = {
   0: {
     title: 'Adjacent sibling combinator'
