@@ -164,14 +164,14 @@
         <div class="report-item-header-type">
           {reportInfo.title}
         </div>
-        <div class="report-item-header-name">
-          {#if itemName}
+        {#if itemName}
+          <div class="report-item-header-name">
             {normalizeItemName(reportInfo.key, itemName)}
             {#if itemVal.length > 0}
               {normalizeItemVal(itemVal)}
             {/if}
-          {/if}
-        </div>
+          </div>
+        {/if}
         {#if report.rules?.url}
           <div class="report-item-header-link">
             <a
