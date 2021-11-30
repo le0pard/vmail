@@ -87,6 +87,14 @@
   }
 
   @media only screen and (max-width: 480px) {
+    .report-item-header-type {
+      flex: 1;
+    }
+
+    .report-item-header-name {
+      flex: 1;
+    }
+
     .report-item-header-link {
       display: none;
     }
