@@ -233,7 +233,7 @@ class CaniuseGenerator # rubocop:disable Metrics/ClassLength
     'css-at-media-prefers-color-scheme' => [['@media', 'prefers-color-scheme']],
     'css-at-media-prefers-reduced-motion' => [['@media', 'prefers-reduced-motion']],
     'css-at-media' => [['@media', '']],
-    'css-at-supports' => [['@fsupports', '']]
+    'css-at-supports' => [['@supports', '']]
   }.freeze
 
   IMG_FORMATS_MAPS = {
