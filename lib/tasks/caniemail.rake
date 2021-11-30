@@ -57,6 +57,10 @@ class CaniuseGenerator # rubocop:disable Metrics/ClassLength
     'html-span' => [['span', '']],
     'html-strike' => [['strike', '']],
     'html-strong' => [['strong', '']],
+    'html-srcset' => [
+      %w[img srcset], %w[img sizes],
+      %w[source srcset], %w[source sizes]
+    ],
     'html-style' => [['style', '']],
     'html-svg' => [['svg', '']],
     'html-table' => [['table', '']],
@@ -78,7 +82,6 @@ class CaniuseGenerator # rubocop:disable Metrics/ClassLength
     'html-loading-attribute' => [['loading', '']],
     'html-required' => [['required', '']],
     'html-role' => [['role', '']],
-    'html-srcset' => [['srcset', ''], ['sizes', '']],
     'html-valign' => [['valign', '']],
     'html-width' => [['width', '']]
   }.freeze
