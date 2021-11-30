@@ -75,23 +75,6 @@
     />
   {/if}
 
-  {#each MULTI_LEVEL_REPORT_KEYS as reportInfo (reportInfo.key)}
-    {#if $report[reportInfo.key]}
-      {#each Object.keys($report[reportInfo.key]).sort() as itemName (itemName)}
-        {#each Object.keys($report[reportInfo.key][itemName]).sort() as itemVal (itemVal)}
-          <ReportItemComponent
-            reportInfo="{reportInfo}"
-            itemName="{itemName}"
-            itemVal="{itemVal}"
-            elementID="{genElementID([reportInfo, itemName, itemVal])}"
-            report="{$report[reportInfo.key][itemName][itemVal]}"
-            handleLineClick="{handleLineClick}"
-          />
-        {/each}
-      {/each}
-    {/if}
-  {/each}
-
   {#if $report[REPORT_CSS_IMPORTANT.key] && $report[REPORT_CSS_IMPORTANT.key].lines.length > 0}
     <ReportItemComponent
       reportInfo="{REPORT_CSS_IMPORTANT}"
@@ -113,6 +96,23 @@
       handleLineClick="{handleLineClick}"
     />
   {/if}
+
+  {#each MULTI_LEVEL_REPORT_KEYS as reportInfo (reportInfo.key)}
+    {#if $report[reportInfo.key]}
+      {#each Object.keys($report[reportInfo.key]).sort() as itemName (itemName)}
+        {#each Object.keys($report[reportInfo.key][itemName]).sort() as itemVal (itemVal)}
+          <ReportItemComponent
+            reportInfo="{reportInfo}"
+            itemName="{itemName}"
+            itemVal="{itemVal}"
+            elementID="{genElementID([reportInfo, itemName, itemVal])}"
+            report="{$report[reportInfo.key][itemName][itemVal]}"
+            handleLineClick="{handleLineClick}"
+          />
+        {/each}
+      {/each}
+    {/if}
+  {/each}
 
   {#each SINGLE_LEVEL_REPORT_KEYS as reportInfo (reportInfo.key)}
     {#if $report[reportInfo.key]}
