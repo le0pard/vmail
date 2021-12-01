@@ -3,11 +3,78 @@ package main
 // Import the package to access the Wasm environment
 import (
 	"errors"
+	"reflect"
 	"sort"
 	"sync"
 	"syscall/js"
 
 	"github.com/le0pard/vmail/wasm_parser/parser"
+)
+
+type ReportConvertorMap struct {
+	MapKey  string
+	JsonKey string
+}
+
+var (
+	NESTED_LEVEL_KEYS []ReportConvertorMap = []ReportConvertorMap{
+		ReportConvertorMap{
+			MapKey:  "HtmlTags",
+			JsonKey: "html_tags",
+		},
+		ReportConvertorMap{
+			MapKey:  "HtmlAttributes",
+			JsonKey: "html_attributes",
+		},
+		ReportConvertorMap{
+			MapKey:  "CssProperties",
+			JsonKey: "css_properties",
+		},
+		ReportConvertorMap{
+			MapKey:  "AtRuleCssStatements",
+			JsonKey: "at_rule_css_statements",
+		},
+	}
+	ONE_LEVEL_KEYS []ReportConvertorMap = []ReportConvertorMap{
+		ReportConvertorMap{
+			MapKey:  "CssSelectorTypes",
+			JsonKey: "css_selector_types",
+		},
+		ReportConvertorMap{
+			MapKey:  "CssDimentions",
+			JsonKey: "css_dimentions",
+		},
+		ReportConvertorMap{
+			MapKey:  "CssFunctions",
+			JsonKey: "css_functions",
+		},
+		ReportConvertorMap{
+			MapKey:  "CssPseudoSelectors",
+			JsonKey: "css_pseudo_selectors",
+		},
+		ReportConvertorMap{
+			MapKey:  "ImgFormats",
+			JsonKey: "img_formats",
+		},
+		ReportConvertorMap{
+			MapKey:  "LinkTypes",
+			JsonKey: "link_types",
+		},
+	}
+	SINGLE_ITEM_KEYS []ReportConvertorMap = []ReportConvertorMap{
+		ReportConvertorMap{
+			MapKey:  "CssVariables",
+			JsonKey: "css_variables",
+		},
+		ReportConvertorMap{
+			MapKey:  "CssImportant",
+			JsonKey: "css_important",
+		},
+		ReportConvertorMap{
+			MapKey:  "Html5Doctype",
+			JsonKey: "html5_doctype",
+		},
+	}
 )
 
 // Main function: it sets up our Wasm application
@@ -29,6 +96,82 @@ func rejectWithError(reject js.Value, message string) {
 	reject.Invoke(errorObject)
 }
 
+func collectNestedLevelReport(items map[string]map[string]parser.ReportContainer) map[string]interface{} {
+	itemsReports := make(map[string]interface{})
+	for k1, v1 := range items {
+		tagAttributeReports := make(map[string]interface{})
+		for k2, v2 := range v1 {
+			// hash to slice
+			lines := make([]int, 0, len(v2.Lines))
+			for line, _ := range v2.Lines {
+				lines = append(lines, line)
+			}
+			// sort slice with positions
+			sort.Ints(lines)
+
+			linesObj := make([]interface{}, len(lines))
+			for i, line := range lines {
+				linesObj[i] = line
+			}
+
+			tagAttributeReports[k2] = map[string]interface{}{
+				"rules":      v2.Rules,
+				"lines":      linesObj,
+				"more_lines": v2.MoreLines,
+			}
+		}
+		itemsReports[k1] = tagAttributeReports
+	}
+	return itemsReports
+}
+
+func collectOneLevelReport(items map[string]parser.ReportContainer) map[string]interface{} {
+	itemsReports := make(map[string]interface{})
+	for k1, v1 := range items {
+		// hash to slice
+		lines := make([]int, 0, len(v1.Lines))
+		for line, _ := range v1.Lines {
+			lines = append(lines, line)
+		}
+		// sort slice with positions
+		sort.Ints(lines)
+
+		linesObj := make([]interface{}, len(lines))
+		for i, line := range lines {
+			linesObj[i] = line
+		}
+
+		itemsReports[k1] = map[string]interface{}{
+			"rules":      v1.Rules,
+			"lines":      linesObj,
+			"more_lines": v1.MoreLines,
+		}
+	}
+	return itemsReports
+}
+
+func collectItemReport(item parser.ReportContainer) map[string]interface{} {
+	// hash to slice
+	lines := make([]int, 0, len(item.Lines))
+	for line, _ := range item.Lines {
+		lines = append(lines, line)
+	}
+	// sort slice with positions
+	sort.Ints(lines)
+
+	linesObj := make([]interface{}, len(lines))
+	for i, line := range lines {
+		linesObj[i] = line
+	}
+
+	report := map[string]interface{}{
+		"rules":      item.Rules,
+		"lines":      linesObj,
+		"more_lines": item.MoreLines,
+	}
+	return report
+}
+
 func normalizeReportForPromise(report *parser.ParseReport) map[string]interface{} {
 	var (
 		wg sync.WaitGroup
@@ -37,427 +180,52 @@ func normalizeReportForPromise(report *parser.ParseReport) map[string]interface{
 
 	newReport := make(map[string]interface{})
 
-	if len(report.HtmlTags) > 0 {
-		wg.Add(1)
+	for _, k := range NESTED_LEVEL_KEYS {
+		reportVal := reflect.ValueOf(report)
+		keyValue, ok := reflect.Indirect(reportVal).FieldByName(k.MapKey).Interface().(map[string]map[string]parser.ReportContainer)
+		if ok && len(keyValue) > 0 {
+			wg.Add(1)
 
-		go func() {
-			defer wg.Done()
-			tagReports := make(map[string]interface{})
-			for k1, v1 := range report.HtmlTags {
-				tagAttributeReports := make(map[string]interface{})
-				for k2, v2 := range v1 {
-					// hash to slice
-					lines := make([]int, 0, len(v2.Lines))
-					for line, _ := range v2.Lines {
-						lines = append(lines, line)
-					}
-					// sort slice with positions
-					sort.Ints(lines)
-
-					linesObj := make([]interface{}, len(lines))
-					for i, line := range lines {
-						linesObj[i] = line
-					}
-
-					tagAttributeReports[k2] = map[string]interface{}{
-						"rules":      v2.Rules,
-						"lines":      linesObj,
-						"more_lines": v2.MoreLines,
-					}
-				}
-				tagReports[k1] = tagAttributeReports
-			}
-			mx.Lock()
-			defer mx.Unlock()
-			newReport["html_tags"] = tagReports
-		}()
+			go func(items map[string]map[string]parser.ReportContainer, jsonKey string) {
+				defer wg.Done()
+				attrs := collectNestedLevelReport(items)
+				mx.Lock()
+				defer mx.Unlock()
+				newReport[jsonKey] = attrs
+			}(keyValue, k.JsonKey)
+		}
 	}
 
-	if len(report.HtmlAttributes) > 0 {
-		wg.Add(1)
+	for _, k := range ONE_LEVEL_KEYS {
+		reportVal := reflect.ValueOf(report)
+		keyValue, ok := reflect.Indirect(reportVal).FieldByName(k.MapKey).Interface().(map[string]parser.ReportContainer)
+		if ok && len(keyValue) > 0 {
+			wg.Add(1)
 
-		go func() {
-			defer wg.Done()
-			htmlAttributesReports := make(map[string]interface{})
-			for k1, v1 := range report.HtmlAttributes {
-				htmlAttributeValReports := make(map[string]interface{})
-				for k2, v2 := range v1 {
-					// hash to slice
-					lines := make([]int, 0, len(v2.Lines))
-					for line, _ := range v2.Lines {
-						lines = append(lines, line)
-					}
-					// sort slice with positions
-					sort.Ints(lines)
-
-					linesObj := make([]interface{}, len(lines))
-					for i, line := range lines {
-						linesObj[i] = line
-					}
-
-					htmlAttributeValReports[k2] = map[string]interface{}{
-						"rules":      v2.Rules,
-						"lines":      linesObj,
-						"more_lines": v2.MoreLines,
-					}
-				}
-				htmlAttributesReports[k1] = htmlAttributeValReports
-			}
-			mx.Lock()
-			defer mx.Unlock()
-			newReport["html_attributes"] = htmlAttributesReports
-		}()
+			go func(items map[string]parser.ReportContainer, jsonKey string) {
+				defer wg.Done()
+				attrs := collectOneLevelReport(items)
+				mx.Lock()
+				defer mx.Unlock()
+				newReport[jsonKey] = attrs
+			}(keyValue, k.JsonKey)
+		}
 	}
 
-	if len(report.CssProperties) > 0 {
-		wg.Add(1)
+	for _, k := range SINGLE_ITEM_KEYS {
+		reportVal := reflect.ValueOf(report)
+		keyValue, ok := reflect.Indirect(reportVal).FieldByName(k.MapKey).Interface().(parser.ReportContainer)
+		if ok && len(keyValue.Lines) > 0 {
+			wg.Add(1)
 
-		go func() {
-			defer wg.Done()
-			cssPropertyReports := make(map[string]interface{})
-			for k1, v1 := range report.CssProperties {
-				cssValReports := make(map[string]interface{})
-				for k2, v2 := range v1 {
-					// hash to slice
-					lines := make([]int, 0, len(v2.Lines))
-					for line, _ := range v2.Lines {
-						lines = append(lines, line)
-					}
-					// sort slice with positions
-					sort.Ints(lines)
-
-					linesObj := make([]interface{}, len(lines))
-					for i, line := range lines {
-						linesObj[i] = line
-					}
-
-					cssValReports[k2] = map[string]interface{}{
-						"rules":      v2.Rules,
-						"lines":      linesObj,
-						"more_lines": v2.MoreLines,
-					}
-				}
-				cssPropertyReports[k1] = cssValReports
-			}
-			mx.Lock()
-			defer mx.Unlock()
-			newReport["css_properties"] = cssPropertyReports
-		}()
-	}
-
-	if len(report.AtRuleCssStatements) > 0 {
-		wg.Add(1)
-
-		go func() {
-			defer wg.Done()
-			atRuleCssStatementsReports := make(map[string]interface{})
-			for k1, v1 := range report.AtRuleCssStatements {
-				cssValReports := make(map[string]interface{})
-				for k2, v2 := range v1 {
-					// hash to slice
-					lines := make([]int, 0, len(v2.Lines))
-					for line, _ := range v2.Lines {
-						lines = append(lines, line)
-					}
-					// sort slice with positions
-					sort.Ints(lines)
-
-					linesObj := make([]interface{}, len(lines))
-					for i, line := range lines {
-						linesObj[i] = line
-					}
-
-					cssValReports[k2] = map[string]interface{}{
-						"rules":      v2.Rules,
-						"lines":      linesObj,
-						"more_lines": v2.MoreLines,
-					}
-				}
-				atRuleCssStatementsReports[k1] = cssValReports
-			}
-			mx.Lock()
-			defer mx.Unlock()
-			newReport["at_rule_css_statements"] = atRuleCssStatementsReports
-		}()
-	}
-
-	if len(report.CssSelectorTypes) > 0 {
-		wg.Add(1)
-
-		go func() {
-			defer wg.Done()
-			cssSelectorsTypeReports := make(map[string]interface{})
-			for k1, v1 := range report.CssSelectorTypes {
-				// hash to slice
-				lines := make([]int, 0, len(v1.Lines))
-				for line, _ := range v1.Lines {
-					lines = append(lines, line)
-				}
-				// sort slice with positions
-				sort.Ints(lines)
-
-				linesObj := make([]interface{}, len(lines))
-				for i, line := range lines {
-					linesObj[i] = line
-				}
-
-				cssSelectorsTypeReports[k1] = map[string]interface{}{
-					"rules":      v1.Rules,
-					"lines":      linesObj,
-					"more_lines": v1.MoreLines,
-				}
-			}
-			mx.Lock()
-			defer mx.Unlock()
-			newReport["css_selector_types"] = cssSelectorsTypeReports
-		}()
-	}
-
-	if len(report.CssDimentions) > 0 {
-		wg.Add(1)
-
-		go func() {
-			defer wg.Done()
-			cssDimentionsReports := make(map[string]interface{})
-			for k1, v1 := range report.CssDimentions {
-				// hash to slice
-				lines := make([]int, 0, len(v1.Lines))
-				for line, _ := range v1.Lines {
-					lines = append(lines, line)
-				}
-				// sort slice with positions
-				sort.Ints(lines)
-
-				linesObj := make([]interface{}, len(lines))
-				for i, line := range lines {
-					linesObj[i] = line
-				}
-
-				cssDimentionsReports[k1] = map[string]interface{}{
-					"rules":      v1.Rules,
-					"lines":      linesObj,
-					"more_lines": v1.MoreLines,
-				}
-			}
-			mx.Lock()
-			defer mx.Unlock()
-			newReport["css_dimentions"] = cssDimentionsReports
-		}()
-	}
-
-	if len(report.CssFunctions) > 0 {
-		wg.Add(1)
-
-		go func() {
-			defer wg.Done()
-			cssFunctionsReports := make(map[string]interface{})
-			for k1, v1 := range report.CssFunctions {
-				// hash to slice
-				lines := make([]int, 0, len(v1.Lines))
-				for line, _ := range v1.Lines {
-					lines = append(lines, line)
-				}
-				// sort slice with positions
-				sort.Ints(lines)
-
-				linesObj := make([]interface{}, len(lines))
-				for i, line := range lines {
-					linesObj[i] = line
-				}
-
-				cssFunctionsReports[k1] = map[string]interface{}{
-					"rules":      v1.Rules,
-					"lines":      linesObj,
-					"more_lines": v1.MoreLines,
-				}
-			}
-			mx.Lock()
-			defer mx.Unlock()
-			newReport["css_functions"] = cssFunctionsReports
-		}()
-	}
-
-	if len(report.CssPseudoSelectors) > 0 {
-		wg.Add(1)
-
-		go func() {
-			defer wg.Done()
-			cssPseudoSelectorsReports := make(map[string]interface{})
-			for k1, v1 := range report.CssPseudoSelectors {
-				// hash to slice
-				lines := make([]int, 0, len(v1.Lines))
-				for line, _ := range v1.Lines {
-					lines = append(lines, line)
-				}
-				// sort slice with positions
-				sort.Ints(lines)
-
-				linesObj := make([]interface{}, len(lines))
-				for i, line := range lines {
-					linesObj[i] = line
-				}
-
-				cssPseudoSelectorsReports[k1] = map[string]interface{}{
-					"rules":      v1.Rules,
-					"lines":      linesObj,
-					"more_lines": v1.MoreLines,
-				}
-			}
-			mx.Lock()
-			defer mx.Unlock()
-			newReport["css_pseudo_selectors"] = cssPseudoSelectorsReports
-		}()
-	}
-
-	if len(report.ImgFormats) > 0 {
-		wg.Add(1)
-
-		go func() {
-			defer wg.Done()
-			imgFormatsReports := make(map[string]interface{})
-			for k1, v1 := range report.ImgFormats {
-				// hash to slice
-				lines := make([]int, 0, len(v1.Lines))
-				for line, _ := range v1.Lines {
-					lines = append(lines, line)
-				}
-				// sort slice with positions
-				sort.Ints(lines)
-
-				linesObj := make([]interface{}, len(lines))
-				for i, line := range lines {
-					linesObj[i] = line
-				}
-
-				imgFormatsReports[k1] = map[string]interface{}{
-					"rules":      v1.Rules,
-					"lines":      linesObj,
-					"more_lines": v1.MoreLines,
-				}
-			}
-			mx.Lock()
-			defer mx.Unlock()
-			newReport["img_formats"] = imgFormatsReports
-		}()
-	}
-
-	if len(report.LinkTypes) > 0 {
-		wg.Add(1)
-
-		go func() {
-			defer wg.Done()
-			linkTypesReports := make(map[string]interface{})
-			for k1, v1 := range report.LinkTypes {
-				// hash to slice
-				lines := make([]int, 0, len(v1.Lines))
-				for line, _ := range v1.Lines {
-					lines = append(lines, line)
-				}
-				// sort slice with positions
-				sort.Ints(lines)
-
-				linesObj := make([]interface{}, len(lines))
-				for i, line := range lines {
-					linesObj[i] = line
-				}
-
-				linkTypesReports[k1] = map[string]interface{}{
-					"rules":      v1.Rules,
-					"lines":      linesObj,
-					"more_lines": v1.MoreLines,
-				}
-			}
-			mx.Lock()
-			defer mx.Unlock()
-			newReport["link_types"] = linkTypesReports
-		}()
-	}
-
-	if len(report.CssVariables.Lines) > 0 {
-		wg.Add(1)
-
-		go func() {
-			defer wg.Done()
-			// hash to slice
-			lines := make([]int, 0, len(report.CssVariables.Lines))
-			for line, _ := range report.CssVariables.Lines {
-				lines = append(lines, line)
-			}
-			// sort slice with positions
-			sort.Ints(lines)
-
-			linesObj := make([]interface{}, len(lines))
-			for i, line := range lines {
-				linesObj[i] = line
-			}
-
-			cssVarsReports := map[string]interface{}{
-				"rules":      report.CssVariables.Rules,
-				"lines":      linesObj,
-				"more_lines": report.CssVariables.MoreLines,
-			}
-			mx.Lock()
-			defer mx.Unlock()
-			newReport["css_variables"] = cssVarsReports
-		}()
-	}
-
-	if len(report.CssImportant.Lines) > 0 {
-		wg.Add(1)
-
-		go func() {
-			defer wg.Done()
-			// hash to slice
-			lines := make([]int, 0, len(report.CssImportant.Lines))
-			for line, _ := range report.CssImportant.Lines {
-				lines = append(lines, line)
-			}
-			// sort slice with positions
-			sort.Ints(lines)
-
-			linesObj := make([]interface{}, len(lines))
-			for i, line := range lines {
-				linesObj[i] = line
-			}
-
-			cssImportantReports := map[string]interface{}{
-				"rules":      report.CssImportant.Rules,
-				"lines":      linesObj,
-				"more_lines": report.CssImportant.MoreLines,
-			}
-			mx.Lock()
-			defer mx.Unlock()
-			newReport["css_important"] = cssImportantReports
-		}()
-	}
-
-	if len(report.Html5Doctype.Lines) > 0 {
-		wg.Add(1)
-
-		go func() {
-			defer wg.Done()
-			// hash to slice
-			lines := make([]int, 0, len(report.Html5Doctype.Lines))
-			for line, _ := range report.Html5Doctype.Lines {
-				lines = append(lines, line)
-			}
-			// sort slice with positions
-			sort.Ints(lines)
-
-			linesObj := make([]interface{}, len(lines))
-			for i, line := range lines {
-				linesObj[i] = line
-			}
-
-			html5DoctypeReports := map[string]interface{}{
-				"rules":      report.Html5Doctype.Rules,
-				"lines":      linesObj,
-				"more_lines": report.Html5Doctype.MoreLines,
-			}
-			mx.Lock()
-			defer mx.Unlock()
-			newReport["html5_doctype"] = html5DoctypeReports
-		}()
+			go func(item parser.ReportContainer, jsonKey string) {
+				defer wg.Done()
+				attrs := collectItemReport(item)
+				mx.Lock()
+				defer mx.Unlock()
+				newReport[jsonKey] = attrs
+			}(keyValue, k.JsonKey)
+		}
 	}
 
 	wg.Wait()
