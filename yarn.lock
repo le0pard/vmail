@@ -2358,14 +2358,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/gutter@npm:^0.19.5":
-  version: 0.19.5
-  resolution: "@codemirror/gutter@npm:0.19.5"
+"@codemirror/gutter@npm:^0.19.7":
+  version: 0.19.7
+  resolution: "@codemirror/gutter@npm:0.19.7"
   dependencies:
     "@codemirror/rangeset": ^0.19.0
     "@codemirror/state": ^0.19.0
-    "@codemirror/view": ^0.19.0
-  checksum: 9a00c2e079ecd822b6b237d3917110cb8ac1c899981896a6e2497724df888b9f4db4389286ea66a947ce8f7cca119bd691fa8a642ea254582e2aaaa6790a3801
+    "@codemirror/view": ^0.19.23
+  checksum: 0f9bed7670e9e8683704dfc11120dbf9f94b1e0275c31230ae0e47ddf75d6d20240a79eb295ee0fdfa3e715d06aa02502ace44331a40e0a8bb1743707dd5a0ad
   languageName: node
   linkType: hard
 
@@ -2406,9 +2406,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/lang-html@npm:^0.19.3":
-  version: 0.19.3
-  resolution: "@codemirror/lang-html@npm:0.19.3"
+"@codemirror/lang-html@npm:^0.19.4":
+  version: 0.19.4
+  resolution: "@codemirror/lang-html@npm:0.19.4"
   dependencies:
     "@codemirror/autocomplete": ^0.19.0
     "@codemirror/highlight": ^0.19.6
@@ -2418,7 +2418,7 @@ __metadata:
     "@codemirror/state": ^0.19.0
     "@lezer/common": ^0.15.0
     "@lezer/html": ^0.15.0
-  checksum: 44a621fb4846159714a9faa5f23c14eea604a2f1bd30d021b8adae35068da38a628954a0aa3af02365623c9d86ce7668eb945daddea97a5ee30a0c004e4cd8d3
+  checksum: 8fdb90502b1c2d91a6216a9b0baf3dfa0e3430c782eb286bbe24d5339630d4cb066595f60d475c50a55ee08d8805cf2d3de3e02659fc2a3240144ffa48dcc848
   languageName: node
   linkType: hard
 
@@ -2542,16 +2542,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/view@npm:^0.19.21":
-  version: 0.19.21
-  resolution: "@codemirror/view@npm:0.19.21"
+"@codemirror/view@npm:^0.19.23, @codemirror/view@npm:^0.19.24":
+  version: 0.19.24
+  resolution: "@codemirror/view@npm:0.19.24"
   dependencies:
     "@codemirror/rangeset": ^0.19.0
     "@codemirror/state": ^0.19.3
     "@codemirror/text": ^0.19.0
     style-mod: ^4.0.0
     w3c-keyname: ^2.2.4
-  checksum: 54d3517ad1682fa9b5af5267407eb42168d8a48437704e00da6a252d1a75147d4c7a2f9ca8e30dec56fc457e374583586adac60c8b09ebb90ec03f4e6b11e9c4
+  checksum: 03d0818ced419e6beb743776b3a2f82824e820686520029b923911ff4538981628dceebc00a3c20e6b2773819f926b48f2736747a2580f47b0af4ef8100730fe
   languageName: node
   linkType: hard
 
@@ -6264,6 +6264,13 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
+"immutable@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "immutable@npm:4.0.0"
+  checksum: 4b5e9181e4d5fa06728a481835ec09c86367e5d03268666c95b522b7644ab891098022e4479a43c4c81a68f2ed82f10751ce5d33e208d7b873b6e7f9dfaf4d87
+  languageName: node
+  linkType: hard
+
 "import-cwd@npm:^3.0.0":
   version: 3.0.0
   resolution: "import-cwd@npm:3.0.0"
@@ -9961,14 +9968,15 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"sass@npm:1.43.5":
-  version: 1.43.5
-  resolution: "sass@npm:1.43.5"
+"sass@npm:1.44.0":
+  version: 1.44.0
+  resolution: "sass@npm:1.44.0"
   dependencies:
     chokidar: ">=3.0.0 <4.0.0"
+    immutable: ^4.0.0
   bin:
     sass: sass.js
-  checksum: 4dc71400a6e21e0aa841ba69f536ba242b956229fea88acc3faafa44114ca59496a4b153704175c36ac835e33934059dc8d843638c8952f4f1220adbef54c988
+  checksum: 35b5b21ee5f9ca4012793052c203df0b4114f33b8c33bb4cba21c90d3141337a8a19e3ed934f2c783ace80a3534333c5248dc1a2f2e5ba45ce326591d3a08051
   languageName: node
   linkType: hard
 
@@ -11299,12 +11307,12 @@ fsevents@~2.3.2:
     "@babel/runtime": 7.16.3
     "@babel/runtime-corejs3": 7.16.3
     "@codemirror/commands": ^0.19.5
-    "@codemirror/gutter": ^0.19.5
+    "@codemirror/gutter": ^0.19.7
     "@codemirror/highlight": ^0.19.6
     "@codemirror/history": ^0.19.0
-    "@codemirror/lang-html": ^0.19.3
+    "@codemirror/lang-html": ^0.19.4
     "@codemirror/state": ^0.19.6
-    "@codemirror/view": ^0.19.21
+    "@codemirror/view": ^0.19.24
     "@hotwired/stimulus": ^3.0.1
     "@hotwired/stimulus-webpack-helpers": ^1.0.1
     "@hotwired/turbo": 7.1.0
@@ -11333,7 +11341,7 @@ fsevents@~2.3.2:
     prettier: ^2.5.0
     prettier-plugin-svelte: ^2.5.0
     rucksack-css: ^1.0.2
-    sass: 1.43.5
+    sass: 1.44.0
     sass-loader: 12.3.0
     style-loader: 3.3.1
     svelte: ^3.44.2
