@@ -463,3 +463,105 @@ func TestReportFromHTMLDifferentDimentionsFormat(t *testing.T) {
 		})
 	}
 }
+
+func TestReportFromHTML5Doctype(t *testing.T) {
+	html := `<!DOCTYPE html>
+<html><body>
+</body></html>`
+	report, err := ReportFromHTML([]byte(html))
+	if err != nil {
+		t.Fatalf(`ReportFromHTML("%s"), %v`, html, err)
+	}
+
+	// log.Printf("report: %v\n", report)
+
+	var tests = []struct {
+		checkType string
+		got       map[int]bool
+		want      map[int]bool
+	}{
+		{"Html5Doctype", report.Html5Doctype.Lines, map[int]bool{1: true}},
+	}
+
+	for _, tt := range tests {
+		testname := tt.checkType
+		t.Run(testname, func(t *testing.T) {
+			if !reflect.DeepEqual(tt.got, tt.want) {
+				t.Errorf("%s: got %v, want %v", tt.checkType, tt.got, tt.want)
+			}
+		})
+	}
+}
+
+func TestReportFromHTMLCssImportant(t *testing.T) {
+	html := `<html><body>
+	<style>
+		.button {
+			font-size: 14px !important;
+			margin: 10px;
+		}
+	</style>
+	<button class="button" style="padding:10px!important">Test</button>
+</body></html>`
+	report, err := ReportFromHTML([]byte(html))
+	if err != nil {
+		t.Fatalf(`ReportFromHTML("%s"), %v`, html, err)
+	}
+
+	// log.Printf("report: %v\n", report)
+
+	var tests = []struct {
+		checkType string
+		got       map[int]bool
+		want      map[int]bool
+	}{
+		{"CssImportant", report.CssImportant.Lines, map[int]bool{4: true, 8: true}},
+	}
+
+	for _, tt := range tests {
+		testname := tt.checkType
+		t.Run(testname, func(t *testing.T) {
+			if !reflect.DeepEqual(tt.got, tt.want) {
+				t.Errorf("%s: got %v, want %v", tt.checkType, tt.got, tt.want)
+			}
+		})
+	}
+}
+
+func TestReportFromHTMLLinkTypes(t *testing.T) {
+	html := `<html><body>
+	<ul>
+		<li><a href="#test1">Anchor to #test1</a></li>
+		<li><a href="#test2">Anchor to #test2</a></li>
+		<li><a href="#test3">Anchor to #test3</a></li>
+		<li><a href="#test4">Anchor to #test4</a></li>
+		<li><a href="#">Not Anchor</a></li>
+	</ul>
+	<a href="mailto:to@example.com">Test 1</a>
+	<a href="mailto:to@example.com?bcc=bcc@example.com">Test 3</a>
+</body></html>`
+	report, err := ReportFromHTML([]byte(html))
+	if err != nil {
+		t.Fatalf(`ReportFromHTML("%s"), %v`, html, err)
+	}
+
+	// log.Printf("report: %v\n", report)
+
+	var tests = []struct {
+		checkType string
+		got       map[int]bool
+		want      map[int]bool
+	}{
+		{"LinkTypes anchor", report.LinkTypes["anchor"].Lines, map[int]bool{3: true, 4: true, 5: true, 6: true}},
+		{"LinkTypes mailto", report.LinkTypes["mailto"].Lines, map[int]bool{9: true, 10: true}},
+	}
+
+	for _, tt := range tests {
+		testname := tt.checkType
+		t.Run(testname, func(t *testing.T) {
+			if !reflect.DeepEqual(tt.got, tt.want) {
+				t.Errorf("%s: got %v, want %v", tt.checkType, tt.got, tt.want)
+			}
+		})
+	}
+}

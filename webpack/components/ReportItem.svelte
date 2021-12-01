@@ -202,6 +202,16 @@
       </div>
     </div>
     {#if clientsWithStats}
+      {#if clientsWithStats.unknown.length > 0}
+        <ClientListComponent
+          title="Support unknown"
+          bullet="unknown"
+          clients="{clientsWithStats.unknown}"
+          count="{clientsWithStats.unknownCount}"
+          percentage="{clientsWithStats.unknownPercentage}"
+          notesStore="{notesStore}"
+        />
+      {/if}
       {#if clientsWithStats.unsupported.length > 0}
         <ClientListComponent
           title="Unsupported clients"

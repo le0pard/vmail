@@ -341,6 +341,38 @@ func normalizeReportForPromise(report *parser.ParseReport) map[string]interface{
 		}()
 	}
 
+	if len(report.LinkTypes) > 0 {
+		wg.Add(1)
+
+		go func() {
+			defer wg.Done()
+			linkTypesReports := make(map[string]interface{})
+			for k1, v1 := range report.LinkTypes {
+				// hash to slice
+				lines := make([]int, 0, len(v1.Lines))
+				for line, _ := range v1.Lines {
+					lines = append(lines, line)
+				}
+				// sort slice with positions
+				sort.Ints(lines)
+
+				linesObj := make([]interface{}, len(lines))
+				for i, line := range lines {
+					linesObj[i] = line
+				}
+
+				linkTypesReports[k1] = map[string]interface{}{
+					"rules":      v1.Rules,
+					"lines":      linesObj,
+					"more_lines": v1.MoreLines,
+				}
+			}
+			mx.Lock()
+			defer mx.Unlock()
+			newReport["link_types"] = linkTypesReports
+		}()
+	}
+
 	if len(report.CssVariables.Lines) > 0 {
 		wg.Add(1)
 

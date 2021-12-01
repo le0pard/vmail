@@ -24,6 +24,10 @@
     margin-right: 0.5rem;
   }
 
+  .client-bullet-unknown {
+    background-color: var(--cardBaseColor);
+  }
+
   .client-bullet-error {
     background-color: var(--errorColor);
   }
@@ -98,6 +102,11 @@
     border-radius: 0.4rem;
   }
 
+  .client-list-percentage-unknown {
+    color: var(--cardBaseColor);
+    background-color: var(--mutedButtonBgColor);
+  }
+
   .client-list-percentage-error {
     color: var(--errorColor);
     background-color: var(--errorBgColor);
@@ -125,7 +134,8 @@
     class="client-bullet"
     class:client-bullet-error="{bullet === 'error'}"
     class:client-bullet-warning="{bullet === 'warning'}"
-    class:client-bullet-success="{bullet === 'success'}"></span>
+    class:client-bullet-success="{bullet === 'success'}"
+    class:client-bullet-unknown="{bullet === 'unknown'}"></span>
 
   <div class="client-list-body">
     <div class="client-list-title">{title} ({count})</div>
@@ -157,6 +167,7 @@
     class:client-list-percentage-error="{bullet === 'error'}"
     class:client-list-percentage-warning="{bullet === 'warning'}"
     class:client-list-percentage-success="{bullet === 'success'}"
+    class:client-list-percentage-unknown="{bullet === 'unknown'}"
   >
     {percentage}&#37;
   </div>

@@ -45,6 +45,13 @@ export const normalizeItemName = (reportKey, itemName) => {
   switch (reportKey) {
     case 'css_selector_types':
       return CSS_SELECTORS_MAP[itemName]?.title ?? ''
+    case 'link_types':
+      switch (itemName) {
+        case 'anchor':
+          return 'local anchors'
+        default:
+          return 'mailto: links'
+      }
     default:
       return itemName
   }
@@ -109,6 +116,12 @@ export const clientsListWithStats = (rules) => {
                   unsupported: [...agg.unsupported, clientData],
                   unsupportedCount: agg.unsupportedCount + 1
                 }
+              } else if (state === 'u') {
+                agg = {
+                  ...agg,
+                  unknown: [...agg.unknown, clientData],
+                  unknownCount: agg.unknownCount + 1
+                }
               } else {
                 agg = {
                   ...agg,
@@ -126,27 +139,35 @@ export const clientsListWithStats = (rules) => {
         supportedCount: 0,
         mitigated: [],
         mitigatedCount: 0,
+        unknown: [],
+        unknownCount: 0,
         unsupported: [],
         unsupportedCount: 0
       }
     )
 
   const countAll =
-    reducedData.supportedCount + reducedData.mitigatedCount + reducedData.unsupportedCount
+    reducedData.supportedCount +
+    reducedData.mitigatedCount +
+    reducedData.unknownCount +
+    reducedData.unsupportedCount
 
   const unsupportedPercentage = roundNumToStr((reducedData.unsupportedCount * 100) / countAll)
   const mitigatedPercentage = roundNumToStr((reducedData.mitigatedCount * 100) / countAll)
+  const unknownPercentage = roundNumToStr((reducedData.unknownCount * 100) / countAll)
   const supportedPercentage = roundNumToStr(
-    100 - Number(unsupportedPercentage) - Number(mitigatedPercentage)
-  ) // supported calculate from unsupported and mitigated, so sum will be 100% in the end
+    100 - Number(unsupportedPercentage) - Number(mitigatedPercentage) - Number(unknownPercentage)
+  ) // supported calculate from unsupported, mitigated and unknown, so sum will be 100% in the end
 
   return {
     ...reducedData,
     supported: reducedData.supported.sort(sortClientsByTitleFun),
     mitigated: reducedData.mitigated.sort(sortClientsByTitleFun),
+    unknown: reducedData.unknown.sort(sortClientsByTitleFun),
     unsupported: reducedData.unsupported.sort(sortClientsByTitleFun),
     supportedPercentage,
     mitigatedPercentage,
+    unknownPercentage,
     unsupportedPercentage
   }
 }

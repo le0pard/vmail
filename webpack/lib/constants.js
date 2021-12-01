@@ -38,6 +38,10 @@ export const SINGLE_LEVEL_REPORT_KEYS = [
     title: 'CSS Pseudo-class'
   },
   {
+    key: 'link_types',
+    title: 'Link'
+  },
+  {
     key: 'img_formats',
     title: 'Image format'
   }

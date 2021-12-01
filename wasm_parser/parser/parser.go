@@ -48,6 +48,8 @@ const (
 
 var (
 	html5DoctypeRe = regexp.MustCompile(`(?i)<!DOCTYPE\s+html>`)
+	anchorLinkRe   = regexp.MustCompile(`(?i)^#(.+)`)
+	mailtoLinkRe   = regexp.MustCompile(`(?i)^mailto:(.+)`)
 	dimentionsRe   = regexp.MustCompile(`(\+|-)?(\d(\.\d)?|\.\d)`) // based on https://developer.mozilla.org/en-US/docs/Web/CSS/dimension
 	cssUrlRe       = regexp.MustCompile(`url\(['"\s]?(.*?)['"\s]?\)`)
 )
@@ -90,6 +92,7 @@ type CaniuseDB struct {
 	CssFunctions        map[string]interface{}            `json:"css_functions"`
 	CssPseudoSelectors  map[string]interface{}            `json:"css_pseudo_selectors"`
 	ImgFormats          map[string]interface{}            `json:"img_formats"`
+	LinkTypes           map[string]interface{}            `json:"link_types"`
 	CssVariables        interface{}                       `json:"css_variables"`
 	CssImportant        interface{}                       `json:"css_important"`
 	Html5Doctype        interface{}                       `json:"html5_doctype"`
@@ -101,91 +104,26 @@ var rulesDB CaniuseDB
 
 // result structure begin
 
-type HTMLTagReport struct {
-	Rules     interface{}  `json:"rules"`
-	Lines     map[int]bool `json:"lines"`
-	MoreLines bool         `json:"more_lines"`
-}
-
-type HtmlAttributesReport struct {
-	Rules     interface{}  `json:"rules"`
-	Lines     map[int]bool `json:"lines"`
-	MoreLines bool         `json:"more_lines"`
-}
-
-type CssPropertyReport struct {
-	Rules     interface{}  `json:"rules"`
-	Lines     map[int]bool `json:"lines"`
-	MoreLines bool         `json:"more_lines"`
-}
-
-type AtRuleCssStatementsReport struct {
-	Rules     interface{}  `json:"rules"`
-	Lines     map[int]bool `json:"lines"`
-	MoreLines bool         `json:"more_lines"`
-}
-
-type CssSelectorTypeReport struct {
-	Rules     interface{}  `json:"rules"`
-	Lines     map[int]bool `json:"lines"`
-	MoreLines bool         `json:"more_lines"`
-}
-
-type CssDimentionsReport struct {
-	Rules     interface{}  `json:"rules"`
-	Lines     map[int]bool `json:"lines"`
-	MoreLines bool         `json:"more_lines"`
-}
-
-type CssFunctionsReport struct {
-	Rules     interface{}  `json:"rules"`
-	Lines     map[int]bool `json:"lines"`
-	MoreLines bool         `json:"more_lines"`
-}
-
-type CssPseudoSelectorsReport struct {
-	Rules     interface{}  `json:"rules"`
-	Lines     map[int]bool `json:"lines"`
-	MoreLines bool         `json:"more_lines"`
-}
-
-type ImgFormatsReport struct {
-	Rules     interface{}  `json:"rules"`
-	Lines     map[int]bool `json:"lines"`
-	MoreLines bool         `json:"more_lines"`
-}
-
-type CssVariablesReport struct {
-	Rules     interface{}  `json:"rules"`
-	Lines     map[int]bool `json:"lines"`
-	MoreLines bool         `json:"more_lines"`
-}
-
-type CssImportantReport struct {
-	Rules     interface{}  `json:"rules"`
-	Lines     map[int]bool `json:"lines"`
-	MoreLines bool         `json:"more_lines"`
-}
-
-type Html5DoctypeReport struct {
+type ReportContainer struct {
 	Rules     interface{}  `json:"rules"`
 	Lines     map[int]bool `json:"lines"`
 	MoreLines bool         `json:"more_lines"`
 }
 
 type ParseReport struct {
-	HtmlTags            map[string]map[string]HTMLTagReport             `json:"html_tags"`
-	HtmlAttributes      map[string]map[string]HtmlAttributesReport      `json:"html_attributes"`
-	CssProperties       map[string]map[string]CssPropertyReport         `json:"css_properties"`
-	AtRuleCssStatements map[string]map[string]AtRuleCssStatementsReport `json:"at_rule_css_statements"`
-	CssSelectorTypes    map[string]CssSelectorTypeReport                `json:"css_selector_types"`
-	CssDimentions       map[string]CssDimentionsReport                  `json:"css_dimentions"`
-	CssFunctions        map[string]CssFunctionsReport                   `json:"css_functions"`
-	CssPseudoSelectors  map[string]CssPseudoSelectorsReport             `json:"css_pseudo_selectors"`
-	ImgFormats          map[string]ImgFormatsReport                     `json:"img_formats"`
-	CssVariables        CssVariablesReport                              `json:"css_variables"`
-	CssImportant        CssImportantReport                              `json:"css_important"`
-	Html5Doctype        Html5DoctypeReport                              `json:"html5_doctype"`
+	HtmlTags            map[string]map[string]ReportContainer `json:"html_tags"`
+	HtmlAttributes      map[string]map[string]ReportContainer `json:"html_attributes"`
+	CssProperties       map[string]map[string]ReportContainer `json:"css_properties"`
+	AtRuleCssStatements map[string]map[string]ReportContainer `json:"at_rule_css_statements"`
+	CssSelectorTypes    map[string]ReportContainer            `json:"css_selector_types"`
+	CssDimentions       map[string]ReportContainer            `json:"css_dimentions"`
+	CssFunctions        map[string]ReportContainer            `json:"css_functions"`
+	CssPseudoSelectors  map[string]ReportContainer            `json:"css_pseudo_selectors"`
+	ImgFormats          map[string]ReportContainer            `json:"img_formats"`
+	LinkTypes           map[string]ReportContainer            `json:"link_types"`
+	CssVariables        ReportContainer                       `json:"css_variables"`
+	CssImportant        ReportContainer                       `json:"css_important"`
+	Html5Doctype        ReportContainer                       `json:"html5_doctype"`
 }
 
 // result structure end
@@ -213,11 +151,11 @@ func InitParser() *ParserEngine {
 	}
 }
 
-func makeInitialHtmlAttributes(position int, ruleCssPropData interface{}) HtmlAttributesReport {
+func makeInitialReportContainer(position int, ruleCssPropData interface{}) ReportContainer {
 	lines := make(map[int]bool)
 	lines[position] = true
 
-	return HtmlAttributesReport{
+	return ReportContainer{
 		Rules:     ruleCssPropData,
 		Lines:     lines,
 		MoreLines: false,
@@ -239,21 +177,21 @@ func (prs *ParserEngine) saveToReportHtmlAttributes(attrKey, attrVal string, pos
 			prs.pr.HtmlAttributes[attrKey] = prKeyData
 		} else {
 			if len(prs.pr.HtmlAttributes[attrKey]) > 0 {
-				prs.pr.HtmlAttributes[attrKey][attrVal] = makeInitialHtmlAttributes(position, ruleCssPropData)
+				prs.pr.HtmlAttributes[attrKey][attrVal] = makeInitialReportContainer(position, ruleCssPropData)
 			} else {
-				rootData := make(map[string]HtmlAttributesReport)
-				rootData[attrVal] = makeInitialHtmlAttributes(position, ruleCssPropData)
+				rootData := make(map[string]ReportContainer)
+				rootData[attrVal] = makeInitialReportContainer(position, ruleCssPropData)
 				prs.pr.HtmlAttributes[attrKey] = rootData
 			}
 		}
 	} else {
-		rData := make(map[string]HtmlAttributesReport)
-		rData[attrVal] = makeInitialHtmlAttributes(position, ruleCssPropData)
+		rData := make(map[string]ReportContainer)
+		rData[attrVal] = makeInitialReportContainer(position, ruleCssPropData)
 
 		if len(prs.pr.HtmlAttributes) > 0 {
 			prs.pr.HtmlAttributes[attrKey] = rData
 		} else {
-			rootData := make(map[string]map[string]HtmlAttributesReport)
+			rootData := make(map[string]map[string]ReportContainer)
 			rootData[attrKey] = rData
 			prs.pr.HtmlAttributes = rootData
 		}
@@ -271,7 +209,7 @@ func (prs *ParserEngine) saveToReportCssVariables(position int) {
 		lines := make(map[int]bool)
 		lines[position] = true
 
-		prs.pr.CssVariables = CssVariablesReport{
+		prs.pr.CssVariables = ReportContainer{
 			Rules:     rulesDB.CssVariables,
 			Lines:     lines,
 			MoreLines: false,
@@ -290,7 +228,7 @@ func (prs *ParserEngine) saveToReportCssImportant(position int) {
 		lines := make(map[int]bool)
 		lines[position] = true
 
-		prs.pr.CssImportant = CssImportantReport{
+		prs.pr.CssImportant = ReportContainer{
 			Rules:     rulesDB.CssImportant,
 			Lines:     lines,
 			MoreLines: false,
@@ -309,7 +247,7 @@ func (prs *ParserEngine) saveToReportHtml5Doctype(position int) {
 		lines := make(map[int]bool)
 		lines[position] = true
 
-		prs.pr.Html5Doctype = Html5DoctypeReport{
+		prs.pr.Html5Doctype = ReportContainer{
 			Rules:     rulesDB.Html5Doctype,
 			Lines:     lines,
 			MoreLines: false,
@@ -328,17 +266,6 @@ func (prs *ParserEngine) checkHtmlAttribute(attrKey, attrVal string, position in
 	}
 }
 
-func makeInitialAtRuleCssStatements(position int, ruleCssPropData interface{}) AtRuleCssStatementsReport {
-	lines := make(map[int]bool)
-	lines[position] = true
-
-	return AtRuleCssStatementsReport{
-		Rules:     ruleCssPropData,
-		Lines:     lines,
-		MoreLines: false,
-	}
-}
-
 func (prs *ParserEngine) saveToReportAtRuleCssStatements(propertyKey, propertyVal string, position int, ruleCssPropData interface{}) {
 	prs.mx.Lock()
 	defer prs.mx.Unlock()
@@ -354,21 +281,21 @@ func (prs *ParserEngine) saveToReportAtRuleCssStatements(propertyKey, propertyVa
 			prs.pr.AtRuleCssStatements[propertyKey] = prKeyData
 		} else {
 			if len(prs.pr.AtRuleCssStatements[propertyKey]) > 0 {
-				prs.pr.AtRuleCssStatements[propertyKey][propertyVal] = makeInitialAtRuleCssStatements(position, ruleCssPropData)
+				prs.pr.AtRuleCssStatements[propertyKey][propertyVal] = makeInitialReportContainer(position, ruleCssPropData)
 			} else {
-				rootData := make(map[string]AtRuleCssStatementsReport)
-				rootData[propertyVal] = makeInitialAtRuleCssStatements(position, ruleCssPropData)
+				rootData := make(map[string]ReportContainer)
+				rootData[propertyVal] = makeInitialReportContainer(position, ruleCssPropData)
 				prs.pr.AtRuleCssStatements[propertyKey] = rootData
 			}
 		}
 	} else {
-		rData := make(map[string]AtRuleCssStatementsReport)
-		rData[propertyVal] = makeInitialAtRuleCssStatements(position, ruleCssPropData)
+		rData := make(map[string]ReportContainer)
+		rData[propertyVal] = makeInitialReportContainer(position, ruleCssPropData)
 
 		if len(prs.pr.AtRuleCssStatements) > 0 {
 			prs.pr.AtRuleCssStatements[propertyKey] = rData
 		} else {
-			rootData := make(map[string]map[string]AtRuleCssStatementsReport)
+			rootData := make(map[string]map[string]ReportContainer)
 			rootData[propertyKey] = rData
 			prs.pr.AtRuleCssStatements = rootData
 		}
@@ -386,17 +313,6 @@ func (prs *ParserEngine) checkAtRuleCssStatements(propertyKey, propertyVal strin
 	}
 }
 
-func makeInitialImgFormatsReport(position int, ruleCssSelectorData interface{}) ImgFormatsReport {
-	lines := make(map[int]bool)
-	lines[position] = true
-
-	return ImgFormatsReport{
-		Rules:     ruleCssSelectorData,
-		Lines:     lines,
-		MoreLines: false,
-	}
-}
-
 func (prs *ParserEngine) saveToReportImgFormats(psSelectorValue string, position int, ruleCssPropData interface{}) {
 	prs.mx.Lock()
 	defer prs.mx.Unlock()
@@ -410,10 +326,10 @@ func (prs *ParserEngine) saveToReportImgFormats(psSelectorValue string, position
 		prs.pr.ImgFormats[psSelectorValue] = prKeyData
 	} else {
 		if len(prs.pr.ImgFormats) > 0 {
-			prs.pr.ImgFormats[psSelectorValue] = makeInitialImgFormatsReport(position, ruleCssPropData)
+			prs.pr.ImgFormats[psSelectorValue] = makeInitialReportContainer(position, ruleCssPropData)
 		} else {
-			rootData := make(map[string]ImgFormatsReport)
-			rootData[psSelectorValue] = makeInitialImgFormatsReport(position, ruleCssPropData)
+			rootData := make(map[string]ReportContainer)
+			rootData[psSelectorValue] = makeInitialReportContainer(position, ruleCssPropData)
 			prs.pr.ImgFormats = rootData
 		}
 	}
@@ -458,17 +374,6 @@ func (prs *ParserEngine) checkAttrImgFormat(attrKey, imgUrl string, position int
 	prs.checkImgFormat(imgUrl, position)
 }
 
-func makeInitialCssPseudoSelectorsReport(position int, ruleCssSelectorData interface{}) CssPseudoSelectorsReport {
-	lines := make(map[int]bool)
-	lines[position] = true
-
-	return CssPseudoSelectorsReport{
-		Rules:     ruleCssSelectorData,
-		Lines:     lines,
-		MoreLines: false,
-	}
-}
-
 func (prs *ParserEngine) saveToReportCssPseudoSelectors(psSelectorValue string, position int, ruleCssPropData interface{}) {
 	prs.mx.Lock()
 	defer prs.mx.Unlock()
@@ -482,10 +387,10 @@ func (prs *ParserEngine) saveToReportCssPseudoSelectors(psSelectorValue string, 
 		prs.pr.CssPseudoSelectors[psSelectorValue] = prKeyData
 	} else {
 		if len(prs.pr.CssPseudoSelectors) > 0 {
-			prs.pr.CssPseudoSelectors[psSelectorValue] = makeInitialCssPseudoSelectorsReport(position, ruleCssPropData)
+			prs.pr.CssPseudoSelectors[psSelectorValue] = makeInitialReportContainer(position, ruleCssPropData)
 		} else {
-			rootData := make(map[string]CssPseudoSelectorsReport)
-			rootData[psSelectorValue] = makeInitialCssPseudoSelectorsReport(position, ruleCssPropData)
+			rootData := make(map[string]ReportContainer)
+			rootData[psSelectorValue] = makeInitialReportContainer(position, ruleCssPropData)
 			prs.pr.CssPseudoSelectors = rootData
 		}
 	}
@@ -495,17 +400,6 @@ func (prs *ParserEngine) checkCssPseudoSelector(psSelectorValue string, position
 	psSelectorValue = strings.ToLower(strings.Trim(psSelectorValue, WHITESPACE))
 	if cssFunctionsData, ok := rulesDB.CssPseudoSelectors[psSelectorValue]; ok {
 		prs.saveToReportCssPseudoSelectors(psSelectorValue, position, cssFunctionsData)
-	}
-}
-
-func makeInitialCssFunctionsReport(position int, ruleCssSelectorData interface{}) CssFunctionsReport {
-	lines := make(map[int]bool)
-	lines[position] = true
-
-	return CssFunctionsReport{
-		Rules:     ruleCssSelectorData,
-		Lines:     lines,
-		MoreLines: false,
 	}
 }
 
@@ -522,10 +416,10 @@ func (prs *ParserEngine) saveToReportCssFunctions(functionValue string, position
 		prs.pr.CssFunctions[functionValue] = prKeyData
 	} else {
 		if len(prs.pr.CssFunctions) > 0 {
-			prs.pr.CssFunctions[functionValue] = makeInitialCssFunctionsReport(position, ruleCssPropData)
+			prs.pr.CssFunctions[functionValue] = makeInitialReportContainer(position, ruleCssPropData)
 		} else {
-			rootData := make(map[string]CssFunctionsReport)
-			rootData[functionValue] = makeInitialCssFunctionsReport(position, ruleCssPropData)
+			rootData := make(map[string]ReportContainer)
+			rootData[functionValue] = makeInitialReportContainer(position, ruleCssPropData)
 			prs.pr.CssFunctions = rootData
 		}
 	}
@@ -535,17 +429,6 @@ func (prs *ParserEngine) checkCssFunction(functionValue string, position int) {
 	functionValue = strings.ToLower(strings.Trim(strings.ReplaceAll(functionValue, "(", ""), WHITESPACE))
 	if cssFunctionsData, ok := rulesDB.CssFunctions[functionValue]; ok {
 		prs.saveToReportCssFunctions(functionValue, position, cssFunctionsData)
-	}
-}
-
-func makeInitialCssDimentionReport(position int, ruleCssSelectorData interface{}) CssDimentionsReport {
-	lines := make(map[int]bool)
-	lines[position] = true
-
-	return CssDimentionsReport{
-		Rules:     ruleCssSelectorData,
-		Lines:     lines,
-		MoreLines: false,
 	}
 }
 
@@ -562,10 +445,10 @@ func (prs *ParserEngine) saveToReportCssDimention(dimentionValue string, positio
 		prs.pr.CssDimentions[dimentionValue] = prKeyData
 	} else {
 		if len(prs.pr.CssDimentions) > 0 {
-			prs.pr.CssDimentions[dimentionValue] = makeInitialCssDimentionReport(position, ruleCssPropData)
+			prs.pr.CssDimentions[dimentionValue] = makeInitialReportContainer(position, ruleCssPropData)
 		} else {
-			rootData := make(map[string]CssDimentionsReport)
-			rootData[dimentionValue] = makeInitialCssDimentionReport(position, ruleCssPropData)
+			rootData := make(map[string]ReportContainer)
+			rootData[dimentionValue] = makeInitialReportContainer(position, ruleCssPropData)
 			prs.pr.CssDimentions = rootData
 		}
 	}
@@ -575,17 +458,6 @@ func (prs *ParserEngine) checkCssDimention(dimentionValue string, position int) 
 	dimentionValue = strings.ToLower(strings.Trim(dimentionsRe.ReplaceAllString(dimentionValue, ""), WHITESPACE))
 	if cssDimentionsData, ok := rulesDB.CssDimentions[dimentionValue]; ok {
 		prs.saveToReportCssDimention(dimentionValue, position, cssDimentionsData)
-	}
-}
-
-func makeInitialCssSeelctorTypeReport(position int, ruleCssSelectorData interface{}) CssSelectorTypeReport {
-	lines := make(map[int]bool)
-	lines[position] = true
-
-	return CssSelectorTypeReport{
-		Rules:     ruleCssSelectorData,
-		Lines:     lines,
-		MoreLines: false,
 	}
 }
 
@@ -602,10 +474,10 @@ func (prs *ParserEngine) saveToReportCssSelectorType(selectorType CssSelectorTyp
 		prs.pr.CssSelectorTypes[selectorType.String()] = prKeyData
 	} else {
 		if len(prs.pr.CssSelectorTypes) > 0 {
-			prs.pr.CssSelectorTypes[selectorType.String()] = makeInitialCssSeelctorTypeReport(position, ruleCssPropData)
+			prs.pr.CssSelectorTypes[selectorType.String()] = makeInitialReportContainer(position, ruleCssPropData)
 		} else {
-			rootData := make(map[string]CssSelectorTypeReport)
-			rootData[selectorType.String()] = makeInitialCssSeelctorTypeReport(position, ruleCssPropData)
+			rootData := make(map[string]ReportContainer)
+			rootData[selectorType.String()] = makeInitialReportContainer(position, ruleCssPropData)
 			prs.pr.CssSelectorTypes = rootData
 		}
 	}
@@ -632,17 +504,6 @@ func (prs *ParserEngine) checkCssPropertyStyle(propertyKey, propertyVal string, 
 	}
 }
 
-func makeInitialCssPropertyReport(position int, ruleCssPropData interface{}) CssPropertyReport {
-	lines := make(map[int]bool)
-	lines[position] = true
-
-	return CssPropertyReport{
-		Rules:     ruleCssPropData,
-		Lines:     lines,
-		MoreLines: false,
-	}
-}
-
 func (prs *ParserEngine) saveToReportCssProperty(propertyKey, propertyVal string, position int, ruleCssPropData interface{}) {
 	prs.mx.Lock()
 	defer prs.mx.Unlock()
@@ -658,21 +519,21 @@ func (prs *ParserEngine) saveToReportCssProperty(propertyKey, propertyVal string
 			prs.pr.CssProperties[propertyKey] = prKeyData
 		} else {
 			if len(prs.pr.CssProperties[propertyKey]) > 0 {
-				prs.pr.CssProperties[propertyKey][propertyVal] = makeInitialCssPropertyReport(position, ruleCssPropData)
+				prs.pr.CssProperties[propertyKey][propertyVal] = makeInitialReportContainer(position, ruleCssPropData)
 			} else {
-				rootData := make(map[string]CssPropertyReport)
-				rootData[propertyVal] = makeInitialCssPropertyReport(position, ruleCssPropData)
+				rootData := make(map[string]ReportContainer)
+				rootData[propertyVal] = makeInitialReportContainer(position, ruleCssPropData)
 				prs.pr.CssProperties[propertyKey] = rootData
 			}
 		}
 	} else {
-		rData := make(map[string]CssPropertyReport)
-		rData[propertyVal] = makeInitialCssPropertyReport(position, ruleCssPropData)
+		rData := make(map[string]ReportContainer)
+		rData[propertyVal] = makeInitialReportContainer(position, ruleCssPropData)
 
 		if len(prs.pr.CssProperties) > 0 {
 			prs.pr.CssProperties[propertyKey] = rData
 		} else {
-			rootData := make(map[string]map[string]CssPropertyReport)
+			rootData := make(map[string]map[string]ReportContainer)
 			rootData[propertyKey] = rData
 			prs.pr.CssProperties = rootData
 		}
@@ -862,17 +723,6 @@ func (prs *ParserEngine) processCssInStyleTag(inlineStyle string, htmlTagPositio
 	}
 }
 
-func makeInitialHtmlTagReport(position int, ruleTagAttrData interface{}) HTMLTagReport {
-	lines := make(map[int]bool)
-	lines[position] = true
-
-	return HTMLTagReport{
-		Rules:     ruleTagAttrData,
-		Lines:     lines,
-		MoreLines: false,
-	}
-}
-
 func (prs *ParserEngine) saveToReportHtmlTag(tagName, tagAttr string, position int, ruleTagAttrData interface{}) {
 	prs.mx.Lock()
 	defer prs.mx.Unlock()
@@ -888,21 +738,21 @@ func (prs *ParserEngine) saveToReportHtmlTag(tagName, tagAttr string, position i
 			prs.pr.HtmlTags[tagName] = tagData
 		} else {
 			if len(prs.pr.HtmlTags[tagName]) > 0 {
-				prs.pr.HtmlTags[tagName][tagAttr] = makeInitialHtmlTagReport(position, ruleTagAttrData)
+				prs.pr.HtmlTags[tagName][tagAttr] = makeInitialReportContainer(position, ruleTagAttrData)
 			} else {
-				rootData := make(map[string]HTMLTagReport)
-				rootData[tagAttr] = makeInitialHtmlTagReport(position, ruleTagAttrData)
+				rootData := make(map[string]ReportContainer)
+				rootData[tagAttr] = makeInitialReportContainer(position, ruleTagAttrData)
 				prs.pr.HtmlTags[tagName] = rootData
 			}
 		}
 	} else {
-		rData := make(map[string]HTMLTagReport)
-		rData[tagAttr] = makeInitialHtmlTagReport(position, ruleTagAttrData)
+		rData := make(map[string]ReportContainer)
+		rData[tagAttr] = makeInitialReportContainer(position, ruleTagAttrData)
 
 		if len(prs.pr.HtmlTags) > 0 {
 			prs.pr.HtmlTags[tagName] = rData
 		} else {
-			rootData := make(map[string]map[string]HTMLTagReport)
+			rootData := make(map[string]map[string]ReportContainer)
 			rootData[tagName] = rData
 			prs.pr.HtmlTags = rootData
 		}
@@ -959,6 +809,48 @@ func (prs *ParserEngine) checkHtmlTags(tagName string, attrs []html.Attribute, p
 	}
 }
 
+func (prs *ParserEngine) saveToReportLinkTypes(linkType string, position int, ruleCssPropData interface{}) {
+	prs.mx.Lock()
+	defer prs.mx.Unlock()
+
+	if prKeyData, ok := prs.pr.LinkTypes[linkType]; ok {
+		if len(prKeyData.Lines) < LIMIT_REPORT_LINES {
+			prKeyData.Lines[position] = true
+		} else {
+			prKeyData.MoreLines = true
+		}
+		prs.pr.LinkTypes[linkType] = prKeyData
+	} else {
+		if len(prs.pr.LinkTypes) > 0 {
+			prs.pr.LinkTypes[linkType] = makeInitialReportContainer(position, ruleCssPropData)
+		} else {
+			rootData := make(map[string]ReportContainer)
+			rootData[linkType] = makeInitialReportContainer(position, ruleCssPropData)
+			prs.pr.LinkTypes = rootData
+		}
+	}
+}
+
+func (prs *ParserEngine) checkLinkTypes(attrs []html.Attribute, position int) {
+	for _, att := range attrs {
+		attrKey := strings.ToLower(att.Key)
+		attrVal := strings.Trim(att.Val, WHITESPACE)
+
+		if attrKey == "href" && len(attrVal) > 0 {
+			if anchorLinkRe.MatchString(attrVal) {
+				if ruleLinkData, ok := rulesDB.LinkTypes["anchor"]; ok {
+					prs.saveToReportLinkTypes("anchor", position, ruleLinkData)
+				}
+			}
+			if mailtoLinkRe.MatchString(attrVal) {
+				if ruleLinkData, ok := rulesDB.LinkTypes["mailto"]; ok {
+					prs.saveToReportLinkTypes("mailto", position, ruleLinkData)
+				}
+			}
+		}
+	}
+}
+
 func (prs *ParserEngine) processHtmlToken(htmlTokenizer *html.Tokenizer, token html.Token, tagLine int) {
 	switch token.Type {
 	case html.TextToken:
@@ -970,6 +862,9 @@ func (prs *ParserEngine) processHtmlToken(htmlTokenizer *html.Tokenizer, token h
 		case a.Style:
 			prs.isStyleTagOpen = true
 			prs.styleTagLine = tagLine
+		case a.A:
+			// check link
+			prs.checkLinkTypes(token.Attr, tagLine)
 		}
 		// process html tag
 		prs.checkHtmlTags(token.Data, token.Attr, tagLine)

@@ -254,6 +254,11 @@ class CaniuseGenerator # rubocop:disable Metrics/ClassLength
     'image-webp' => 'webp'
   }.freeze
 
+  LINK_TYPES_MAP = {
+    'html-anchor-links' => 'anchor',
+    'html-mailto-links' => 'mailto'
+  }.freeze
+
   attr_reader :data
 
   def initialize
@@ -283,6 +288,7 @@ class CaniuseGenerator # rubocop:disable Metrics/ClassLength
       css_pseudo_selectors: generate_css_pseudo_selectors,
       at_rule_css_statements: generate_at_rule_css_statements,
       img_formats: generate_img_formats,
+      link_types: generate_link_types,
       css_variables: generate_for_single_key('css-variables'),
       css_important: generate_for_single_key('css-important'),
       html5_doctype: generate_for_single_key('html-doctype')
@@ -294,7 +300,7 @@ class CaniuseGenerator # rubocop:disable Metrics/ClassLength
 
   private
 
-  def warn_about_now_covered_rules # rubocop:disable Metrics/AbcSize
+  def warn_about_now_covered_rules # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
     rules_without_apply = data.filter do |r|
       !SINGLE_KEY_MAP.include?(r['slug']) &&
         !HTML_TAGS_MAPS.key?(r['slug']) &&
@@ -305,8 +311,12 @@ class CaniuseGenerator # rubocop:disable Metrics/ClassLength
         !CSS_FUNCTIONS_MAPS.key?(r['slug']) &&
         !CSS_PSEUDO_SELECTORS_MAPS.key?(r['slug']) &&
         !AT_RULE_CSS_STATEMENTS_MAPS.key?(r['slug']) &&
-        !IMG_FORMATS_MAPS.key?(r['slug'])
+        !IMG_FORMATS_MAPS.key?(r['slug']) &&
+        !LINK_TYPES_MAP.key?(r['slug'])
     end
+
+    return if rules_without_apply.size.zero?
+
     $stdout.puts "WARN, This rules was skipped: #{rules_without_apply.map { |r| r['slug'] }.join(', ')}"
   end
 
@@ -344,6 +354,10 @@ class CaniuseGenerator # rubocop:disable Metrics/ClassLength
 
   def generate_img_formats
     generate_one_level_maps(IMG_FORMATS_MAPS)
+  end
+
+  def generate_link_types
+    generate_one_level_maps(LINK_TYPES_MAP)
   end
 
   def generate_for_single_key(key)
