@@ -96,60 +96,6 @@ func rejectWithError(reject js.Value, message string) {
 	reject.Invoke(errorObject)
 }
 
-func collectNestedLevelReport(items map[string]map[string]parser.ReportContainer) map[string]interface{} {
-	itemsReports := make(map[string]interface{})
-	for k1, v1 := range items {
-		tagAttributeReports := make(map[string]interface{})
-		for k2, v2 := range v1 {
-			// hash to slice
-			lines := make([]int, 0, len(v2.Lines))
-			for line, _ := range v2.Lines {
-				lines = append(lines, line)
-			}
-			// sort slice with positions
-			sort.Ints(lines)
-
-			linesObj := make([]interface{}, len(lines))
-			for i, line := range lines {
-				linesObj[i] = line
-			}
-
-			tagAttributeReports[k2] = map[string]interface{}{
-				"rules":      v2.Rules,
-				"lines":      linesObj,
-				"more_lines": v2.MoreLines,
-			}
-		}
-		itemsReports[k1] = tagAttributeReports
-	}
-	return itemsReports
-}
-
-func collectOneLevelReport(items map[string]parser.ReportContainer) map[string]interface{} {
-	itemsReports := make(map[string]interface{})
-	for k1, v1 := range items {
-		// hash to slice
-		lines := make([]int, 0, len(v1.Lines))
-		for line, _ := range v1.Lines {
-			lines = append(lines, line)
-		}
-		// sort slice with positions
-		sort.Ints(lines)
-
-		linesObj := make([]interface{}, len(lines))
-		for i, line := range lines {
-			linesObj[i] = line
-		}
-
-		itemsReports[k1] = map[string]interface{}{
-			"rules":      v1.Rules,
-			"lines":      linesObj,
-			"more_lines": v1.MoreLines,
-		}
-	}
-	return itemsReports
-}
-
 func collectItemReport(item parser.ReportContainer) map[string]interface{} {
 	// hash to slice
 	lines := make([]int, 0, len(item.Lines))
@@ -170,6 +116,22 @@ func collectItemReport(item parser.ReportContainer) map[string]interface{} {
 		"more_lines": item.MoreLines,
 	}
 	return report
+}
+
+func collectOneLevelReport(items map[string]parser.ReportContainer) map[string]interface{} {
+	itemsReports := make(map[string]interface{})
+	for k1, v1 := range items {
+		itemsReports[k1] = collectItemReport(v1)
+	}
+	return itemsReports
+}
+
+func collectNestedLevelReport(items map[string]map[string]parser.ReportContainer) map[string]interface{} {
+	itemsReports := make(map[string]interface{})
+	for k1, v1 := range items {
+		itemsReports[k1] = collectOneLevelReport(v1)
+	}
+	return itemsReports
 }
 
 func normalizeReportForPromise(report *parser.ParseReport) map[string]interface{} {
