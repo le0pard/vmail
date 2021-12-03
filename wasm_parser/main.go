@@ -3,7 +3,6 @@ package main
 // Import the package to access the Wasm environment
 import (
 	"errors"
-	"reflect"
 	"sort"
 	"sync"
 	"syscall/js"
@@ -11,78 +10,19 @@ import (
 	"github.com/le0pard/vmail/wasm_parser/parser"
 )
 
-type ReportConvertorMap struct {
-	MapKey  string
+type ReportNestedLevelMap struct {
+	Data    map[string]map[string]parser.ReportContainer
 	JsonKey string
 }
 
-var (
-	NESTED_LEVEL_KEYS []ReportConvertorMap = []ReportConvertorMap{
-		ReportConvertorMap{
-			MapKey:  "HtmlTags",
-			JsonKey: "html_tags",
-		},
-		ReportConvertorMap{
-			MapKey:  "HtmlAttributes",
-			JsonKey: "html_attributes",
-		},
-		ReportConvertorMap{
-			MapKey:  "CssProperties",
-			JsonKey: "css_properties",
-		},
-		ReportConvertorMap{
-			MapKey:  "AtRuleCssStatements",
-			JsonKey: "at_rule_css_statements",
-		},
-	}
-	ONE_LEVEL_KEYS []ReportConvertorMap = []ReportConvertorMap{
-		ReportConvertorMap{
-			MapKey:  "CssSelectorTypes",
-			JsonKey: "css_selector_types",
-		},
-		ReportConvertorMap{
-			MapKey:  "CssDimentions",
-			JsonKey: "css_dimentions",
-		},
-		ReportConvertorMap{
-			MapKey:  "CssFunctions",
-			JsonKey: "css_functions",
-		},
-		ReportConvertorMap{
-			MapKey:  "CssPseudoSelectors",
-			JsonKey: "css_pseudo_selectors",
-		},
-		ReportConvertorMap{
-			MapKey:  "ImgFormats",
-			JsonKey: "img_formats",
-		},
-		ReportConvertorMap{
-			MapKey:  "LinkTypes",
-			JsonKey: "link_types",
-		},
-	}
-	SINGLE_ITEM_KEYS []ReportConvertorMap = []ReportConvertorMap{
-		ReportConvertorMap{
-			MapKey:  "CssVariables",
-			JsonKey: "css_variables",
-		},
-		ReportConvertorMap{
-			MapKey:  "CssImportant",
-			JsonKey: "css_important",
-		},
-		ReportConvertorMap{
-			MapKey:  "Html5Doctype",
-			JsonKey: "html5_doctype",
-		},
-	}
-)
+type ReportOneLevelMap struct {
+	Data    map[string]parser.ReportContainer
+	JsonKey string
+}
 
-// Main function: it sets up our Wasm application
-func main() {
-	// Define the function "VMailParser" in the JavaScript scope
-	js.Global().Set("VMailParser", VMailParser())
-	// Prevent the function from returning, which is required in a wasm module
-	select {}
+type ReportItemMap struct {
+	Data    parser.ReportContainer
+	JsonKey string
 }
 
 func rejectWithError(reject js.Value, message string) {
@@ -134,18 +74,6 @@ func collectNestedLevelReport(items map[string]map[string]parser.ReportContainer
 	return itemsReports
 }
 
-func getStructValueByKeyName(obj interface{}, fieldName string) (interface{}, error) {
-	curStruct := reflect.ValueOf(obj).Elem()
-	if curStruct.Kind() != reflect.Struct {
-		return nil, errors.New("not struct")
-	}
-	curField := curStruct.FieldByName(fieldName)
-	if !curField.IsValid() {
-		return nil, errors.New("not found:" + fieldName)
-	}
-	return curField.Interface(), nil
-}
-
 func normalizeReportForPromise(report *parser.ParseReport) map[string]interface{} {
 	var (
 		wg sync.WaitGroup
@@ -154,13 +82,27 @@ func normalizeReportForPromise(report *parser.ParseReport) map[string]interface{
 
 	newReport := make(map[string]interface{})
 
-	for _, k := range NESTED_LEVEL_KEYS {
-		keyData, err := getStructValueByKeyName(report, k.MapKey)
-		if err != nil {
-			continue
-		}
-		keyValue, ok := keyData.(map[string]map[string]parser.ReportContainer)
-		if ok && len(keyValue) > 0 {
+	var nestedLevelKeys []ReportNestedLevelMap = []ReportNestedLevelMap{
+		ReportNestedLevelMap{
+			Data:    report.HtmlTags,
+			JsonKey: "html_tags",
+		},
+		ReportNestedLevelMap{
+			Data:    report.HtmlAttributes,
+			JsonKey: "html_attributes",
+		},
+		ReportNestedLevelMap{
+			Data:    report.CssProperties,
+			JsonKey: "css_properties",
+		},
+		ReportNestedLevelMap{
+			Data:    report.AtRuleCssStatements,
+			JsonKey: "at_rule_css_statements",
+		},
+	}
+
+	for _, k := range nestedLevelKeys {
+		if len(k.Data) > 0 {
 			wg.Add(1)
 
 			go func(items map[string]map[string]parser.ReportContainer, jsonKey string) {
@@ -169,17 +111,39 @@ func normalizeReportForPromise(report *parser.ParseReport) map[string]interface{
 				mx.Lock()
 				defer mx.Unlock()
 				newReport[jsonKey] = attrs
-			}(keyValue, k.JsonKey)
+			}(k.Data, k.JsonKey)
 		}
 	}
 
-	for _, k := range ONE_LEVEL_KEYS {
-		keyData, err := getStructValueByKeyName(report, k.MapKey)
-		if err != nil {
-			continue
-		}
-		keyValue, ok := keyData.(map[string]parser.ReportContainer)
-		if ok && len(keyValue) > 0 {
+	var oneLevelKeys []ReportOneLevelMap = []ReportOneLevelMap{
+		ReportOneLevelMap{
+			Data:    report.CssSelectorTypes,
+			JsonKey: "css_selector_types",
+		},
+		ReportOneLevelMap{
+			Data:    report.CssDimentions,
+			JsonKey: "css_dimentions",
+		},
+		ReportOneLevelMap{
+			Data:    report.CssFunctions,
+			JsonKey: "css_functions",
+		},
+		ReportOneLevelMap{
+			Data:    report.CssPseudoSelectors,
+			JsonKey: "css_pseudo_selectors",
+		},
+		ReportOneLevelMap{
+			Data:    report.ImgFormats,
+			JsonKey: "img_formats",
+		},
+		ReportOneLevelMap{
+			Data:    report.LinkTypes,
+			JsonKey: "link_types",
+		},
+	}
+
+	for _, k := range oneLevelKeys {
+		if len(k.Data) > 0 {
 			wg.Add(1)
 
 			go func(items map[string]parser.ReportContainer, jsonKey string) {
@@ -188,17 +152,27 @@ func normalizeReportForPromise(report *parser.ParseReport) map[string]interface{
 				mx.Lock()
 				defer mx.Unlock()
 				newReport[jsonKey] = attrs
-			}(keyValue, k.JsonKey)
+			}(k.Data, k.JsonKey)
 		}
 	}
 
-	for _, k := range SINGLE_ITEM_KEYS {
-		keyData, err := getStructValueByKeyName(report, k.MapKey)
-		if err != nil {
-			continue
-		}
-		keyValue, ok := keyData.(parser.ReportContainer)
-		if ok && len(keyValue.Lines) > 0 {
+	var singleItemKeys []ReportItemMap = []ReportItemMap{
+		ReportItemMap{
+			Data:    report.CssVariables,
+			JsonKey: "css_variables",
+		},
+		ReportItemMap{
+			Data:    report.CssImportant,
+			JsonKey: "css_important",
+		},
+		ReportItemMap{
+			Data:    report.Html5Doctype,
+			JsonKey: "html5_doctype",
+		},
+	}
+
+	for _, k := range singleItemKeys {
+		if len(k.Data.Lines) > 0 {
 			wg.Add(1)
 
 			go func(item parser.ReportContainer, jsonKey string) {
@@ -207,7 +181,7 @@ func normalizeReportForPromise(report *parser.ParseReport) map[string]interface{
 				mx.Lock()
 				defer mx.Unlock()
 				newReport[jsonKey] = attrs
-			}(keyValue, k.JsonKey)
+			}(k.Data, k.JsonKey)
 		}
 	}
 
@@ -250,4 +224,12 @@ func VMailParser() js.Func {
 		promiseConstructor := js.Global().Get("Promise")
 		return promiseConstructor.New(handler)
 	})
+}
+
+// Main function: it sets up our Wasm application
+func main() {
+	// Define the function "VMailParser" in the JavaScript scope
+	js.Global().Set("VMailParser", VMailParser())
+	// Prevent the function from returning, which is required in a wasm module
+	select {}
 }

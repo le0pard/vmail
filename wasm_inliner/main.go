@@ -8,14 +8,6 @@ import (
 	"github.com/le0pard/vmail/wasm_inliner/inliner"
 )
 
-// Main function: it sets up our Wasm application
-func main() {
-	// Define the function "VMailInliner" in the JavaScript scope
-	js.Global().Set("VMailInliner", VMailInliner())
-	// Prevent the function from returning, which is required in a wasm module
-	select {}
-}
-
 func rejectWithError(reject js.Value, message string) {
 	err := errors.New(message)
 
@@ -61,4 +53,12 @@ func VMailInliner() js.Func {
 		promiseConstructor := js.Global().Get("Promise")
 		return promiseConstructor.New(handler)
 	})
+}
+
+// Main function: it sets up our Wasm application
+func main() {
+	// Define the function "VMailInliner" in the JavaScript scope
+	js.Global().Set("VMailInliner", VMailInliner())
+	// Prevent the function from returning, which is required in a wasm module
+	select {}
 }
