@@ -4,11 +4,12 @@
   import {onMount, onDestroy} from 'svelte'
   import {EVENT_SUBMIT_EXAMPLE, EVENT_INLINE_CSS} from 'lib/constants'
   import {inlinerLoading, inlinerError} from 'stores/inliner'
-  import {screenSizeMinMedia} from 'stores/split'
   import IconComponent from './Icon'
 
   let inlinerButtonText = 'Inline CSS in HTML'
   let sampleButtonText = 'Sample HTML/CSS'
+
+  const screenSizeMediumMedia = window.matchMedia('(max-width: 1000px)')
 
   const genAndSubmitSample = () => {
     window.dispatchEvent(new window.CustomEvent(EVENT_SUBMIT_EXAMPLE, {detail: {}}))
@@ -18,13 +19,13 @@
     window.dispatchEvent(new window.CustomEvent(EVENT_INLINE_CSS, {detail: {}}))
   }
 
-  const onScreenSizeMinMediaChange = (e) => {
+  const onScreenSizeMediumMediaChange = (e) => {
     if (e.matches) {
-      inlinerButtonText = 'Inline CSS'
       sampleButtonText = 'Sample'
+      inlinerButtonText = 'Inline CSS'
     } else {
-      inlinerButtonText = 'Inline CSS in HTML'
       sampleButtonText = 'Sample HTML/CSS'
+      inlinerButtonText = 'Inline CSS in HTML'
     }
   }
 
@@ -35,9 +36,11 @@
   })
 
   onMount(() => {
-    onScreenSizeMinMediaChange(screenSizeMinMedia)
-    screenSizeMinMedia.addEventListener('change', onScreenSizeMinMediaChange)
-    return () => screenSizeMinMedia.removeEventListener('change', onScreenSizeMinMediaChange)
+    // init
+    onScreenSizeMediumMediaChange(screenSizeMediumMedia)
+    // listeners
+    screenSizeMediumMedia.addEventListener('change', onScreenSizeMediumMediaChange)
+    return () => screenSizeMediumMedia.removeEventListener('change', onScreenSizeMediumMediaChange)
   })
 
   onDestroy(unsubscribeInlinerError)
