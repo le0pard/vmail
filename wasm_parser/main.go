@@ -134,6 +134,18 @@ func collectNestedLevelReport(items map[string]map[string]parser.ReportContainer
 	return itemsReports
 }
 
+func getStructValueByKeyName(obj interface{}, fieldName string) (interface{}, error) {
+	curStruct := reflect.ValueOf(obj).Elem()
+	if curStruct.Kind() != reflect.Struct {
+		return nil, errors.New("not struct")
+	}
+	curField := curStruct.FieldByName(fieldName)
+	if !curField.IsValid() {
+		return nil, errors.New("not found:" + fieldName)
+	}
+	return curField.Interface(), nil
+}
+
 func normalizeReportForPromise(report *parser.ParseReport) map[string]interface{} {
 	var (
 		wg sync.WaitGroup
@@ -143,8 +155,11 @@ func normalizeReportForPromise(report *parser.ParseReport) map[string]interface{
 	newReport := make(map[string]interface{})
 
 	for _, k := range NESTED_LEVEL_KEYS {
-		reportVal := reflect.ValueOf(report)
-		keyValue, ok := reflect.Indirect(reportVal).FieldByName(k.MapKey).Interface().(map[string]map[string]parser.ReportContainer)
+		keyData, err := getStructValueByKeyName(report, k.MapKey)
+		if err != nil {
+			continue
+		}
+		keyValue, ok := keyData.(map[string]map[string]parser.ReportContainer)
 		if ok && len(keyValue) > 0 {
 			wg.Add(1)
 
@@ -159,8 +174,11 @@ func normalizeReportForPromise(report *parser.ParseReport) map[string]interface{
 	}
 
 	for _, k := range ONE_LEVEL_KEYS {
-		reportVal := reflect.ValueOf(report)
-		keyValue, ok := reflect.Indirect(reportVal).FieldByName(k.MapKey).Interface().(map[string]parser.ReportContainer)
+		keyData, err := getStructValueByKeyName(report, k.MapKey)
+		if err != nil {
+			continue
+		}
+		keyValue, ok := keyData.(map[string]parser.ReportContainer)
 		if ok && len(keyValue) > 0 {
 			wg.Add(1)
 
@@ -175,8 +193,11 @@ func normalizeReportForPromise(report *parser.ParseReport) map[string]interface{
 	}
 
 	for _, k := range SINGLE_ITEM_KEYS {
-		reportVal := reflect.ValueOf(report)
-		keyValue, ok := reflect.Indirect(reportVal).FieldByName(k.MapKey).Interface().(parser.ReportContainer)
+		keyData, err := getStructValueByKeyName(report, k.MapKey)
+		if err != nil {
+			continue
+		}
+		keyValue, ok := keyData.(parser.ReportContainer)
 		if ok && len(keyValue.Lines) > 0 {
 			wg.Add(1)
 
