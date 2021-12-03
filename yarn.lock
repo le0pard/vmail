@@ -2358,14 +2358,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/gutter@npm:^0.19.8":
-  version: 0.19.8
-  resolution: "@codemirror/gutter@npm:0.19.8"
+"@codemirror/gutter@npm:^0.19.9":
+  version: 0.19.9
+  resolution: "@codemirror/gutter@npm:0.19.9"
   dependencies:
     "@codemirror/rangeset": ^0.19.0
     "@codemirror/state": ^0.19.0
     "@codemirror/view": ^0.19.23
-  checksum: 3fa9364e09f9b1e0f7596fabc89d08d303b2e0b88f270e0630c43bc429e9aaa01318a34ecc6a71f0910678995bd4aa6bb71770c3f830276ddbf871e3492c725b
+  checksum: 948e4bdeddfdd2f824412aa8a2cc43915444e948c310ee113faca4a988e98b6b02bea72f8849481adf82a5021b00d6a8ee2bdf0b105864de0e8aa417b41a9ed1
   languageName: node
   linkType: hard
 
@@ -2555,16 +2555,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/view@npm:^0.19.25":
-  version: 0.19.25
-  resolution: "@codemirror/view@npm:0.19.25"
+"@codemirror/view@npm:^0.19.26":
+  version: 0.19.26
+  resolution: "@codemirror/view@npm:0.19.26"
   dependencies:
     "@codemirror/rangeset": ^0.19.0
     "@codemirror/state": ^0.19.3
     "@codemirror/text": ^0.19.0
     style-mod: ^4.0.0
     w3c-keyname: ^2.2.4
-  checksum: 624d3cc85a16fa725aa34ab85a462968e8bad3ab0762695c08fdd71fd3ae025a7d5bef02ca161bcccbf22eb525dcbfdd670c5cabb0a9fd726fbea98853a5319e
+  checksum: b1a47c94039b71df9288a9e4a56c751437fc6651f7d58265627aaf8597d5c22dd892be750f281dd054a66b9df591958b94c57f916c996a6cd5f26d2ec5d8448e
   languageName: node
   linkType: hard
 
@@ -11320,12 +11320,12 @@ fsevents@~2.3.2:
     "@babel/runtime": 7.16.3
     "@babel/runtime-corejs3": 7.16.3
     "@codemirror/commands": ^0.19.5
-    "@codemirror/gutter": ^0.19.8
+    "@codemirror/gutter": ^0.19.9
     "@codemirror/highlight": ^0.19.6
     "@codemirror/history": ^0.19.0
     "@codemirror/lang-html": ^0.19.4
     "@codemirror/state": ^0.19.6
-    "@codemirror/view": ^0.19.25
+    "@codemirror/view": ^0.19.26
     "@hotwired/stimulus": ^3.0.1
     "@hotwired/stimulus-webpack-helpers": ^1.0.1
     "@hotwired/turbo": 7.1.0
