@@ -19,12 +19,12 @@
     "@babel/runtime": "7.16.3",
     "@babel/runtime-corejs3": "7.16.3",
     "@codemirror/commands": "^0.19.5",
-    "@codemirror/gutter": "^0.19.7",
+    "@codemirror/gutter": "^0.19.8",
     "@codemirror/highlight": "^0.19.6",
     "@codemirror/history": "^0.19.0",
     "@codemirror/lang-html": "^0.19.4",
     "@codemirror/state": "^0.19.6",
-    "@codemirror/view": "^0.19.24",
+    "@codemirror/view": "^0.19.25",
     "@hotwired/stimulus": "^3.0.1",
     "@hotwired/stimulus-webpack-helpers": "^1.0.1",
     "@hotwired/turbo": "7.1.0",
@@ -59,8 +59,8 @@
     "webpack": "5.64.4",
     "webpack-assets-manifest": "5.0.6",
     "webpack-cli": "4.9.1",
-    "workbox-webpack-plugin": "6.4.1",
-    "workbox-window": "6.4.1"
+    "workbox-webpack-plugin": "6.4.2",
+    "workbox-window": "6.4.2"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.16.3",
