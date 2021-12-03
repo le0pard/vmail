@@ -59,11 +59,11 @@ title: "FAQ"
 				<h4 class="faq-question">Where VMail get informations about email clients limitations?</h4>
 				<p class="faq-answer">VMail collect the data on support for particular HTML & CSS rules from <a href="https://www.caniemail.com/<%= link_campaign_query %>">Caniemail.com</a></p>
 
-				<h4 class="faq-question">What does the "Inline CSS" button do?</h4>
+				<h4 class="faq-question">What does the "Inline CSS in HTML"/"Inline CSS" button do?</h4>
 				<p class="faq-answer-middle">There are three ways to include styles within an email: using external stylesheets, embedded styles, or inline styles. While external stylesheets are a great option for web design, they aren't the best option for email design—many webmail clients block links to external stylesheets</p>
 				<p class="faq-answer-middle">Embedded styles are becoming increasingly popular due to the rise of mobile and associated popularity of responsive design techniques, but they do have their limitations. Since embedded styles are placed in the placed in the &lt;head&gt; of HTML documents, and some email clients, like Gmail, strip out most of the CSS styles in the &lt;head&gt;, the result is a royal mess in those inboxes</p>
 				<p class="faq-answer-middle">Inline styles are applied directly to HTML elements in each line of HTML—and are generally the safest way to ensure rendering compatibility across various email clients. However, inline styles can be time-consuming to write and a bit challenging to manage</p>
-				<p class="faq-answer-middle">While it's entirely possible to hand code inlined CSS from the start, it's time consuming and difficult to maintain. By clicking button "Inline CSS" application will try to load all your external stylesheets and with embedded styles inline its properties in HTML tags. This solution is not 100% error prone and can lead to broken HTML email template. For more control, you can use alternative services (they contain additional settings, which can be tunned for your HTML email template):</p>
+				<p class="faq-answer-middle">While it's entirely possible to hand code inlined CSS from the start, it's time consuming and difficult to maintain. By clicking button "Inline CSS in HTML"/"Inline CSS" application will try to load all your external stylesheets and with embedded styles inline its properties in HTML tags. This solution is not 100% error prone and can lead to broken HTML email template. For more control, you can use alternative services (they contain additional settings, which can be tunned for your HTML email template):</p>
 				<ul>
 					<li><a href="https://alter.email/<%= link_campaign_query %>">Alter.Email</a></li>
 					<li><a href="https://app.postdrop.io/<%= link_campaign_query %>">Postdrop</a></li>

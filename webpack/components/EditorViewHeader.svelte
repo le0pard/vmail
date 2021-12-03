@@ -1,22 +1,43 @@
 <svelte:options immutable="{true}" />
 
 <script>
-  import {onDestroy} from 'svelte'
+  import {onMount, onDestroy} from 'svelte'
   import {EVENT_SUBMIT_EXAMPLE, EVENT_INLINE_CSS} from 'lib/constants'
   import {inlinerLoading, inlinerError} from 'stores/inliner'
+  import {screenSizeMinMedia} from 'stores/split'
   import IconComponent from './Icon'
+
+  let inlinerButtonText = 'Inline CSS in HTML'
+  let sampleButtonText = 'Sample HTML/CSS'
 
   const genAndSubmitSample = () => {
     window.dispatchEvent(new window.CustomEvent(EVENT_SUBMIT_EXAMPLE, {detail: {}}))
   }
+
   const inlineCssInHTML = () => {
     window.dispatchEvent(new window.CustomEvent(EVENT_INLINE_CSS, {detail: {}}))
+  }
+
+  const onScreenSizeMinMediaChange = (e) => {
+    if (e.matches) {
+      inlinerButtonText = 'Inline CSS'
+      sampleButtonText = 'Sample'
+    } else {
+      inlinerButtonText = 'Inline CSS in HTML'
+      sampleButtonText = 'Sample HTML/CSS'
+    }
   }
 
   const unsubscribeInlinerError = inlinerError.subscribe((errorValue) => {
     if (errorValue) {
       setTimeout(() => inlinerError.set(null), 3000)
     }
+  })
+
+  onMount(() => {
+    onScreenSizeMinMediaChange(screenSizeMinMedia)
+    screenSizeMinMedia.addEventListener('change', onScreenSizeMinMediaChange)
+    return () => screenSizeMinMedia.removeEventListener('change', onScreenSizeMinMediaChange)
   })
 
   onDestroy(unsubscribeInlinerError)
@@ -217,7 +238,7 @@
       class:editor-header-inline-button-error="{$inlinerError !== null}"
       on:click|preventDefault="{inlineCssInHTML}"
     >
-      {$inlinerError ? 'Inlining error' : 'Inline CSS'}
+      {$inlinerError ? 'Inlining error' : inlinerButtonText}
     </button>
     <div
       class="editor-header-inline-loader"
@@ -228,7 +249,7 @@
   </div>
   <div class="editor-header-item">
     <button class="editor-header-sample-button" on:click|preventDefault="{genAndSubmitSample}">
-      Sample HTML/CSS
+      {sampleButtonText}
     </button>
   </div>
 </div>
