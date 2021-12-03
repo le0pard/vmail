@@ -20,6 +20,20 @@ const sha256 = (message) => {
   })
 }
 
+const JSONstringifyOrder = (obj) => {
+  let allKeys = []
+  let seen = {}
+  JSON.stringify(obj, (key, value) => {
+    if (!(key in seen)) {
+      allKeys.push(key)
+      seen[key] = null
+    }
+    return value
+  })
+  allKeys.sort()
+  return JSON.stringify(obj, allKeys)
+}
+
 self.addEventListener('message', (event) => {
   if (event.data?.type === 'SKIP_WAITING') {
     self.skipWaiting()
@@ -56,7 +70,7 @@ registerRoute(
 
 const cachedAssets = self.__WB_MANIFEST
 
-sha256(JSON.stringify(cachedAssets)).then((rev) => {
+sha256(JSONstringifyOrder(cachedAssets)).then((rev) => {
   const revision = `${rev}-v1`
   precacheAndRoute([
     // favicons
