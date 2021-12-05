@@ -56,7 +56,14 @@ registerRoute(
 
 const cachedAssets = self.__WB_MANIFEST
 
-sha256(JSON.stringify(cachedAssets.sort())).then((rev) => {
+const searchCollator = new Intl.Collator('en', {
+  usage: 'sort',
+  sensitivity: 'base',
+  numeric: true
+})
+const sortClientsByUrlFun = (a, b) => searchCollator.compare(a.url, b.url)
+
+sha256(JSON.stringify(cachedAssets.sort(sortClientsByUrlFun))).then((rev) => {
   const revision = `${rev}-v1`
   precacheAndRoute([
     // favicons
