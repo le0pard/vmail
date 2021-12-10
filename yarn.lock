@@ -2555,16 +2555,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/view@npm:^0.19.26":
-  version: 0.19.26
-  resolution: "@codemirror/view@npm:0.19.26"
+"@codemirror/view@npm:^0.19.29":
+  version: 0.19.29
+  resolution: "@codemirror/view@npm:0.19.29"
   dependencies:
     "@codemirror/rangeset": ^0.19.0
     "@codemirror/state": ^0.19.3
     "@codemirror/text": ^0.19.0
     style-mod: ^4.0.0
     w3c-keyname: ^2.2.4
-  checksum: b1a47c94039b71df9288a9e4a56c751437fc6651f7d58265627aaf8597d5c22dd892be750f281dd054a66b9df591958b94c57f916c996a6cd5f26d2ec5d8448e
+  checksum: dcbdc2cfd709ff98899c5993a790f63b1b40c059ed47ce38dccd54cfc1324f83f00ada33ab2b5ad96d8043a39a0c02c2653253cc70ceb4796420f0eea01b4b0a
   languageName: node
   linkType: hard
 
@@ -4365,10 +4365,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:3.19.2":
-  version: 3.19.2
-  resolution: "core-js@npm:3.19.2"
-  checksum: a605f7b0448a7aa13731fd9a13525460681e15ce60ec0e1ff45e88b18b71e74f6c625959200f0f8376ec0a1eb94b0f06e3d6807a01c5a46f3871d08a2c4f1d58
+"core-js@npm:3.19.3":
+  version: 3.19.3
+  resolution: "core-js@npm:3.19.3"
+  checksum: eaa7afd87411393a7b1637fd0813957f689e91007219b6a951a1fe1aa08edccfddbbfbb1acb281a76dbe90b42fe7768377289258d81ba46e13c9919527aee95a
   languageName: node
   linkType: hard
 
@@ -5206,9 +5206,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:8.4.0":
-  version: 8.4.0
-  resolution: "eslint@npm:8.4.0"
+"eslint@npm:8.4.1":
+  version: 8.4.1
+  resolution: "eslint@npm:8.4.1"
   dependencies:
     "@eslint/eslintrc": ^1.0.5
     "@humanwhocodes/config-array": ^0.9.2
@@ -5250,7 +5250,7 @@ __metadata:
     v8-compile-cache: ^2.0.3
   bin:
     eslint: bin/eslint.js
-  checksum: 12eb9e7af353d4b8afbf5417f923a93e1da8aa065d97026d98c3e7f69442639eae5c013a5251fe20273dbbe9ad6f36445a985b3e9929e911dda79fb40e308eb0
+  checksum: d962cd7cd0f68ddc2412f47154b8992ad3af987cf47fa6e60e51a2b7d32a91f934388f7d29e2c45b16b7ac69f0d220d0a483189ec6ba43a8a480110c34f158f9
   languageName: node
   linkType: hard
 
@@ -9305,13 +9305,13 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"prettier-plugin-svelte@npm:^2.5.0":
-  version: 2.5.0
-  resolution: "prettier-plugin-svelte@npm:2.5.0"
+"prettier-plugin-svelte@npm:^2.5.1":
+  version: 2.5.1
+  resolution: "prettier-plugin-svelte@npm:2.5.1"
   peerDependencies:
     prettier: ^1.16.4 || ^2.0.0
     svelte: ^3.2.0
-  checksum: 0c9bf251c330f354aeda12e67ccf0a424345980a50a5cac2a99b87d50adceefd558719692b79e3274ee42e40aa4e0b44c8a9fa6b6908297b3ea7006b2ebcd90b
+  checksum: 433c0008749043a0ef16ecc27371db9cdd616b700d071e8f26fc933d23e466b2703b129643fabe1072151cf84dfb6ccad39d0baaa9f93f522d3e6bebb5a06d9e
   languageName: node
   linkType: hard
 
@@ -9932,15 +9932,15 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"sass-loader@npm:12.3.0":
-  version: 12.3.0
-  resolution: "sass-loader@npm:12.3.0"
+"sass-loader@npm:12.4.0":
+  version: 12.4.0
+  resolution: "sass-loader@npm:12.4.0"
   dependencies:
     klona: ^2.0.4
     neo-async: ^2.6.2
   peerDependencies:
     fibers: ">= 3.1.0"
-    node-sass: ^4.0.0 || ^5.0.0 || ^6.0.0
+    node-sass: ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0
     sass: ^1.3.0
     webpack: ^5.0.0
   peerDependenciesMeta:
@@ -9950,7 +9950,7 @@ fsevents@~2.3.2:
       optional: true
     sass:
       optional: true
-  checksum: b755e6d5ceddb70d54334b53f70546b4afc9af5f9704cc0e2666894d0568bdaeccb2b07056bd35465c22c51c55e1d790023b32b9aa0977080403036ef6c47b29
+  checksum: 0f7ca3633e7f61c412b0628766a9b57cb15f68def45e4303e68eb2f3a0722aec231956fbfd118489d93c997ab605470e89de8e3f7d6776830cc6366d9657d618
   languageName: node
   linkType: hard
 
@@ -11298,17 +11298,17 @@ fsevents@~2.3.2:
     "@codemirror/history": ^0.19.0
     "@codemirror/lang-html": ^0.19.4
     "@codemirror/state": ^0.19.6
-    "@codemirror/view": ^0.19.26
+    "@codemirror/view": ^0.19.29
     "@hotwired/stimulus": ^3.0.1
     "@hotwired/stimulus-webpack-helpers": ^1.0.1
     "@hotwired/turbo": 7.1.0
     babel-loader: 8.2.3
     comlink: ^4.3.1
-    core-js: 3.19.2
+    core-js: 3.19.3
     css-loader: 6.5.1
     css-minimizer-webpack-plugin: 3.2.0
     del: 6.0.0
-    eslint: 8.4.0
+    eslint: 8.4.1
     eslint-plugin-import: 2.25.3
     eslint-plugin-svelte3: ^3.2.1
     file-loader: 6.2.0
@@ -11325,17 +11325,17 @@ fsevents@~2.3.2:
     postcss-preset-env: 7.0.1
     postcss-reporter: 7.0.4
     prettier: ^2.5.1
-    prettier-plugin-svelte: ^2.5.0
+    prettier-plugin-svelte: ^2.5.1
     rucksack-css: ^1.0.2
     sass: 1.44.0
-    sass-loader: 12.3.0
+    sass-loader: 12.4.0
     style-loader: 3.3.1
     svelte: ^3.44.2
     svelte-loader: ^3.1.2
     svelte-preprocess: ^4.9.8
     terser-webpack-plugin: 5.2.5
     url-loader: 4.1.1
-    webpack: 5.64.4
+    webpack: 5.65.0
     webpack-assets-manifest: 5.0.6
     webpack-cli: 4.9.1
     workbox-webpack-plugin: 6.4.2
@@ -11350,13 +11350,13 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"watchpack@npm:^2.3.0":
-  version: 2.3.0
-  resolution: "watchpack@npm:2.3.0"
+"watchpack@npm:^2.3.1":
+  version: 2.3.1
+  resolution: "watchpack@npm:2.3.1"
   dependencies:
     glob-to-regexp: ^0.4.1
     graceful-fs: ^4.1.2
-  checksum: 54f577fe311ae6130b43c3202ddc5c66ea8cdc5e0569b6e1dbccf5c0f5f4f8d4d00b7b97f6ae6d53e9361766bf0dc4e6dc7b30e57392948af9795217f6d9d7a7
+  checksum: 70a34f92842d94b5d842980f866d568d7a467de667c96ae5759c759f46587e49265863171f4650bdbafc5f3870a28f2b4453e9e847098ec4b718b38926d47d22
   languageName: node
   linkType: hard
 
@@ -11444,9 +11444,9 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"webpack@npm:5.64.4":
-  version: 5.64.4
-  resolution: "webpack@npm:5.64.4"
+"webpack@npm:5.65.0":
+  version: 5.65.0
+  resolution: "webpack@npm:5.65.0"
   dependencies:
     "@types/eslint-scope": ^3.7.0
     "@types/estree": ^0.0.50
@@ -11470,14 +11470,14 @@ fsevents@~2.3.2:
     schema-utils: ^3.1.0
     tapable: ^2.1.1
     terser-webpack-plugin: ^5.1.3
-    watchpack: ^2.3.0
+    watchpack: ^2.3.1
     webpack-sources: ^3.2.2
   peerDependenciesMeta:
     webpack-cli:
       optional: true
   bin:
     webpack: bin/webpack.js
-  checksum: 62ac598291374fa5269c80fcd82ad3cbf8e8c3f837c2bf6ea80812812154d9f4d3390c6fdc1ce85323e6fdd46132e3e3db08cde9a1b4d61197879e867c7c1375
+  checksum: 221ab8ccd440cb678269e86689704bbef81cf41393eb266625873e30c6980ffaa055bb1a7d14bf9fc0f5a2e6f03d15d068cbb995bc876757c01a4ca27fd2870c
   languageName: node
   linkType: hard
 
