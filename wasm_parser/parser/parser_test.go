@@ -1,6 +1,7 @@
 package parser
 
 import (
+	"os"
 	"reflect"
 	"testing"
 )
@@ -564,4 +565,19 @@ func TestReportFromHTMLLinkTypes(t *testing.T) {
 			}
 		})
 	}
+}
+
+func BenchmarkReportFromHTML(b *testing.B) {
+	html, err := os.ReadFile("./bench.html")
+	if err != nil {
+		b.Fatalf(`Error to read bench.html, %v`, err)
+	}
+
+	for i := 0; i < b.N; i++ {
+		_, err = ReportFromHTML(html)
+		if err != nil {
+			b.Fatalf(`ReportFromHTML, %v`, err)
+		}
+	}
+
 }

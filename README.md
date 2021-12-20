@@ -35,6 +35,13 @@ $ bundle exec rake wasm:inliner # build wasm inliner module
 yarn prettier --write --plugin-search-dir=. ./webpack/components/*
 ```
 
+### Benchmark parser
+
+```bash
+$ cd wasm_parser/parser
+$ go test -bench=. -benchmem
+```
+
 ## Contributing
 
 1. Fork it
