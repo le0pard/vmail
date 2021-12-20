@@ -25,7 +25,7 @@ var caniuseJSON []byte
 
 const (
 	WHITESPACE            = " \t\r\n\f"
-	LIMIT_REPORT_LINES    = 30
+	LIMIT_REPORT_LINES    = 50
 	TWO_KEYS_MERGE_FORMAT = "%s||%s"
 )
 
