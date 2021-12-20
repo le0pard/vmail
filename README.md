@@ -39,7 +39,7 @@ yarn prettier --write --plugin-search-dir=. ./webpack/components/*
 
 ```bash
 $ cd wasm_parser/parser
-$ go test -bench=. -benchmem
+$ go test -benchmem -bench=.
 ```
 
 ## Contributing
