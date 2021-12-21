@@ -567,7 +567,7 @@ func TestReportFromHTMLLinkTypes(t *testing.T) {
 	}
 }
 
-func TestReportFromHTMLCSSWithNoSemicolumn(t *testing.T) {
+func TestReportFromHTMLCSSWithNoSemicolumns(t *testing.T) {
 	html := `<html><body>
 <style>
   @media (min-width: 576px) {
@@ -601,6 +601,10 @@ func TestReportFromHTMLCSSWithNoSemicolumn(t *testing.T) {
 		max-width: 3000px
 
 	}
+
+	.button3 {
+
+		max-width: 3000px}
 </style>
 </body></html>`
 	report, err := ReportFromHTML([]byte(html))
@@ -616,7 +620,7 @@ func TestReportFromHTMLCSSWithNoSemicolumn(t *testing.T) {
 		want      map[int]bool
 	}{
 		{"AtRuleCssStatements @media", report.AtRuleCssStatements["@media"][""].Lines, map[int]bool{3: true, 8: true}},
-		{"CssProperties max-width", report.CssProperties["max-width"][""].Lines, map[int]bool{5: true, 15: true, 18: true, 24: true, 31: true}},
+		{"CssProperties max-width", report.CssProperties["max-width"][""].Lines, map[int]bool{5: true, 15: true, 18: true, 24: true, 31: true, 37: true}},
 	}
 
 	for _, tt := range tests {

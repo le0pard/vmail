@@ -697,28 +697,22 @@ func (prs *ParserEngine) processCssInStyleTag(inlineStyle string, htmlTagPositio
 
 	correctLine := func(gt css.GrammarType, offset, cssLine int) int {
 		if css.DeclarationGrammar == gt && len(inlineStyleBytes) > offset && cssLine > 1 {
-			switch inlineStyleBytes[offset] {
-			case '\t', '\n', '\r', '\f', '}':
-				newLine := cssLine
-				startOffset := bytesToLine[newLine-1]
-				endOffset := offset
+			newLine := cssLine
+			startOffset := bytesToLine[newLine-1]
+			endOffset := offset
 
-				for {
-					declarationLine := inlineStyleBytes[startOffset:endOffset]
-					if len(bytes.Trim(declarationLine, " \t\r\n\f}")) > 0 {
-						return newLine
-					}
-
-					newLine = newLine - 1
-					if newLine < 1 {
-						return cssLine
-					}
-
-					endOffset = startOffset
-					startOffset = bytesToLine[newLine-1]
+			for {
+				if len(bytes.Trim(inlineStyleBytes[startOffset:endOffset], " \t\r\n\f}")) > 0 {
+					return newLine
 				}
-			default:
-				return cssLine
+
+				newLine = newLine - 1
+				if newLine < 1 {
+					return cssLine
+				}
+
+				endOffset = startOffset
+				startOffset = bytesToLine[newLine-1]
 			}
 		}
 		return cssLine
