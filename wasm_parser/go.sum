@@ -1,5 +1,3 @@
-github.com/le0pard/vmail v0.0.0-20211220223659-8fecae1f9530 h1:6ArHhkNsvRDLNzU7RlKuWPhtsUbtIYW+X56uv+ECgJ8=
-github.com/le0pard/vmail v0.0.0-20211220223659-8fecae1f9530/go.mod h1:0GugK0kmHaVQJ/7uyVWL1BWIX5VaeXviLo4nUPevRDM=
 github.com/tdewolff/parse/v2 v2.5.23-0.20211101212351-646f46fcfe51 h1:sBN719OLPTFZw0NDFl8SBfuXm7VIQ+gFztr2u37j/rM=
 github.com/tdewolff/parse/v2 v2.5.23-0.20211101212351-646f46fcfe51/go.mod h1:WzaJpRSbwq++EIQHYIRTpbYKNA3gn9it1Ik++q4zyho=
 github.com/tdewolff/test v1.0.6 h1:76mzYJQ83Op284kMT+63iCNCI7NEERsIN8dLM+RiKr4=
