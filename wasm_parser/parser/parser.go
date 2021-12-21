@@ -689,7 +689,7 @@ func (prs *ParserEngine) processCssInStyleTag(inlineStyle string, htmlTagPositio
 	)
 
 	inlineStyleBytes := []byte(inlineStyle)
-	lines := bytes.Split([]byte(inlineStyleBytes), []byte("\n"))
+	lines := bytes.Split(inlineStyleBytes, []byte("\n"))
 	for _, line := range lines {
 		bytesToLine = append(bytesToLine, cursorPos)
 		cursorPos += len(line) + 1 // "\n" provide additional byte
