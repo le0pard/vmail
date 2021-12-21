@@ -688,20 +688,50 @@ func (prs *ParserEngine) processCssInStyleTag(inlineStyle string, htmlTagPositio
 		cssLine     int = 0
 	)
 
-	lines := bytes.Split([]byte(inlineStyle), []byte("\n"))
+	inlineStyleBytes := []byte(inlineStyle)
+	lines := bytes.Split([]byte(inlineStyleBytes), []byte("\n"))
 	for _, line := range lines {
 		bytesToLine = append(bytesToLine, cursorPos)
 		cursorPos += len(line) + 1 // "\n" provide additional byte
 	}
 
-	getLineByOffset := func(offset int) int {
+	correctLine := func(gt css.GrammarType, offset, cssLine int) int {
+		if css.DeclarationGrammar == gt && len(inlineStyleBytes) > offset && cssLine > 1 {
+			switch inlineStyleBytes[offset] {
+			case '\t', '\n', '\r', '\f', '}':
+				newLine := cssLine
+				startOffset := bytesToLine[newLine-1]
+				endOffset := offset
+
+				for {
+					declarationLine := inlineStyleBytes[startOffset:endOffset]
+					if len(bytes.Trim(declarationLine, " \t\r\n\f}")) > 0 {
+						return newLine
+					}
+
+					newLine = newLine - 1
+					if newLine < 1 {
+						return cssLine
+					}
+
+					endOffset = startOffset
+					startOffset = bytesToLine[newLine-1]
+				}
+			default:
+				return cssLine
+			}
+		}
+		return cssLine
+	}
+
+	getLineByOffset := func(gt css.GrammarType, offset int) int {
 		for {
 			if len(bytesToLine) <= cssLine {
-				return cssLine
+				return correctLine(gt, offset, cssLine)
 			}
 
 			if bytesToLine[cssLine] > offset {
-				return cssLine
+				return correctLine(gt, offset, cssLine)
 			}
 
 			cssLine += 1
@@ -712,13 +742,13 @@ func (prs *ParserEngine) processCssInStyleTag(inlineStyle string, htmlTagPositio
 	for {
 		gt, _, data := p.Next()
 
-		// log.Printf("[checkTagInlinedStyle]: %v - %v - %v\n", gt, string(data), p.Values())
+		// log.Printf("[checkTagInlinedStyle]: %v - %v - %v - %v\n", gt, string(data), p.Values(), p.Offset())
 
 		if gt == css.ErrorGrammar {
 			return
 		}
 
-		position := htmlTagPosition + getLineByOffset(p.Offset()) - 1
+		position := htmlTagPosition + getLineByOffset(gt, p.Offset()) - 1
 		prs.checkCssParsedToken(p, gt, data, position)
 	}
 }

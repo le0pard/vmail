@@ -567,6 +567,68 @@ func TestReportFromHTMLLinkTypes(t *testing.T) {
 	}
 }
 
+func TestReportFromHTMLCSSWithNoSemicolumn(t *testing.T) {
+	html := `<html><body>
+<style>
+  @media (min-width: 576px) {
+    .container, .container-sm {
+        max-width: 540px
+        }
+    }
+  @media (min-width: 100px) {
+    .container, .container-sm {
+
+
+
+
+
+        max-width: 1000px
+        }
+    }
+  .button {max-width: 1000px
+
+
+
+	}
+	.button2 {
+				max-width: 1000px
+
+
+
+	}
+	.button3 {
+
+		max-width: 3000px
+
+	}
+</style>
+</body></html>`
+	report, err := ReportFromHTML([]byte(html))
+	if err != nil {
+		t.Fatalf(`ReportFromHTML("%s"), %v`, html, err)
+	}
+
+	// log.Printf("report: %v\n", report)
+
+	var tests = []struct {
+		checkType string
+		got       map[int]bool
+		want      map[int]bool
+	}{
+		{"AtRuleCssStatements @media", report.AtRuleCssStatements["@media"][""].Lines, map[int]bool{3: true, 8: true}},
+		{"CssProperties max-width", report.CssProperties["max-width"][""].Lines, map[int]bool{5: true, 15: true, 18: true, 24: true, 31: true}},
+	}
+
+	for _, tt := range tests {
+		testname := tt.checkType
+		t.Run(testname, func(t *testing.T) {
+			if !reflect.DeepEqual(tt.got, tt.want) {
+				t.Errorf("%s: got %v, want %v", tt.checkType, tt.got, tt.want)
+			}
+		})
+	}
+}
+
 func BenchmarkReportFromHTML(b *testing.B) {
 	html, err := os.ReadFile("./bench.html")
 	if err != nil {
