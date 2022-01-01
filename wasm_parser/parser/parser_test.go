@@ -636,14 +636,14 @@ func TestReportFromHTMLCSSWithNoSemicolumns(t *testing.T) {
 func TestReportFromHTMLHasPseudoSelector(t *testing.T) {
 	html := `<html><body>
 <style>
-  div:has(p) {
+	div:has(p) {
 		color: red;
 	}
 	div:has(+ div) {
 		color: blue;
 	}
 	a:has(> img) {
-  	border: 20px solid white;
+		border: 20px solid white;
 	}
 	ul li:not(:first-of-type) {
 		color: red;
