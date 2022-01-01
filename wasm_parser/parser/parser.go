@@ -614,8 +614,12 @@ func (prs *ParserEngine) checkCssParsedToken(p *css.Parser, gt css.GrammarType, 
 				}
 			}
 
-			if prevTokenType.TokenType == css.ColonToken && val.TokenType == css.IdentToken {
-				prs.checkCssPseudoSelector(string(val.Data), position)
+			if prevTokenType.TokenType == css.ColonToken && (val.TokenType == css.IdentToken || val.TokenType == css.FunctionToken) {
+				pseudoName := string(val.Data)
+				if val.TokenType == css.FunctionToken { // convert "has(" to "has"
+					pseudoName = strings.ReplaceAll(pseudoName, "(", "")
+				}
+				prs.checkCssPseudoSelector(pseudoName, position)
 			}
 			if prevTokenType.TokenType == css.DelimToken && string(prevTokenType.Data) == "." && val.TokenType == css.IdentToken {
 				prs.checkCssSelectorType(CLASS_SELECTOR_TYPE, position)

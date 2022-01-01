@@ -633,6 +633,50 @@ func TestReportFromHTMLCSSWithNoSemicolumns(t *testing.T) {
 	}
 }
 
+func TestReportFromHTMLHasPseudoSelector(t *testing.T) {
+	html := `<html><body>
+<style>
+  div:has(p) {
+		color: red;
+	}
+	div:has(+ div) {
+		color: blue;
+	}
+	a:has(> img) {
+  	border: 20px solid white;
+	}
+	ul li:not(:first-of-type) {
+		color: red;
+	}
+</style>
+</body></html>`
+	report, err := ReportFromHTML([]byte(html))
+	if err != nil {
+		t.Fatalf(`ReportFromHTML("%s"), %v`, html, err)
+	}
+
+	// log.Printf("report: %v\n", report)
+
+	var tests = []struct {
+		checkType string
+		got       map[int]bool
+		want      map[int]bool
+	}{
+		{"CssPseudoSelectors has", report.CssPseudoSelectors["has"].Lines, map[int]bool{3: true, 6: true, 9: true}},
+		{"CssPseudoSelectors not", report.CssPseudoSelectors["not"].Lines, map[int]bool{12: true}},
+		{"CssPseudoSelectors first-of-type", report.CssPseudoSelectors["first-of-type"].Lines, map[int]bool{12: true}},
+	}
+
+	for _, tt := range tests {
+		testname := tt.checkType
+		t.Run(testname, func(t *testing.T) {
+			if !reflect.DeepEqual(tt.got, tt.want) {
+				t.Errorf("%s: got %v, want %v", tt.checkType, tt.got, tt.want)
+			}
+		})
+	}
+}
+
 func BenchmarkReportFromHTML(b *testing.B) {
 	html, err := os.ReadFile("./bench.html")
 	if err != nil {

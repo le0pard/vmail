@@ -65,6 +65,7 @@ class CaniuseGenerator # rubocop:disable Metrics/ClassLength
     'html-style' => [['style', '']],
     'html-svg' => [['svg', '']],
     'html-table' => [['table', '']],
+    'html-target' => [%w[a target]],
     'html-textarea' => [['textarea', '']],
     'html-video' => [['video', '']],
     'html-wbr' => [['wbr', '']]
@@ -192,6 +193,8 @@ class CaniuseGenerator # rubocop:disable Metrics/ClassLength
   }.freeze
 
   CSS_FUNCTIONS_MAPS = {
+    'css-linear-gradient' => 'linear-gradient',
+    'css-radial-gradient' => 'radial-gradient',
     'css-rgb' => 'rgb',
     'css-rgba' => 'rgba',
     'css-unit-calc' => 'calc',
@@ -206,6 +209,7 @@ class CaniuseGenerator # rubocop:disable Metrics/ClassLength
     'css-pseudo-class-first-child' => 'first-child',
     'css-pseudo-class-first-of-type' => 'first-of-type',
     'css-pseudo-class-focus' => 'focus',
+    'css-pseudo-class-has' => 'has',
     'css-pseudo-class-hover' => 'hover',
     'css-pseudo-class-last-child' => 'last-child',
     'css-pseudo-class-last-of-type' => 'last-of-type',
@@ -296,7 +300,7 @@ class CaniuseGenerator # rubocop:disable Metrics/ClassLength
       html5_doctype: generate_for_single_key('html-doctype')
     }
 
-    File.open(file, 'w') { |f| f.write JSON.dump(rules) }
+    File.write(file, JSON.dump(rules))
     warn_about_now_covered_rules
   end
 
