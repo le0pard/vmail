@@ -58,7 +58,7 @@ jobs:
         run: bundle exec rubocop
 
       - name: Run eslint linter
-        run: yarn eslint
+        run: yarn lint
 
       - name: Run tests for GO parser
         run: go test -v

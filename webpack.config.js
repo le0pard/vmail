@@ -38,22 +38,6 @@ const cssLoaders = [
   }
 ]
 
-const sassLoaders = [
-  ...cssLoaders,
-  {
-    loader: 'sass-loader',
-    options: {
-      sourceMap: true,
-      webpackImporter: true,
-      implementation: require('sass'),
-      sassOptions: {
-        fiber: false,
-        includePaths: [path.join(__dirname, 'webpack', 'css')]
-      }
-    }
-  }
-]
-
 let config = {
   target: 'web',
   mode: currentEnv,
@@ -63,8 +47,8 @@ let config = {
     maxAssetSize: 1024000
   },
   entry: {
-    'app': preScriptsEnv.concat(['./webpack/app.js']),
-    'ww': preScriptsEnv.concat(['./webpack/ww.js'])
+    'app': preScriptsEnv.concat(['./assets/app.js']),
+    'ww': preScriptsEnv.concat(['./assets/ww.js'])
   },
 
   output: {
@@ -72,10 +56,11 @@ let config = {
     // that all webpacked assets start with webpack/
 
     // must match config.webpack.output_dir
-    path: path.join(__dirname, '.tmp', 'dist'),
+    path: path.join(__dirname, '.assets-build'),
     publicPath: '/',
     filename: isProduction ? '[name]-[contenthash].js' : '[name].js',
-    assetModuleFilename: 'assets/[name]-[contenthash][ext]'
+    assetModuleFilename: 'assets/[name]-[contenthash][ext]',
+    clean: true
   },
 
   resolve: {
@@ -83,7 +68,7 @@ let config = {
       svelte: path.dirname(require.resolve('svelte/package.json'))
     },
     modules: [
-      path.join(__dirname, 'webpack'),
+      path.join(__dirname, 'assets'),
       path.join(__dirname, 'node_modules')
     ],
     extensions: ['.mjs', '.js', '.json', '.svelte'],
@@ -135,11 +120,6 @@ let config = {
         test: /\.css$/,
         sideEffects: true,
         use: cssLoaders
-      },
-      {
-        test: /\.(scss|sass)$/,
-        sideEffects: true,
-        use: sassLoaders
       }
     ]
   },
@@ -159,7 +139,15 @@ let config = {
 config.optimization = config.optimization || {}
 config.optimization.runtimeChunk = false
 config.optimization.splitChunks = {
-  chunks: 'async'
+  chunks: 'async',
+  cacheGroups: {
+    styles: {
+      name: 'app',
+      type: 'css/mini-extract',
+      chunks: 'all',
+      enforce: true
+    }
+  }
 }
 
 config.plugins.push(
@@ -219,14 +207,14 @@ if (isProduction) {
 
 config.plugins.push(
   new WebpackAssetsManifest({
-    output: 'assets-manifest.json',
+    output: 'manifest.json',
     publicPath: config.output.publicPath,
     writeToDisk: true,
     integrity: true,
     integrityHashes: ['sha256']
   }),
   new WorkboxPlugin.InjectManifest({
-    swSrc: './webpack/sw.js',
+    swSrc: './assets/sw.js',
     swDest: 'sw.js',
     compileSrc: true,
     maximumFileSizeToCacheInBytes: (isProduction ? 2097152 : 15730000)

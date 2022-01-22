@@ -1,0 +1,121 @@
+:root {
+  --baseColor: #181c32;
+  --bgColor: #f9fafb;
+  --headColor: #5e6278;
+  --headHoverColor: #04c8c8;
+  --headBgColor: #fff;
+  --headBorderColor: #eff2f5;
+  --linkColor: #04aa77;
+  --linkHoverColor: #36d3d3;
+  --cardBgColor: #fff;
+  --cardBaseColor: #7e8299;
+  --successColor: #04c8c8;
+  --successBgColor: #dcfdfd;
+  --warningColor: #d9a900;
+  --warningBgColor: #fff8dd;
+  --errorColor: #f1416c;
+  --errorBgColor: #fff5f8;
+  --clientColor: #3f4254;
+  --buttonColor: #fff;
+  --buttonBgColor: #0bb783;
+  --buttonBgHoverColor: #04aa77;
+  --buttonBgActiveColor: #00afaf;
+  --mutedButtonColor: #5e6278;
+  --mutedButtonBgColor: #f5f8fa;
+  --mutedButtonHoverColor: #7e8299;
+  --mutedButtonHoverBgColor: #e4e6ef;
+  --splitColor: #7e8299;
+  --splitHoverColor: #04c8c8;
+  --splitBgColor: #f5f8fa;
+  --splitBgHoverColor: #dcfdfd;
+  --splitBorderColor: #e4e6ef;
+}
+
+:root.dark {
+  --baseColor: #fff;
+  --bgColor: #151521;
+  --headColor: #92929f;
+  --headHoverColor: #0bb783;
+  --headBgColor: #1e1e2d;
+  --headBorderColor: #2b2b40;
+  --linkColor: #04aa77;
+  --linkHoverColor: #36d3d3;
+  --cardBgColor: #282c34;
+  --cardBaseColor: #8a8a9c;
+  --successColor: #0bb783;
+  --successBgColor: #1c3238;
+  --warningColor: #d9a900;
+  --warningBgColor: #392f28;
+  --errorColor: #f64e60;
+  --errorBgColor: #3a2434;
+  --clientColor: #cdcdde;
+  --buttonColor: #fff;
+  --buttonBgColor: #0bb783;
+  --buttonBgHoverColor: #04aa77;
+  --buttonBgActiveColor: #00afaf;
+  --mutedButtonColor: #92929f;
+  --mutedButtonBgColor: #1b1b29;
+  --mutedButtonHoverColor: #cdcdde;
+  --mutedButtonHoverBgColor: #323248;
+  --splitColor: #cdcdde;
+  --splitHoverColor: #0bb783;
+  --splitBgColor: #1b1b29;
+  --splitBgHoverColor: #1c3238;
+  --splitBorderColor: #323248;
+}
+
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+html {
+  font-size: responsive 14px 18px;
+  font-range: 420px 1440px;
+}
+
+body {
+  font-family: system-ui;
+  font-weight: 400;
+  line-height: 1.5rem;
+  background-color: var(--bgColor);
+  color: var(--baseColor);
+}
+
+h1, h2, h3, h4 {
+  line-height: 1.2;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+h1 {
+  font-size: 1.75rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+}
+
+h3 {
+  font-size: 1.35rem;
+}
+
+h4 {
+  font-size: 1.1rem;
+}
+
+a {
+  color: var(--linkColor);
+  text-decoration: none;
+}
+a:hover, a:active {
+  color: var(--linkHoverColor);
+}
+
+.parser-controller {
+  height: 100%;
+}
+
+.parser-container {
+  height: 100%;
+}
