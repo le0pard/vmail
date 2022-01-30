@@ -10,6 +10,7 @@
 # Ignore the build directory
 /build
 /.assets-build
+/tmp
 
 # ignore wasm
 *.wasm
