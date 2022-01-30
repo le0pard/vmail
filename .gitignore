@@ -20,7 +20,7 @@
 
 .DS_Store
 .cache
-node_modules/
+/node_modules
 yarn-error.log
 
 .yarn/*
