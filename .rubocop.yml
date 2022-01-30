@@ -155,3 +155,11 @@ Style/NumericPredicate:
   Exclude:
     - 'spec/**/*'
 
+Naming/BlockForwarding:
+  Enabled: true
+  EnforcedStyle: explicit
+
+Style/HashSyntax:
+  Enabled: true
+  EnforcedStyle: ruby19
+  EnforcedShorthandSyntax: either
