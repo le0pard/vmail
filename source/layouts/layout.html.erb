@@ -47,8 +47,8 @@
       gtag('config', 'G-CWKXJRGZ81');
     </script>
 
-    <%= stylesheet_pack_tag "app" %>
-    <%= javascript_pack_tag "app" %>
+    <%= external_pipeline_stylesheet_tag :webpack, ['app.css', 'src'], media: 'all' %>
+    <%= external_pipeline_javascript_tag :webpack, ['app.js', 'src'], defer: 'defer', async: 'async', 'data-turbo-track' => 'reload' %>
 </head>
 <body>
 

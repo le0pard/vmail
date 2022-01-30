@@ -40,7 +40,8 @@ activate :external_pipeline,
          command: "yarn run assets:#{build? ? 'build' : 'watch'}",
          source: assets_dir,
          latency: 2,
-         ignore_exit_code: true
+         ignore_exit_code: true,
+         manifest_json: File.expand_path('manifest.json', assets_dir)
 
 activate :auto_blank_links,
          ignore_hostnames: ['vmail.leopard.in.ua', 'www.vmail.leopard.in.ua']
