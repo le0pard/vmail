@@ -68,8 +68,8 @@ let config = {
       svelte: path.dirname(require.resolve('svelte/package.json'))
     },
     modules: [
-      path.join(__dirname, 'assets'),
-      path.join(__dirname, 'node_modules')
+      'node_modules',
+      path.join(__dirname, 'assets')
     ],
     extensions: ['.mjs', '.js', '.json', '.svelte'],
     mainFields: ['svelte', 'browser', 'module', 'main']
