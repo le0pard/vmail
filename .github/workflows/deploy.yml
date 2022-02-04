@@ -59,9 +59,9 @@ jobs:
         with:
           path: |
             tmp/cache
-          key: ${{ runner.os }}-builder-cache-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-builder-cache-v1-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-builder-cache-
+            ${{ runner.os }}-builder-cache-v1-
 
       - name: Run rubocop linter
         run: bundle exec rubocop
