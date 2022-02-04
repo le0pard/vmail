@@ -59,9 +59,9 @@ jobs:
         with:
           path: |
             tmp/cache
-          key: ${{ runner.os }}-builder-cache-v1-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-builder-cache-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-builder-cache-v1-
+            ${{ runner.os }}-builder-cache-
 
       - name: Run rubocop linter
         run: bundle exec rubocop
@@ -84,7 +84,7 @@ jobs:
         run: bundle exec rake wasm:inliner
 
       - name: Build website
-        run: bundle exec middleman build
+        run: bundle exec middleman build --verbose
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@4.1.0
