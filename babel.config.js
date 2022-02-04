@@ -21,7 +21,6 @@ module.exports = function(api) {
         '@babel/preset-env',
         {
           targets: browserlist,
-          bugfixes: true,
           modules: (isTestEnv ? 'auto' : false),
           useBuiltIns: 'usage',
           corejs: 3,
