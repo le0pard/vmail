@@ -68,9 +68,19 @@
   outline: none;
 }
 
-html {
-  font-size: responsive 14px 18px;
-  font-range: 420px 1440px;
+:root {
+  font-size: 14px;
+}
+
+@media (min-width: 420px) and (max-width: 1440px) {
+  :root {
+    font-size: calc( 14px + (18 - 14) * ( (100vw - 420px) / ( 1440 - 420) ));
+  }
+}
+@media (min-width: 1440px) {
+  :root {
+    font-size: 18px;
+  }
 }
 
 body {

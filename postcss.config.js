@@ -5,7 +5,6 @@ module.exports = {
     require('postcss-import')({
       path: ['app/javascript/src']
     }),
-    require('rucksack-css'),
     require('postcss-preset-env')({
       stage: 2,
       browsers: browserlist,
