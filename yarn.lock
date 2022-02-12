@@ -5033,13 +5033,6 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"picocolors@npm:^0.2.1":
-  version: 0.2.1
-  resolution: "picocolors@npm:0.2.1"
-  checksum: 3b0f441f0062def0c0f39e87b898ae7461c3a16ffc9f974f320b44c799418cabff17780ee647fda42b856a1dc45897e2c62047e1b546d94d6d5c6962f45427b2
-  languageName: node
-  linkType: hard
-
 "picocolors@npm:^1.0.0":
   version: 1.0.0
   resolution: "picocolors@npm:1.0.0"
@@ -5078,15 +5071,6 @@ fsevents@~2.3.2:
   peerDependencies:
     postcss: ^8.0.2
   checksum: 6e0e872af10ba040af79fd0ee63b29cd6bc87a23a146fe71f9942d15769619c1f5b993b3238bdf30eb4f4c24887d2b85755692bc17e21e0ed3b24bd650cbf38b
-  languageName: node
-  linkType: hard
-
-"postcss-browser-reporter@npm:0.6.0":
-  version: 0.6.0
-  resolution: "postcss-browser-reporter@npm:0.6.0"
-  dependencies:
-    postcss: ^7.0.14
-  checksum: ccd1da6ba538e2c6ae69d9b6e6937bff628694125e1d5fb42e6b235928cea96db1ea0108340454d96fdf382659c3cd338cb90955b10d9a25c2f711146e75f2c5
   languageName: node
   linkType: hard
 
@@ -5840,16 +5824,6 @@ fsevents@~2.3.2:
     picocolors: ^1.0.0
     source-map-js: ^1.0.2
   checksum: 60e7808f39c4a9d0fa067bfd5eb906168c4eb6d3ff0093f7d314d1979b001a16363deedccd368a7df869c63ad4ae350d27da439c94ff3fb0f8fc93d49fe38a90
-  languageName: node
-  linkType: hard
-
-"postcss@npm:^7.0.14":
-  version: 7.0.39
-  resolution: "postcss@npm:7.0.39"
-  dependencies:
-    picocolors: ^0.2.1
-    source-map: ^0.6.1
-  checksum: 4ac793f506c23259189064bdc921260d869a115a82b5e713973c5af8e94fbb5721a5cc3e1e26840500d7e1f1fa42a209747c5b1a151918a9bc11f0d7ed9048e3
   languageName: node
   linkType: hard
 
@@ -6993,7 +6967,6 @@ fsevents@~2.3.2:
     mini-css-extract-plugin: 2.5.3
     normalize.css: 8.0.1
     postcss: 8.4.6
-    postcss-browser-reporter: 0.6.0
     postcss-import: 14.0.2
     postcss-load-config: ^3.1.1
     postcss-loader: 6.2.1
