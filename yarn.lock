@@ -1483,7 +1483,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/rangeset@npm:^0.19.0, @codemirror/rangeset@npm:^0.19.1, @codemirror/rangeset@npm:^0.19.5":
+"@codemirror/rangeset@npm:^0.19.0, @codemirror/rangeset@npm:^0.19.1, @codemirror/rangeset@npm:^0.19.5, @codemirror/rangeset@npm:^0.19.6":
   version: 0.19.6
   resolution: "@codemirror/rangeset@npm:0.19.6"
   dependencies:
@@ -1664,7 +1664,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lezer/common@npm:^0.15.0, @lezer/common@npm:^0.15.5":
+"@lezer/common@npm:^0.15.0, @lezer/common@npm:^0.15.11, @lezer/common@npm:^0.15.5":
   version: 0.15.11
   resolution: "@lezer/common@npm:0.15.11"
   checksum: 5cabce5493b9392bb54816d6b921dae20d154b175423479b408e990fdf572fd2ed77a6b2df0ed6ef26d779eeb66ec737d10aa2312e1ffecbcec22e14b19f7be3
@@ -6948,11 +6948,13 @@ fsevents@~2.3.2:
     "@codemirror/highlight": ^0.19.7
     "@codemirror/history": ^0.19.2
     "@codemirror/lang-html": ^0.19.4
+    "@codemirror/rangeset": ^0.19.6
     "@codemirror/state": ^0.19.6
     "@codemirror/view": ^0.19.40
     "@hotwired/stimulus": ^3.0.1
     "@hotwired/stimulus-webpack-helpers": ^1.0.1
     "@hotwired/turbo": 7.1.0
+    "@lezer/common": ^0.15.11
     babel-loader: 8.2.3
     comlink: ^4.3.1
     core-js: 3.21.0
@@ -6982,6 +6984,12 @@ fsevents@~2.3.2:
     webpack: 5.68.0
     webpack-assets-manifest: 5.1.0
     webpack-cli: 4.9.2
+    workbox-background-sync: ^6.4.2
+    workbox-core: ^6.4.2
+    workbox-expiration: ^6.4.2
+    workbox-precaching: ^6.4.2
+    workbox-routing: ^6.4.2
+    workbox-strategies: ^6.4.2
     workbox-webpack-plugin: 6.4.2
     workbox-window: 6.4.2
   languageName: unknown
@@ -7183,7 +7191,7 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"workbox-background-sync@npm:6.4.2":
+"workbox-background-sync@npm:6.4.2, workbox-background-sync@npm:^6.4.2":
   version: 6.4.2
   resolution: "workbox-background-sync@npm:6.4.2"
   dependencies:
@@ -7257,14 +7265,14 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"workbox-core@npm:6.4.2":
+"workbox-core@npm:6.4.2, workbox-core@npm:^6.4.2":
   version: 6.4.2
   resolution: "workbox-core@npm:6.4.2"
   checksum: bbdf4346e85d775d7162a49710957083bfa2b8cfc50b475bce02fcb62879ef1619ff381b00c969553a48b0c64c8b5ef7d9fce23fd5a64df1df8ed8f78667f23a
   languageName: node
   linkType: hard
 
-"workbox-expiration@npm:6.4.2":
+"workbox-expiration@npm:6.4.2, workbox-expiration@npm:^6.4.2":
   version: 6.4.2
   resolution: "workbox-expiration@npm:6.4.2"
   dependencies:
@@ -7295,7 +7303,7 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"workbox-precaching@npm:6.4.2":
+"workbox-precaching@npm:6.4.2, workbox-precaching@npm:^6.4.2":
   version: 6.4.2
   resolution: "workbox-precaching@npm:6.4.2"
   dependencies:
@@ -7329,7 +7337,7 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"workbox-routing@npm:6.4.2":
+"workbox-routing@npm:6.4.2, workbox-routing@npm:^6.4.2":
   version: 6.4.2
   resolution: "workbox-routing@npm:6.4.2"
   dependencies:
@@ -7338,7 +7346,7 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"workbox-strategies@npm:6.4.2":
+"workbox-strategies@npm:6.4.2, workbox-strategies@npm:^6.4.2":
   version: 6.4.2
   resolution: "workbox-strategies@npm:6.4.2"
   dependencies:
