@@ -50,7 +50,7 @@
     top: 0.33rem;
     z-index: 2;
     transform: translate(0);
-    transition: transform 0.5s ease, background 0.5s ease;
+    transition: transform 0.5s ease;
   }
 
   .toggle__dark::before {
