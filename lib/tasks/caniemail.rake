@@ -169,6 +169,7 @@ class CaniuseGenerator # rubocop:disable Metrics/ClassLength
     'css-vertical-align' => [['vertical-align', '']],
     'css-visibility' => [['visibility', '']],
     'css-white-space' => [['white-space', '']],
+    'css-word-break' => [['word-break', '']],
     'css-width' => [['width', '']],
     'css-z-index' => [['z-index', '']]
   }.freeze
