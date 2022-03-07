@@ -72,7 +72,7 @@ jobs:
         run: bundle exec rake wasm:inliner
 
       - name: Build website
-        run: bundle exec middleman build --verbose
+        run: bundle exec middleman build
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4.2.3
