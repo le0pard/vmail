@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/middleman/middleman
-  revision: fda46ad4f7b5d79454fd083ee95f6b0edc38447b
+  revision: 11c8c21738446a8bd9a0bfc728ff4185e1ea0a01
   specs:
     middleman (5.0.0.rc.2)
       coffee-script (~> 2.4)
@@ -129,12 +129,12 @@ GEM
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     memoist (0.16.2)
-    mini_portile2 (2.7.1)
+    mini_portile2 (2.8.0)
     minitest (5.15.0)
     multi_json (1.15.0)
     multipart-post (2.1.1)
-    nokogiri (1.13.1)
-      mini_portile2 (~> 2.7.0)
+    nokogiri (1.13.3)
+      mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
     oj (3.13.11)
     padrino-helpers (0.15.1)
@@ -143,7 +143,7 @@ GEM
       tilt (>= 1.4.1, < 3)
     padrino-support (0.15.1)
     parallel (1.21.0)
-    parser (3.1.0.0)
+    parser (3.1.1.0)
       ast (~> 2.4.1)
     parslet (2.0.0)
     public_suffix (4.0.6)
@@ -175,9 +175,9 @@ GEM
       rubocop-ast (>= 1.15.1, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 3.0)
-    rubocop-ast (1.15.2)
-      parser (>= 3.0.1.1)
-    rubocop-performance (1.13.2)
+    rubocop-ast (1.16.0)
+      parser (>= 3.1.1.0)
+    rubocop-performance (1.13.3)
       rubocop (>= 1.7.0, < 2.0)
       rubocop-ast (>= 0.4.0)
     rubocop-rake (0.6.0)
@@ -228,4 +228,4 @@ DEPENDENCIES
   rubocop-rake (>= 0.5.1)
 
 BUNDLED WITH
-   2.3.4
+   2.3.7
