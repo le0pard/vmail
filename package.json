@@ -13,11 +13,11 @@
     "lint": "eslint --ext .svelte,.js assets/"
   },
   "dependencies": {
-    "@babel/core": "7.17.5",
+    "@babel/core": "7.17.7",
     "@babel/plugin-transform-runtime": "7.17.0",
     "@babel/preset-env": "7.16.11",
-    "@babel/runtime": "7.17.2",
-    "@babel/runtime-corejs3": "7.17.2",
+    "@babel/runtime": "7.17.7",
+    "@babel/runtime-corejs3": "7.17.7",
     "@codemirror/commands": "^0.19.8",
     "@codemirror/gutter": "^0.19.9",
     "@codemirror/highlight": "^0.19.7",
@@ -33,7 +33,7 @@
     "babel-loader": "8.2.3",
     "comlink": "^4.3.1",
     "core-js": "3.21.1",
-    "css-loader": "6.7.0",
+    "css-loader": "6.7.1",
     "css-minimizer-webpack-plugin": "3.4.1",
     "file-loader": "6.2.0",
     "focus-visible": "^5.2.0",
@@ -64,7 +64,7 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.17.0",
-    "eslint": "8.10.0",
+    "eslint": "8.11.0",
     "eslint-import-resolver-node": "^0.3.6",
     "eslint-plugin-import": "2.25.4",
     "eslint-plugin-svelte3": "^3.4.1",
