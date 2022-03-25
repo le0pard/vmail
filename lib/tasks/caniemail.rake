@@ -153,6 +153,7 @@ class CaniuseGenerator # rubocop:disable Metrics/ClassLength
     'css-object-fit' => [['object-fit', '']],
     'css-object-position' => [['object-position', '']],
     'css-opacity' => [['opacity', '']],
+    'css-outline' => [['outline', '']],
     'css-overflow' => [['overflow', '']],
     'css-padding' => [['padding', '']],
     'css-position' => [['position', '']],
