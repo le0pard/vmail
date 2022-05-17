@@ -83,6 +83,7 @@ let config = {
           loader: 'svelte-loader',
           options: {
             compilerOptions: {
+              cssHash: ({hash, css}) => `vml-${hash(css)}`,
               dev: !isProduction
             },
             emitCss: isProduction,

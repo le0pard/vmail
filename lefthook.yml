@@ -6,7 +6,7 @@ pre-commit:
       run: bundle exec rubocop -c ./.rubocop.yml {staged_files}
     eslint:
       glob: '*.{js,svelte}'
-      run: ./node_modules/.bin/eslint {staged_files}
+      run: yarn run eslint {staged_files}
     bundle-check:
       glob: '{Gemfile,Gemfile.lock,*.gemspec}'
       run: bundle check
