@@ -20,6 +20,10 @@ on:
   schedule:
     - cron: '16 8 * * 5'
 
+env:
+  GOARCH: wasm
+  GOOS: js
+
 jobs:
   analyze:
     name: Analyze
