@@ -181,8 +181,10 @@
     const editorLine = editorView.state.doc.line(line)
     const selection = EditorSelection.cursor(editorLine.from)
     editorView.dispatch({
-      effects: EditorView.centerOn.of(selection),
-      selection
+      selection,
+      effects: EditorView.scrollIntoView(selection, {
+        y: 'center'
+      })
     })
     editorView.focus()
   }
