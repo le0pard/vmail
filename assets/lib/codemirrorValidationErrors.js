@@ -1,6 +1,5 @@
-import {RangeSet} from '@codemirror/rangeset'
-import {StateField, StateEffect} from '@codemirror/state'
-import {GutterMarker} from '@codemirror/gutter'
+import {RangeSet, StateField, StateEffect} from '@codemirror/state'
+import {GutterMarker} from '@codemirror/view'
 
 export const validationErrorsMarker = new (class extends GutterMarker {
   toDOM() {

@@ -3,11 +3,9 @@
 <script>
   import {onMount, onDestroy, getContext} from 'svelte'
   import {EditorState, EditorSelection} from '@codemirror/state'
-  import {EditorView, keymap} from '@codemirror/view'
-  import {defaultKeymap} from '@codemirror/commands'
-  import {history, historyKeymap} from '@codemirror/history'
-  import {lineNumbers, highlightActiveLineGutter, gutter} from '@codemirror/gutter'
-  import {defaultHighlightStyle} from '@codemirror/highlight'
+  import {EditorView, keymap, lineNumbers, highlightActiveLineGutter, gutter} from '@codemirror/view'
+  import {defaultKeymap, history, historyKeymap} from '@codemirror/commands'
+  import {defaultHighlightStyle, syntaxHighlighting} from '@codemirror/language'
   import {html} from '@codemirror/lang-html'
   import {oneDarkTheme, oneDarkHighlightStyle} from 'lib/codemirrorDarkTheme'
   import {isDarkThemeON} from 'stores/theme'
@@ -40,7 +38,10 @@
   const getEditorState = (doc = '') => {
     const [eTheme, eThemeHighLight] = (() => {
       if ($isDarkThemeON) {
-        return [oneDarkTheme, oneDarkHighlightStyle]
+        return [
+          oneDarkTheme,
+          syntaxHighlighting(oneDarkHighlightStyle)
+        ]
       }
 
       return [
@@ -50,7 +51,7 @@
             height: '100%'
           }
         }),
-        defaultHighlightStyle
+        syntaxHighlighting(defaultHighlightStyle)
       ]
     })()
 
@@ -140,9 +141,9 @@
         lineNumbers(),
         highlightActiveLineGutter(),
         history(),
-        eThemeHighLight,
         keymap.of([...defaultKeymap, ...historyKeymap]),
         html(),
+        eThemeHighLight,
         eTheme
       ]
     })

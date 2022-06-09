@@ -24,7 +24,7 @@ gem 'rake'
 
 # Dev
 group :development do
-  gem 'faraday'
+  gem 'faraday', '~> 1'
   gem 'faraday_middleware'
   gem 'lefthook', require: false
   gem 'rubocop', '>= 1.7.0', require: false
