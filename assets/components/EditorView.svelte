@@ -3,7 +3,13 @@
 <script>
   import {onMount, onDestroy, getContext} from 'svelte'
   import {EditorState, EditorSelection} from '@codemirror/state'
-  import {EditorView, keymap, lineNumbers, highlightActiveLineGutter, gutter} from '@codemirror/view'
+  import {
+    EditorView,
+    keymap,
+    lineNumbers,
+    highlightActiveLineGutter,
+    gutter
+  } from '@codemirror/view'
   import {defaultKeymap, history, historyKeymap} from '@codemirror/commands'
   import {defaultHighlightStyle, syntaxHighlighting} from '@codemirror/language'
   import {html} from '@codemirror/lang-html'
@@ -38,10 +44,7 @@
   const getEditorState = (doc = '') => {
     const [eTheme, eThemeHighLight] = (() => {
       if ($isDarkThemeON) {
-        return [
-          oneDarkTheme,
-          syntaxHighlighting(oneDarkHighlightStyle)
-        ]
+        return [oneDarkTheme, syntaxHighlighting(oneDarkHighlightStyle)]
       }
 
       return [

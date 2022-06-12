@@ -32,7 +32,7 @@ $ bundle exec rake wasm:inliner # build wasm inliner module
 ### Format svelte components
 
 ```bash
-yarn prettier --write --plugin-search-dir=. ./webpack/components/*
+yarn prettier --write --plugin-search-dir=. ./assets/components/*
 ```
 
 ### Benchmark parser

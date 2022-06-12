@@ -8,5 +8,8 @@
   "svelteSortOrder": "options-scripts-styles-markup",
   "svelteStrictMode": true,
   "svelteAllowShorthand": false,
-  "svelteIndentScriptAndStyle": true
+  "svelteIndentScriptAndStyle": true,
+  "plugins": [
+    "prettier-plugin-svelte"
+  ]
 }
