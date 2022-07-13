@@ -44,7 +44,10 @@
   const getEditorState = (doc = '') => {
     const [eTheme, eThemeHighLight] = (() => {
       if ($isDarkThemeON) {
-        return [oneDarkTheme, syntaxHighlighting(oneDarkHighlightStyle)]
+        return [
+          oneDarkTheme,
+          syntaxHighlighting(oneDarkHighlightStyle, {fallback: true})
+        ]
       }
 
       return [
@@ -54,7 +57,7 @@
             height: '100%'
           }
         }),
-        syntaxHighlighting(defaultHighlightStyle)
+        syntaxHighlighting(defaultHighlightStyle, {fallback: true})
       ]
     })()
 

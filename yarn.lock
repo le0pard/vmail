@@ -2350,15 +2350,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/commands@npm:^6.0.0":
-  version: 6.0.0
-  resolution: "@codemirror/commands@npm:6.0.0"
+"@codemirror/commands@npm:^6.0.1":
+  version: 6.0.1
+  resolution: "@codemirror/commands@npm:6.0.1"
   dependencies:
     "@codemirror/language": ^6.0.0
     "@codemirror/state": ^6.0.0
     "@codemirror/view": ^6.0.0
     "@lezer/common": ^1.0.0
-  checksum: 5b3bac420635316f9fb324e38b76a281a4d1425f80e6a5e66a34cf1508414e5d182f494e3c30936b27f86aa67403c1af4137bca5df0f0e53b2a4baa49a25caf2
+  checksum: 7b3b73596c13d256b267aa7e2a0dd1fb297426918e9e42135faa4280cc220ff66b0d4743cd6214b6ed2111eccf3c125d1f197fc8585c48c45b386210d53673dd
   languageName: node
   linkType: hard
 
@@ -2374,9 +2374,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/lang-html@npm:^6.0.0":
-  version: 6.0.0
-  resolution: "@codemirror/lang-html@npm:6.0.0"
+"@codemirror/lang-html@npm:6.1.0":
+  version: 6.1.0
+  resolution: "@codemirror/lang-html@npm:6.1.0"
   dependencies:
     "@codemirror/autocomplete": ^6.0.0
     "@codemirror/lang-css": ^6.0.0
@@ -2385,7 +2385,7 @@ __metadata:
     "@codemirror/state": ^6.0.0
     "@lezer/common": ^1.0.0
     "@lezer/html": ^1.0.0
-  checksum: 1cb0aa2ed481d2ef644a23afc8a706f745201c67a22da6f214cdaff1b2c7173e8933dfb9f3b60522b777cdcdd74cb5f88786ef4df61e6a640439eb155cc1c777
+  checksum: 7a526c9b626d034d6b340d1dfe44061e5e3af87c875709a69de830ed102ce32b71ed733ba0ff02b78388371497907970e163ec84f0ae90a58a807122a17348e0
   languageName: node
   linkType: hard
 
@@ -2404,7 +2404,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/language@npm:^6.0.0":
+"@codemirror/language@npm:6.0.0, @codemirror/language@npm:^6.0.0":
   version: 6.0.0
   resolution: "@codemirror/language@npm:6.0.0"
   dependencies:
@@ -2429,7 +2429,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/state@npm:^6.0.0":
+"@codemirror/state@npm:6.0.0, @codemirror/state@npm:^6.0.0":
   version: 6.0.0
   resolution: "@codemirror/state@npm:6.0.0"
   checksum: 7f6286d8e8b8c5e7018f9ee81943b35324150fd15ccc77ae220b904a73e10fa480ab51a89663d956a9c2fae70b13d754da0bf535092759158cc3707743aa236f
@@ -8167,10 +8167,10 @@ fsevents@~2.3.2:
     "@babel/preset-env": 7.18.6
     "@babel/runtime": 7.18.6
     "@babel/runtime-corejs3": 7.18.6
-    "@codemirror/commands": ^6.0.0
-    "@codemirror/lang-html": ^6.0.0
-    "@codemirror/language": ^6.0.0
-    "@codemirror/state": ^6.0.0
+    "@codemirror/commands": ^6.0.1
+    "@codemirror/lang-html": 6.1.0
+    "@codemirror/language": 6.0.0
+    "@codemirror/state": 6.0.0
     "@codemirror/view": ^6.0.0
     "@hotwired/stimulus": ^3.0.1
     "@hotwired/stimulus-webpack-helpers": ^1.0.1
