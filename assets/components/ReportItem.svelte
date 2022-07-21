@@ -152,8 +152,8 @@
 
   .report-line-button:hover,
   .report-line-button:active {
-    color: var(--successColor);
-    background-color: var(--successBgColor);
+    color: var(--mutedButtonHoverColor);
+    background-color: var(--mutedButtonHoverBgColor);
   }
 </style>
 

@@ -25,19 +25,19 @@
   }
 
   .report-header-github-link {
-    color: var(--mutedButtonColor);
+    color: var(--octocatColor);
     margin: 0 1rem;
   }
 
   .report-header-github {
-    fill: var(--mutedButtonColor);
+    fill: var(--octocatColor);
     width: 2rem;
     height: 2rem;
     padding-top: 3px;
   }
 
   .report-header-github-link:hover .report-header-github {
-    fill: var(--mutedButtonHoverColor);
+    fill: var(--octocatHoverColor);
   }
 </style>
 

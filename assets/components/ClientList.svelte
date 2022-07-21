@@ -82,13 +82,13 @@
 
   .client-list-line:hover,
   .client-list-line:active {
-    color: var(--successColor);
-    background-color: var(--successBgColor);
+    color: var(--mutedButtonHoverColor);
+    background-color: var(--mutedButtonHoverBgColor);
   }
 
   .client-list-line-active {
-    color: var(--successColor);
-    background-color: var(--successBgColor);
+    color: var(--mutedButtonHoverColor);
+    background-color: var(--mutedButtonHoverBgColor);
   }
 
   .client-list-percentage {

@@ -23,8 +23,8 @@
   }
 
   .notes-list-item:hover .notes-list-button {
-    color: var(--successColor);
-    background-color: var(--successBgColor);
+    color: var(--mutedButtonHoverColor);
+    background-color: var(--mutedButtonHoverBgColor);
   }
 
   .notes-list-button {
@@ -42,13 +42,13 @@
 
   .notes-list-button:hover,
   .notes-list-button:active {
-    color: var(--successColor);
-    background-color: var(--successBgColor);
+    color: var(--mutedButtonHoverColor);
+    background-color: var(--mutedButtonHoverBgColor);
   }
 
   .notes-list-button-active {
-    color: var(--successColor);
-    background-color: var(--successBgColor);
+    color: var(--mutedButtonHoverColor);
+    background-color: var(--mutedButtonHoverBgColor);
   }
 </style>
 

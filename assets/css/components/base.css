@@ -22,8 +22,10 @@
   --buttonBgActiveColor: #00afaf;
   --mutedButtonColor: #5e6278;
   --mutedButtonBgColor: #f5f8fa;
-  --mutedButtonHoverColor: #7e8299;
-  --mutedButtonHoverBgColor: #e4e6ef;
+  --mutedButtonHoverColor: #fff;
+  --mutedButtonHoverBgColor: #7e8299;
+  --octocatColor: #5e6278;
+  --octocatHoverColor: #3f4254;
   --splitColor: #7e8299;
   --splitHoverColor: #04c8c8;
   --splitBgColor: #f5f8fa;
@@ -57,6 +59,8 @@
   --mutedButtonBgColor: #1b1b29;
   --mutedButtonHoverColor: #cdcdde;
   --mutedButtonHoverBgColor: #323248;
+  --octocatColor: #92929f;
+  --octocatHoverColor: #cdcdde;
   --splitColor: #cdcdde;
   --splitHoverColor: #0bb783;
   --splitBgColor: #1b1b29;

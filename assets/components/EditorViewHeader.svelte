@@ -213,7 +213,8 @@
   .editor-header-sample-button:hover,
   .editor-header-sample-button:active {
     color: var(--mutedButtonHoverColor);
-    border: 1px solid var(--buttonBgHoverColor);
+    border-color: var(--mutedButtonHoverBgColor);
+    background-color: var(--mutedButtonHoverBgColor);
   }
 
   .editor-header-sample-button:active {
