@@ -10,6 +10,10 @@
   :global(html.dark) .path3 {
     fill: #fff;
   }
+
+  svg {
+    height: 100%;
+  }
 </style>
 
 <svg height="216" viewBox="0 0 216 216" width="216" xmlns="http://www.w3.org/2000/svg">
