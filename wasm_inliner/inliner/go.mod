@@ -2,7 +2,7 @@ module github.com/le0pard/vmail/wasm_inliner/inliner
 
 go 1.17
 
-require golang.org/x/net v0.0.0-20220906165146-f3363e06e74c
+require golang.org/x/net v0.0.0-20220930213112-107f3e3c3b0b
 
 require github.com/andybalholm/cascadia v1.3.1
 
