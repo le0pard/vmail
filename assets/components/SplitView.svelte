@@ -10,8 +10,26 @@
     }
   }
 
+  const handleHideLeftKey = (e) => {
+    if (e.key == ' ' ||
+      e.code == 'Space' ||
+      e.keyCode == 32
+    ) {
+      splitState.hideLeft()
+    }
+  }
+
   const handleHideLeft = () => {
     splitState.hideLeft()
+  }
+
+  const handleHideRightKey = (e) => {
+    if (e.key == ' ' ||
+      e.code == 'Space' ||
+      e.keyCode == 32
+    ) {
+      splitState.hideRight()
+    }
   }
 
   const handleHideRight = () => {
@@ -92,6 +110,9 @@
 <div class="split-container">
   <div
     on:click|preventDefault="{handleHideLeft}"
+    on:keypress|preventDefault="{handleHideLeftKey}"
+    tabindex="0"
+    role="button"
     class="split-left"
     class:split-hidden="{$splitState.visible === 'right'}"
   >
@@ -99,6 +120,9 @@
   </div>
   <div
     on:click|preventDefault="{handleHideRight}"
+    on:keypress|preventDefault="{handleHideRightKey}"
+    tabindex="0"
+    role="button"
     class="split-right"
     class:split-hidden="{$splitState.visible === 'left'}"
   >

@@ -57,6 +57,7 @@
   <div
     class="notes-list-item"
     tabindex="0"
+    role="button"
     on:focus="{() => notesStore.setLine(noteKey)}"
     on:mouseover="{() => notesStore.setLine(noteKey)}"
     on:blur="{() => notesStore.reset()}"
