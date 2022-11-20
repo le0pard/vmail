@@ -1305,8 +1305,8 @@ __metadata:
   linkType: hard
 
 "@codemirror/autocomplete@npm:^6.0.0":
-  version: 6.3.1
-  resolution: "@codemirror/autocomplete@npm:6.3.1"
+  version: 6.3.3
+  resolution: "@codemirror/autocomplete@npm:6.3.3"
   dependencies:
     "@codemirror/language": ^6.0.0
     "@codemirror/state": ^6.0.0
@@ -1317,7 +1317,7 @@ __metadata:
     "@codemirror/state": ^6.0.0
     "@codemirror/view": ^6.0.0
     "@lezer/common": ^1.0.0
-  checksum: 5ce68abc0cec49be3145dc5de2e01a2df3d46c73ff34de6580a455a18175fc7acc96ccd795b5e8f1c178be96134f5c4b9669871759f964bdff3be5b702fdba56
+  checksum: 90b2f7eb3b01a37dcb7213bd963b141633ce9d940fd94da156a5a8192aa84646bdd23bc07b4e530b069d01e688f371e39a6684c01fa552e36979df468338c3b6
   languageName: node
   linkType: hard
 
@@ -1345,9 +1345,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/lang-html@npm:6.1.4":
-  version: 6.1.4
-  resolution: "@codemirror/lang-html@npm:6.1.4"
+"@codemirror/lang-html@npm:6.2.0":
+  version: 6.2.0
+  resolution: "@codemirror/lang-html@npm:6.2.0"
   dependencies:
     "@codemirror/autocomplete": ^6.0.0
     "@codemirror/lang-css": ^6.0.0
@@ -1356,8 +1356,8 @@ __metadata:
     "@codemirror/state": ^6.0.0
     "@codemirror/view": ^6.2.2
     "@lezer/common": ^1.0.0
-    "@lezer/html": ^1.0.1
-  checksum: 7a9eb987acb68d37a37746271db8c6a7df1e36b5cbe917fad2258111ef327f7f0f624bc6799968c2b08978fd23128c84d6c49e126dffa814c0c3231612620660
+    "@lezer/html": ^1.1.0
+  checksum: bd4c4dc4bd260db4ac3d0dbdb0617593ed2c2243085419269ceeda2aada327fde3f756cebae77641ad338220356d2d357c5217b778b20060f08846987dd32b7d
   languageName: node
   linkType: hard
 
@@ -1401,21 +1401,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/state@npm:6.1.3, @codemirror/state@npm:^6.0.0":
-  version: 6.1.3
-  resolution: "@codemirror/state@npm:6.1.3"
-  checksum: ef7ff6d0a232b75caa7bff1b3c41aa9b4960ab0bf8080ea1e383bf9ef9988cecbf2560174dd1507e3313d5b52db95501bc3825075e09a2215f5579b570e8dedd
+"@codemirror/state@npm:6.1.4, @codemirror/state@npm:^6.0.0, @codemirror/state@npm:^6.1.4":
+  version: 6.1.4
+  resolution: "@codemirror/state@npm:6.1.4"
+  checksum: ef6bc495d3b89d2f0202b6b1c0fc3e3610f8d815f4ca91f86153d6093c9b93ddbe2cfb787802d07514a7114f0b200cf2eeb54c1cd34d7e00eff774ecea97d845
   languageName: node
   linkType: hard
 
-"@codemirror/view@npm:^6.0.0, @codemirror/view@npm:^6.2.2, @codemirror/view@npm:^6.5.0":
-  version: 6.5.0
-  resolution: "@codemirror/view@npm:6.5.0"
+"@codemirror/view@npm:^6.0.0, @codemirror/view@npm:^6.2.2, @codemirror/view@npm:^6.5.0, @codemirror/view@npm:^6.5.1":
+  version: 6.5.1
+  resolution: "@codemirror/view@npm:6.5.1"
   dependencies:
-    "@codemirror/state": ^6.0.0
+    "@codemirror/state": ^6.1.4
     style-mod: ^4.0.0
     w3c-keyname: ^2.2.4
-  checksum: c91351da4c814c88599806af03c98c6c25ef7da8f64443cd1b73f5c47d3c53452b824ed02fb5d44fdf6553f0d533fc68f277817b750860a1c679a76ddbff5d1c
+  checksum: 1bd66b4f174642c559a521b546e80a67556fdc1b7cc7d1c7baf1cac37fed83e0e63d7a9ff6a88f3991a82d11bbbcfcca6e7b3491dcdd536c4c114de142b0300d
   languageName: node
   linkType: hard
 
@@ -1776,33 +1776,33 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lezer/html@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "@lezer/html@npm:1.0.1"
+"@lezer/html@npm:^1.1.0":
+  version: 1.1.1
+  resolution: "@lezer/html@npm:1.1.1"
   dependencies:
     "@lezer/common": ^1.0.0
     "@lezer/highlight": ^1.0.0
     "@lezer/lr": ^1.0.0
-  checksum: 3672c6a6658eaec0c22495374769da7e7940516a7fcbb6646613ec6e05aa9293aef4c13384aa91ede043aedab2824461c55b49a7b4654236220e76dc270be303
+  checksum: d53a46e6d82cf29ccd302a01673f21c8fc197435fb7164ac72b7d1fa20bebba8c75aa3ed56370235abaf4e162c497ce2322dd6ea84eecd3ebd84adb5938275a2
   languageName: node
   linkType: hard
 
 "@lezer/javascript@npm:^1.0.0":
-  version: 1.0.2
-  resolution: "@lezer/javascript@npm:1.0.2"
+  version: 1.1.1
+  resolution: "@lezer/javascript@npm:1.1.1"
   dependencies:
     "@lezer/highlight": ^1.0.0
     "@lezer/lr": ^1.0.0
-  checksum: d828da05afaf28cb14e97ae83b354db15cc0e945318924c3c3a050da45168d6c2f94d6c3404a2ac93b299716bcb0854b281d5435e2d5f40a412470212f3ae972
+  checksum: 734788cf267e6b8d08a371d7bff7511db64be66d59f535d92314b3e8ef7ca51ed3fda367bcd891c243012a8f3acb4fad50a7fc3afc3372cc0b8d21c6c145d5be
   languageName: node
   linkType: hard
 
 "@lezer/lr@npm:^1.0.0":
-  version: 1.2.4
-  resolution: "@lezer/lr@npm:1.2.4"
+  version: 1.2.5
+  resolution: "@lezer/lr@npm:1.2.5"
   dependencies:
     "@lezer/common": ^1.0.0
-  checksum: c3351c7e51692591abf84bdcf881a6c7547861b26f3f783ec75ead37d976dc21ec43ccdac315cb6cdfd9295b58db55bb42da3dd53ea05836a9f7f9e49c2d4c91
+  checksum: 9a2fb2663dba5608c0f8a7d51b4c1beeb37d391da972fb3569fe51b637167ac4889b055ceb0c5267b8612a0aa5dfd517cbbd1349975cd662d1ca7fea374916b1
   languageName: node
   linkType: hard
 
@@ -2246,36 +2246,36 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@webpack-cli/configtest@npm:^1.2.0":
-  version: 1.2.0
-  resolution: "@webpack-cli/configtest@npm:1.2.0"
+"@webpack-cli/configtest@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@webpack-cli/configtest@npm:2.0.0"
   peerDependencies:
-    webpack: 4.x.x || 5.x.x
-    webpack-cli: 4.x.x
-  checksum: a2726cd9ec601d2b57e5fc15e0ebf5200a8892065e735911269ac2038e62be4bfc176ea1f88c2c46ff09b4d05d4c10ae045e87b3679372483d47da625a327e28
+    webpack: 5.x.x
+    webpack-cli: 5.x.x
+  checksum: 7d1977c833c4dcd7cc30a6873bf5f79564a194e4799bcdaf8158081595409adf64e3179beada4f7b6522086c8e18ee802f7b505692d6359aab6503e8caa82de8
   languageName: node
   linkType: hard
 
-"@webpack-cli/info@npm:^1.5.0":
-  version: 1.5.0
-  resolution: "@webpack-cli/info@npm:1.5.0"
-  dependencies:
-    envinfo: ^7.7.3
+"@webpack-cli/info@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@webpack-cli/info@npm:2.0.0"
   peerDependencies:
-    webpack-cli: 4.x.x
-  checksum: 7f56fe037cd7d1fd5c7428588519fbf04a0cad33925ee4202ffbafd00f8ec1f2f67d991245e687d50e0f3e23f7b7814273d56cb9f7da4b05eed47c8d815c6296
+    webpack: 5.x.x
+    webpack-cli: 5.x.x
+  checksum: d354d50dbef180066279b548e91b84372a99e1026fa1c228dcb4a6923a6aefc76e8a9c4e328e048732dc086c60fab967ff323690f170cc6a3c1a83c06bbf043e
   languageName: node
   linkType: hard
 
-"@webpack-cli/serve@npm:^1.7.0":
-  version: 1.7.0
-  resolution: "@webpack-cli/serve@npm:1.7.0"
+"@webpack-cli/serve@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@webpack-cli/serve@npm:2.0.0"
   peerDependencies:
-    webpack-cli: 4.x.x
+    webpack: 5.x.x
+    webpack-cli: 5.x.x
   peerDependenciesMeta:
     webpack-dev-server:
       optional: true
-  checksum: d475e8effa23eb7ff9a48b14d4de425989fd82f906ce71c210921cc3852327c22873be00c35e181a25a6bd03d424ae2b83e7f3b3f410ac7ee31b128ab4ac7713
+  checksum: d5cd72589d3563e21dedbd9e05102ef87f7e325a1de15fb7db0906132440556920719ce012e0f052efd1bc4c1fbaf3fb123552c5f3476339657ebf29c5c81732
   languageName: node
   linkType: hard
 
@@ -2836,10 +2836,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"commander@npm:^7.0.0, commander@npm:^7.2.0":
+"commander@npm:^7.2.0":
   version: 7.2.0
   resolution: "commander@npm:7.2.0"
   checksum: 53501cbeee61d5157546c0bef0fedb6cdfc763a882136284bed9a07225f09a14b82d2a84e7637edfd1a679fb35ed9502fd58ef1d091e6287f60d790147f68ddc
+  languageName: node
+  linkType: hard
+
+"commander@npm:^9.4.1":
+  version: 9.4.1
+  resolution: "commander@npm:9.4.1"
+  checksum: bfb18e325a5bdf772763c2213d5c7d9e77144d944124e988bcd8e5e65fb6d45d5d4e86b09155d0f2556c9a59c31e428720e57968bcd050b2306e910a0bf3cf13
   languageName: node
   linkType: hard
 
@@ -3556,9 +3563,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:8.27.0":
-  version: 8.27.0
-  resolution: "eslint@npm:8.27.0"
+"eslint@npm:8.28.0":
+  version: 8.28.0
+  resolution: "eslint@npm:8.28.0"
   dependencies:
     "@eslint/eslintrc": ^1.3.3
     "@humanwhocodes/config-array": ^0.11.6
@@ -3601,7 +3608,7 @@ __metadata:
     text-table: ^0.2.0
   bin:
     eslint: bin/eslint.js
-  checksum: 153b022d309e1b647a73b1bb0fa98912add699b06e279084155f23c6f2b5fc5abd05411fc1ba81608a24bbfaf044ca079544c16fffa6fc987b8f676c9960a2c4
+  checksum: 1b793486b2ec80f0602d75fff7116f7c39a3286f523608a999eead9bec4154a06841785d2b4fb87f8292a94cf85778c1dbfaec727772a09c4d604fdb9ff0809a
   languageName: node
   linkType: hard
 
@@ -3973,11 +3980,11 @@ __metadata:
   linkType: hard
 
 "globals@npm:^13.15.0":
-  version: 13.17.0
-  resolution: "globals@npm:13.17.0"
+  version: 13.18.0
+  resolution: "globals@npm:13.18.0"
   dependencies:
     type-fest: ^0.20.2
-  checksum: fbaf4112e59b92c9f5575e85ce65e9e17c0b82711196ec5f58beb08599bbd92fd72703d6dfc9b080381fd35b644e1b11dcf25b38cc2341ec21df942594cbc8ce
+  checksum: 9fdaa74cfd5d4ac91319662f512c29b11d1d2deb9c8a20d3998097671deba83d195f20730b2345887de3ddab958a6fa68952feed9ae836ee4594a82ace62fdb4
   languageName: node
   linkType: hard
 
@@ -4197,10 +4204,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"interpret@npm:^2.2.0":
-  version: 2.2.0
-  resolution: "interpret@npm:2.2.0"
-  checksum: f51efef7cb8d02da16408ffa3504cd6053014c5aeb7bb8c223727e053e4235bf565e45d67028b0c8740d917c603807aa3c27d7bd2f21bf20b6417e2bb3e5fd6e
+"interpret@npm:^3.1.1":
+  version: 3.1.1
+  resolution: "interpret@npm:3.1.1"
+  checksum: 35cebcf48c7351130437596d9ab8c8fe131ce4038da4561e6d665f25640e0034702a031cf7e3a5cea60ac7ac548bf17465e0571ede126f3d3a6933152171ac82
   languageName: node
   linkType: hard
 
@@ -4833,14 +4840,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mini-css-extract-plugin@npm:2.6.1":
-  version: 2.6.1
-  resolution: "mini-css-extract-plugin@npm:2.6.1"
+"mini-css-extract-plugin@npm:2.7.0":
+  version: 2.7.0
+  resolution: "mini-css-extract-plugin@npm:2.7.0"
   dependencies:
     schema-utils: ^4.0.0
   peerDependencies:
     webpack: ^5.0.0
-  checksum: df60840404878c4832b4104799fd29c5a89b06b1e377956c8d4a5729efe0ef301a52e5087d6f383871df5e69a8445922a0ae635c11abf412d7645a7096d0e973
+  checksum: e6b111d4289132bd496286eec42801c74c83af7eac71af630a5babae48ca65377f47d8b39e1f0653b449e68e67b57dbd0d36917242f08fc3e7770e70c0cb56cd
   languageName: node
   linkType: hard
 
@@ -6024,12 +6031,12 @@ __metadata:
   linkType: hard
 
 "postcss-selector-parser@npm:^6.0.10, postcss-selector-parser@npm:^6.0.2, postcss-selector-parser@npm:^6.0.4, postcss-selector-parser@npm:^6.0.5, postcss-selector-parser@npm:^6.0.9":
-  version: 6.0.10
-  resolution: "postcss-selector-parser@npm:6.0.10"
+  version: 6.0.11
+  resolution: "postcss-selector-parser@npm:6.0.11"
   dependencies:
     cssesc: ^3.0.0
     util-deprecate: ^1.0.2
-  checksum: 46afaa60e3d1998bd7adf6caa374baf857cc58d3ff944e29459c9a9e4680a7fe41597bd5b755fc81d7c388357e9bf67c0251d047c640a09f148e13606b8a8608
+  checksum: 0b01aa9c2d2c8dbeb51e9b204796b678284be9823abc8d6d40a8b16d4149514e922c264a8ed4deb4d6dbced564b9be390f5942c058582d8656351516d6c49cde
   languageName: node
   linkType: hard
 
@@ -6081,13 +6088,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier-plugin-svelte@npm:^2.8.0":
-  version: 2.8.0
-  resolution: "prettier-plugin-svelte@npm:2.8.0"
+"prettier-plugin-svelte@npm:^2.8.1":
+  version: 2.8.1
+  resolution: "prettier-plugin-svelte@npm:2.8.1"
   peerDependencies:
     prettier: ^1.16.4 || ^2.0.0
     svelte: ^3.2.0
-  checksum: 3c49d46406b3b5a94c8b67fe139190b7ef1054532e3ae1852813729cdb5c19ba996b9c02f32af877cabb39fb42a7a87f4c9451da1a8c8d82098878e6bce3aba8
+  checksum: b2a6bffbacd32597a9be37ceda33361d99348ccc6cc890ff53f9e4da0a74a769a7781b08f14751394c4c98315d84bce87444069384e37131c2264b04f1e3bc4b
   languageName: node
   linkType: hard
 
@@ -6167,12 +6174,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rechoir@npm:^0.7.0":
-  version: 0.7.1
-  resolution: "rechoir@npm:0.7.1"
+"rechoir@npm:^0.8.0":
+  version: 0.8.0
+  resolution: "rechoir@npm:0.8.0"
   dependencies:
-    resolve: ^1.9.0
-  checksum: 2a04aab4e28c05fcd6ee6768446bc8b859d8f108e71fc7f5bcbc5ef25e53330ce2c11d10f82a24591a2df4c49c4f61feabe1fd11f844c66feedd4cd7bb61146a
+    resolve: ^1.20.0
+  checksum: ad3caed8afdefbc33fbc30e6d22b86c35b3d51c2005546f4e79bcc03c074df804b3640ad18945e6bef9ed12caedc035655ec1082f64a5e94c849ff939dc0a788
   languageName: node
   linkType: hard
 
@@ -6288,7 +6295,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"resolve@npm:^1.1.7, resolve@npm:^1.14.2, resolve@npm:^1.19.0, resolve@npm:^1.20.0, resolve@npm:^1.22.0, resolve@npm:^1.9.0":
+"resolve@npm:^1.1.7, resolve@npm:^1.14.2, resolve@npm:^1.19.0, resolve@npm:^1.20.0, resolve@npm:^1.22.0":
   version: 1.22.1
   resolution: "resolve@npm:1.22.1"
   dependencies:
@@ -6301,7 +6308,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"resolve@patch:resolve@^1.1.7#~builtin<compat/resolve>, resolve@patch:resolve@^1.14.2#~builtin<compat/resolve>, resolve@patch:resolve@^1.19.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.20.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.22.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.9.0#~builtin<compat/resolve>":
+"resolve@patch:resolve@^1.1.7#~builtin<compat/resolve>, resolve@patch:resolve@^1.14.2#~builtin<compat/resolve>, resolve@patch:resolve@^1.19.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.20.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.22.0#~builtin<compat/resolve>":
   version: 1.22.1
   resolution: "resolve@patch:resolve@npm%3A1.22.1#~builtin<compat/resolve>::version=1.22.1&hash=07638b"
   dependencies:
@@ -7169,10 +7176,10 @@ __metadata:
     "@babel/runtime": 7.20.1
     "@babel/runtime-corejs3": 7.20.1
     "@codemirror/commands": ^6.1.2
-    "@codemirror/lang-html": 6.1.4
+    "@codemirror/lang-html": 6.2.0
     "@codemirror/language": 6.3.1
-    "@codemirror/state": 6.1.3
-    "@codemirror/view": ^6.5.0
+    "@codemirror/state": 6.1.4
+    "@codemirror/view": ^6.5.1
     "@hotwired/stimulus": ^3.1.1
     "@hotwired/stimulus-webpack-helpers": ^1.0.1
     "@hotwired/turbo": 7.2.4
@@ -7183,14 +7190,14 @@ __metadata:
     core-js: 3.26.1
     css-loader: 6.7.2
     css-minimizer-webpack-plugin: 4.2.2
-    eslint: 8.27.0
+    eslint: 8.28.0
     eslint-import-resolver-node: ^0.3.6
     eslint-plugin-import: 2.26.0
     eslint-plugin-svelte3: ^4.0.0
     file-loader: 6.2.0
     focus-visible: ^5.2.0
     lodash: 4.17.21
-    mini-css-extract-plugin: 2.6.1
+    mini-css-extract-plugin: 2.7.0
     normalize.css: 8.0.1
     postcss: 8.4.19
     postcss-import: 15.0.0
@@ -7199,14 +7206,14 @@ __metadata:
     postcss-preset-env: 7.8.3
     postcss-reporter: 7.0.5
     prettier: ^2.7.1
-    prettier-plugin-svelte: ^2.8.0
+    prettier-plugin-svelte: ^2.8.1
     svelte: 3.53.1
     svelte-loader: ^3.1.4
     svelte-preprocess: ^4.10.7
     terser-webpack-plugin: 5.3.6
     webpack: 5.75.0
     webpack-assets-manifest: 5.1.0
-    webpack-cli: 4.10.0
+    webpack-cli: 5.0.0
     workbox-background-sync: ^6.5.4
     workbox-core: ^6.5.4
     workbox-expiration: ^6.5.4
@@ -7259,28 +7266,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-cli@npm:4.10.0":
-  version: 4.10.0
-  resolution: "webpack-cli@npm:4.10.0"
+"webpack-cli@npm:5.0.0":
+  version: 5.0.0
+  resolution: "webpack-cli@npm:5.0.0"
   dependencies:
     "@discoveryjs/json-ext": ^0.5.0
-    "@webpack-cli/configtest": ^1.2.0
-    "@webpack-cli/info": ^1.5.0
-    "@webpack-cli/serve": ^1.7.0
+    "@webpack-cli/configtest": ^2.0.0
+    "@webpack-cli/info": ^2.0.0
+    "@webpack-cli/serve": ^2.0.0
     colorette: ^2.0.14
-    commander: ^7.0.0
+    commander: ^9.4.1
     cross-spawn: ^7.0.3
+    envinfo: ^7.7.3
     fastest-levenshtein: ^1.0.12
     import-local: ^3.0.2
-    interpret: ^2.2.0
-    rechoir: ^0.7.0
+    interpret: ^3.1.1
+    rechoir: ^0.8.0
     webpack-merge: ^5.7.3
   peerDependencies:
-    webpack: 4.x.x || 5.x.x
+    webpack: 5.x.x
   peerDependenciesMeta:
     "@webpack-cli/generators":
-      optional: true
-    "@webpack-cli/migrate":
       optional: true
     webpack-bundle-analyzer:
       optional: true
@@ -7288,7 +7294,7 @@ __metadata:
       optional: true
   bin:
     webpack-cli: bin/cli.js
-  checksum: 2ff5355ac348e6b40f2630a203b981728834dca96d6d621be96249764b2d0fc01dd54edfcc37f02214d02935de2cf0eefd6ce689d970d154ef493f01ba922390
+  checksum: 514874b6625d5a0077d9f52fe67dd0528115823d15612dbdc99fece271d26825fbedd3e7b209ed7726edc8528c0e7f787acbba57929ac4cb6d0618ec1c834933
   languageName: node
   linkType: hard
 
