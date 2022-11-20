@@ -1,4 +1,4 @@
-import {writable, derived} from 'svelte/store'
+import { writable, derived } from 'svelte/store'
 import {
   MULTI_LEVEL_REPORT_KEYS,
   SINGLE_LEVEL_REPORT_KEYS,
@@ -72,7 +72,7 @@ const selectLinesAndSelectors = (report) => {
 }
 
 const createBasicStore = (initialVal = null) => {
-  const {subscribe, set} = writable(initialVal)
+  const { subscribe, set } = writable(initialVal)
 
   return {
     subscribe,

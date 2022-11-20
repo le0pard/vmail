@@ -1,7 +1,7 @@
 <svelte:options immutable="{true}" />
 
 <script>
-  import {isReportReady, reportLoading, reportError} from 'stores/report'
+  import { isReportReady, reportLoading, reportError } from 'stores/report'
   import ReportListComponent from './ReportList'
   import ReportLoadingComponent from './ReportLoading'
   import ReportEmptyComponent from './ReportEmpty'

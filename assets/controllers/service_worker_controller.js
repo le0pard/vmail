@@ -1,5 +1,5 @@
-import {Controller} from '@hotwired/stimulus'
-import {Workbox, messageSW} from 'workbox-window'
+import { Controller } from '@hotwired/stimulus'
+import { Workbox, messageSW } from 'workbox-window'
 
 const hiddenNotificationClassName = 'sw-notification__hidden'
 
@@ -54,7 +54,7 @@ export default class extends Controller {
     if (this.wbRegistration?.waiting) {
       // Send a message to the waiting service worker,
       // instructing it to activate.
-      messageSW(this.wbRegistration.waiting, {type: 'SKIP_WAITING'})
+      messageSW(this.wbRegistration.waiting, { type: 'SKIP_WAITING' })
     }
   }
 

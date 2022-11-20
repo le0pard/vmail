@@ -1,10 +1,10 @@
-import {clientsClaim} from 'workbox-core'
-import {precacheAndRoute} from 'workbox-precaching'
-import {registerRoute} from 'workbox-routing'
-import {NetworkFirst} from 'workbox-strategies'
-import {BackgroundSyncPlugin} from 'workbox-background-sync'
-import {ExpirationPlugin} from 'workbox-expiration'
-import {cleanupOutdatedCaches} from 'workbox-precaching/cleanupOutdatedCaches'
+import { clientsClaim } from 'workbox-core'
+import { precacheAndRoute } from 'workbox-precaching'
+import { registerRoute } from 'workbox-routing'
+import { NetworkFirst } from 'workbox-strategies'
+import { BackgroundSyncPlugin } from 'workbox-background-sync'
+import { ExpirationPlugin } from 'workbox-expiration'
+import { cleanupOutdatedCaches } from 'workbox-precaching/cleanupOutdatedCaches'
 
 const sha256 = (message) => {
   // encode as UTF-8
@@ -67,17 +67,17 @@ sha256(JSON.stringify(cachedAssets.sort(sortClientsByUrlFun))).then((rev) => {
   const revision = `${rev}-v1`
   precacheAndRoute([
     // favicons
-    {url: '/icon-192x192.png', revision},
-    {url: '/icon-512x512.png', revision},
-    {url: '/maskable_icon.png', revision},
-    {url: '/favicon.svg', revision},
-    {url: '/favicon.ico', revision},
+    { url: '/icon-192x192.png', revision },
+    { url: '/icon-512x512.png', revision },
+    { url: '/maskable_icon.png', revision },
+    { url: '/favicon.svg', revision },
+    { url: '/favicon.ico', revision },
     // root page
-    {url: '/index.html', revision},
+    { url: '/index.html', revision },
     // faq page
-    {url: '/faq.html', revision},
+    { url: '/faq.html', revision },
     // manifest
-    {url: '/manifest.json', revision}
+    { url: '/manifest.json', revision }
   ])
 })
 

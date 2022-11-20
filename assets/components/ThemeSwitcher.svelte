@@ -1,8 +1,8 @@
 <svelte:options immutable="{true}" />
 
 <script>
-  import {theme, isDarkThemeON} from 'stores/theme'
-  import {activateTheme} from 'utils/theme'
+  import { theme, isDarkThemeON } from 'stores/theme'
+  import { activateTheme } from 'utils/theme'
 
   let isDarkThemeActive = $isDarkThemeON
 

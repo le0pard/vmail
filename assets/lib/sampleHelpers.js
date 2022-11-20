@@ -1,4 +1,4 @@
-import {memoize} from 'utils/memoize'
+import { memoize } from 'utils/memoize'
 
 export const loadSampleContent = memoize(() => {
   const fetchController = new AbortController()

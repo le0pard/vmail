@@ -1,10 +1,10 @@
-import {writable, derived} from 'svelte/store'
-import {APP_THEMES_LIGHT, APP_THEMES_DARK} from 'lib/constants'
-import {getTheme} from 'utils/theme'
+import { writable, derived } from 'svelte/store'
+import { APP_THEMES_LIGHT, APP_THEMES_DARK } from 'lib/constants'
+import { getTheme } from 'utils/theme'
 import LocalStorage from 'lib/localStorage'
 
 const createBasicStore = () => {
-  const {subscribe, set} = writable(getTheme())
+  const { subscribe, set } = writable(getTheme())
 
   return {
     subscribe,

@@ -1,7 +1,7 @@
-import {writable} from 'svelte/store'
+import { writable } from 'svelte/store'
 
 const createBasicStore = (initialVal = null) => {
-  const {subscribe, set} = writable(initialVal)
+  const { subscribe, set } = writable(initialVal)
 
   return {
     subscribe,

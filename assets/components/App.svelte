@@ -1,9 +1,9 @@
 <svelte:options immutable="{true}" />
 
 <script>
-  import {onDestroy, setContext} from 'svelte'
-  import {report, reportLoading, reportError} from 'stores/report'
-  import {splitState} from 'stores/split'
+  import { onDestroy, setContext } from 'svelte'
+  import { report, reportLoading, reportError } from 'stores/report'
+  import { splitState } from 'stores/split'
   import EditorHeaderComponent from './EditorViewHeader'
   import EditorViewComponent from './EditorView'
   import SplitViewComponent from './SplitView'

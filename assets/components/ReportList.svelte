@@ -1,10 +1,10 @@
 <svelte:options immutable="{true}" />
 
 <script>
-  import {onMount} from 'svelte'
-  import {report, linesAndSelectors} from 'stores/report'
-  import {splitState} from 'stores/split'
-  import {camelize} from 'lib/reportHelpers'
+  import { onMount } from 'svelte'
+  import { report, linesAndSelectors } from 'stores/report'
+  import { splitState } from 'stores/split'
+  import { camelize } from 'lib/reportHelpers'
   import {
     MULTI_LEVEL_REPORT_KEYS,
     SINGLE_LEVEL_REPORT_KEYS,
@@ -21,7 +21,7 @@
 
   const handleLineClick = (line) => {
     splitState.switchToLeftOnMobile()
-    window.dispatchEvent(new window.CustomEvent(EVENT_LINE_TO_EDITOR, {detail: {line}}))
+    window.dispatchEvent(new window.CustomEvent(EVENT_LINE_TO_EDITOR, { detail: { line } }))
   }
 
   const handleEditorLineClickEvent = (e) => {
@@ -29,7 +29,7 @@
       return
     }
 
-    const {line} = e.detail
+    const { line } = e.detail
     if (!$linesAndSelectors[line] || $linesAndSelectors[line].length === 0) {
       return
     }

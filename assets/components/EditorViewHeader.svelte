@@ -1,9 +1,9 @@
 <svelte:options immutable="{true}" />
 
 <script>
-  import {onMount, onDestroy} from 'svelte'
-  import {EVENT_SUBMIT_EXAMPLE, EVENT_INLINE_CSS} from 'lib/constants'
-  import {inlinerLoading, inlinerError} from 'stores/inliner'
+  import { onMount, onDestroy } from 'svelte'
+  import { EVENT_SUBMIT_EXAMPLE, EVENT_INLINE_CSS } from 'lib/constants'
+  import { inlinerLoading, inlinerError } from 'stores/inliner'
   import IconComponent from './Icon'
 
   let inlinerButtonText = 'Inline CSS in HTML'
@@ -12,11 +12,11 @@
   const screenSizeMediumMedia = window.matchMedia('(max-width: 1000px)')
 
   const genAndSubmitSample = () => {
-    window.dispatchEvent(new window.CustomEvent(EVENT_SUBMIT_EXAMPLE, {detail: {}}))
+    window.dispatchEvent(new window.CustomEvent(EVENT_SUBMIT_EXAMPLE, { detail: {} }))
   }
 
   const inlineCssInHTML = () => {
-    window.dispatchEvent(new window.CustomEvent(EVENT_INLINE_CSS, {detail: {}}))
+    window.dispatchEvent(new window.CustomEvent(EVENT_INLINE_CSS, { detail: {} }))
   }
 
   const onScreenSizeMediumMediaChange = (e) => {

@@ -1,5 +1,5 @@
-import {RangeSet, StateField, StateEffect} from '@codemirror/state'
-import {GutterMarker} from '@codemirror/view'
+import { RangeSet, StateField, StateEffect } from '@codemirror/state'
+import { GutterMarker } from '@codemirror/view'
 
 export const validationErrorsMarker = new (class extends GutterMarker {
   toDOM() {
@@ -26,7 +26,7 @@ export const validationErrorsState = StateField.define({
       if (e.is(validationErrorsEffect)) {
         switch (e.value.type) {
           case 'remove':
-            set = set.update({filter: (from) => from !== e.value.pos})
+            set = set.update({ filter: (from) => from !== e.value.pos })
             break
           case 'empty':
             set = RangeSet.empty

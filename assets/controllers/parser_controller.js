@@ -1,13 +1,13 @@
-import {Controller} from '@hotwired/stimulus'
-import {wrap} from 'comlink'
-import {memoize} from 'utils/memoize'
+import { Controller } from '@hotwired/stimulus'
+import { wrap } from 'comlink'
+import { memoize } from 'utils/memoize'
 import AppComponent from 'components/App'
 import ErrorComponent from 'components/Error'
 
 const getWebWorker = memoize(
   (url) =>
     new Promise((resolve) => {
-      const webWorker = new window.Worker(url, {name: 'Parser Worker'})
+      const webWorker = new window.Worker(url, { name: 'Parser Worker' })
       return resolve(wrap(webWorker))
     })
 )

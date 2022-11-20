@@ -1,8 +1,8 @@
 // wasm
 import 'vendors/wasm_exec'
-import {memoize} from 'utils/memoize'
-import {expose} from 'comlink'
-import {clientsListWithStats} from 'lib/reportHelpers'
+import { memoize } from 'utils/memoize'
+import { expose } from 'comlink'
+import { clientsListWithStats } from 'lib/reportHelpers'
 
 const getGlobal = () => {
   if (typeof self !== 'undefined') {
@@ -30,7 +30,7 @@ if (!globals.WebAssembly.instantiateStreaming) {
 const loadWasmModule = memoize(async (wasmUrl) => {
   const go = new globals.Go()
   const fetchPromise = globals.fetch(wasmUrl)
-  const {instance} = await globals.WebAssembly.instantiateStreaming(fetchPromise, go.importObject)
+  const { instance } = await globals.WebAssembly.instantiateStreaming(fetchPromise, go.importObject)
   go.run(instance) // do not wait for this promise, it never return result
   return instance
 })

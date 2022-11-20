@@ -1,4 +1,4 @@
-import {APP_THEMES_LIGHT, APP_THEMES_DARK} from 'lib/constants'
+import { APP_THEMES_LIGHT, APP_THEMES_DARK } from 'lib/constants'
 import LocalStorage from 'lib/localStorage'
 
 export const getTheme = () => {

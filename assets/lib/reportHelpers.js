@@ -1,4 +1,4 @@
-import {CSS_SELECTORS_MAP} from './constants'
+import { CSS_SELECTORS_MAP } from './constants'
 
 const FAMILY_MAP = {
   gmail: 'Gmail',

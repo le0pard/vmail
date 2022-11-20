@@ -1,11 +1,11 @@
 <svelte:options immutable="{true}" />
 
 <script>
-  import {onMount, getContext} from 'svelte'
-  import {createNotesStore} from 'stores/notes'
+  import { onMount, getContext } from 'svelte'
+  import { createNotesStore } from 'stores/notes'
   import ClientListComponent from './ClientList'
   import NotesListComponent from './NotesList'
-  import {normalizeItemName, normalizeItemVal, clientsListWithStats} from 'lib/reportHelpers'
+  import { normalizeItemName, normalizeItemVal, clientsListWithStats } from 'lib/reportHelpers'
 
   export let elementID
   export let reportInfo
@@ -17,7 +17,7 @@
   let notesStore = createNotesStore()
   let clientsWithStats = null
 
-  const {getWebWorker} = getContext('ww')
+  const { getWebWorker } = getContext('ww')
 
   onMount(() => {
     const webWorker = getWebWorker()

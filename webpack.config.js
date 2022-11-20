@@ -83,7 +83,7 @@ let config = {
           loader: 'svelte-loader',
           options: {
             compilerOptions: {
-              cssHash: ({hash, css}) => `vml-${hash(css)}`,
+              cssHash: ({ hash, css }) => `vml-${hash(css)}`,
               dev: !isProduction
             },
             emitCss: isProduction,
@@ -156,10 +156,10 @@ let config = {
   },
 
   snapshot: {
-    module: {timestamp: true, hash: Boolean(process.env.CI)},
-    resolve: {timestamp: true, hash: Boolean(process.env.CI)},
-    buildDependencies: {timestamp: true, hash: true},
-    resolveBuildDependencies: {timestamp: true, hash: true}
+    module: { timestamp: true, hash: Boolean(process.env.CI) },
+    resolve: { timestamp: true, hash: Boolean(process.env.CI) },
+    buildDependencies: { timestamp: true, hash: true },
+    resolveBuildDependencies: { timestamp: true, hash: true }
   }
 }
 
@@ -217,7 +217,7 @@ if (isProduction) {
         preset: [
           'default',
           {
-            discardComments: {removeAll: true},
+            discardComments: { removeAll: true },
             mergeRules: false, // right now it break focus-visible
             svgo: false
           }

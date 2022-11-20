@@ -1,8 +1,8 @@
 <svelte:options immutable="{true}" />
 
 <script>
-  import {onMount} from 'svelte'
-  import {splitState, screenSizeMinMedia} from 'stores/split'
+  import { onMount } from 'svelte'
+  import { splitState, screenSizeMinMedia } from 'stores/split'
 
   const onScreenSizeMinMediaChange = (e) => {
     if (e.matches) {

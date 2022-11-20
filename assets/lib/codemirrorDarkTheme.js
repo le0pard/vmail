@@ -1,6 +1,6 @@
-import {EditorView} from '@codemirror/view'
-import {HighlightStyle} from '@codemirror/language'
-import {tags as t} from '@lezer/highlight'
+import { EditorView } from '@codemirror/view'
+import { HighlightStyle } from '@codemirror/language'
+import { tags as t } from '@lezer/highlight'
 
 // Using https://github.com/one-dark/vscode-one-dark-theme/ as reference for the colors
 
@@ -38,14 +38,14 @@ export const oneDarkTheme = EditorView.theme(
       caretColor: cursor
     },
 
-    '&.cm-focused .cm-cursor': {borderLeftColor: cursor},
+    '&.cm-focused .cm-cursor': { borderLeftColor: cursor },
     '&.cm-focused .cm-selectionBackground, .cm-selectionBackground, .cm-content ::selection': {
       backgroundColor: selection
     },
 
-    '.cm-panels': {backgroundColor: darkBackground, color: ivory},
-    '.cm-panels.cm-panels-top': {borderBottom: '2px solid black'},
-    '.cm-panels.cm-panels-bottom': {borderTop: '2px solid black'},
+    '.cm-panels': { backgroundColor: darkBackground, color: ivory },
+    '.cm-panels.cm-panels-top': { borderBottom: '2px solid black' },
+    '.cm-panels.cm-panels-bottom': { borderTop: '2px solid black' },
 
     '.cm-searchMatch': {
       backgroundColor: '#72a1ff59',
@@ -55,8 +55,8 @@ export const oneDarkTheme = EditorView.theme(
       backgroundColor: '#6199ff2f'
     },
 
-    '.cm-activeLine': {backgroundColor: highlightBackground},
-    '.cm-selectionMatch': {backgroundColor: '#aafe661a'},
+    '.cm-activeLine': { backgroundColor: highlightBackground },
+    '.cm-selectionMatch': { backgroundColor: '#aafe661a' },
 
     '&.cm-focused .cm-matchingBracket, &.cm-focused .cm-nonmatchingBracket': {
       backgroundColor: '#bad0f847',
@@ -98,7 +98,7 @@ export const oneDarkTheme = EditorView.theme(
       }
     }
   },
-  {dark: true}
+  { dark: true }
 )
 
 /// The highlighting style for code in the One Dark theme.

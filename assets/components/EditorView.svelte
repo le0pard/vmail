@@ -1,8 +1,8 @@
 <svelte:options immutable="{true}" />
 
 <script>
-  import {onMount, onDestroy, getContext} from 'svelte'
-  import {EditorState, EditorSelection} from '@codemirror/state'
+  import { onMount, onDestroy, getContext } from 'svelte'
+  import { EditorState, EditorSelection } from '@codemirror/state'
   import {
     EditorView,
     keymap,
@@ -10,14 +10,14 @@
     highlightActiveLineGutter,
     gutter
   } from '@codemirror/view'
-  import {defaultKeymap, history, historyKeymap} from '@codemirror/commands'
-  import {defaultHighlightStyle, syntaxHighlighting} from '@codemirror/language'
-  import {html} from '@codemirror/lang-html'
-  import {oneDarkTheme, oneDarkHighlightStyle} from 'lib/codemirrorDarkTheme'
-  import {isDarkThemeON} from 'stores/theme'
-  import {report, reportLoading, reportError, linesAndSelectors} from 'stores/report'
-  import {inlinerLoading, inlinerError} from 'stores/inliner'
-  import {splitState} from 'stores/split'
+  import { defaultKeymap, history, historyKeymap } from '@codemirror/commands'
+  import { defaultHighlightStyle, syntaxHighlighting } from '@codemirror/language'
+  import { html } from '@codemirror/lang-html'
+  import { oneDarkTheme, oneDarkHighlightStyle } from 'lib/codemirrorDarkTheme'
+  import { isDarkThemeON } from 'stores/theme'
+  import { report, reportLoading, reportError, linesAndSelectors } from 'stores/report'
+  import { inlinerLoading, inlinerError } from 'stores/inliner'
+  import { splitState } from 'stores/split'
   import {
     validationErrorsMarker,
     validationErrorsEffect,
@@ -29,8 +29,8 @@
     EVENT_SUBMIT_EXAMPLE,
     EVENT_INLINE_CSS
   } from 'lib/constants'
-  import {loadSampleContent} from 'lib/sampleHelpers'
-  import {getTooltipText} from 'lib/reportHelpers'
+  import { loadSampleContent } from 'lib/sampleHelpers'
+  import { getTooltipText } from 'lib/reportHelpers'
 
   const TOOLTIP_SHIFT_PX = 20
 
@@ -39,14 +39,14 @@
   let tooltipElement = null
   let tooltipTextElement = null
 
-  const {getWebWorker} = getContext('ww')
+  const { getWebWorker } = getContext('ww')
 
   const getEditorState = (doc = '') => {
     const [eTheme, eThemeHighLight] = (() => {
       if ($isDarkThemeON) {
         return [
           oneDarkTheme,
-          syntaxHighlighting(oneDarkHighlightStyle, {fallback: true})
+          syntaxHighlighting(oneDarkHighlightStyle, { fallback: true })
         ]
       }
 
@@ -57,7 +57,7 @@
             height: '100%'
           }
         }),
-        syntaxHighlighting(defaultHighlightStyle, {fallback: true})
+        syntaxHighlighting(defaultHighlightStyle, { fallback: true })
       ]
     })()
 
@@ -97,7 +97,7 @@
         splitState.switchToRightOnMobile()
         window.dispatchEvent(
           new window.CustomEvent(EVENT_LINE_TO_REPORT, {
-            detail: {line: line.number}
+            detail: { line: line.number }
           })
         )
       }
@@ -183,7 +183,7 @@
       return
     }
 
-    const {line} = e.detail
+    const { line } = e.detail
     const editorLine = editorView.state.doc.line(line)
     const selection = EditorSelection.cursor(editorLine.from)
     editorView.dispatch({
@@ -275,7 +275,7 @@
     }
 
     editorView.dispatch({
-      effects: validationErrorsEffect.of({type: 'empty'})
+      effects: validationErrorsEffect.of({ type: 'empty' })
     })
     Object.keys(linesSelector).forEach((line) => {
       const editorLine = editorView.state.doc.line(line)
