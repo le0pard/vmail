@@ -5,9 +5,9 @@ Encoding.default_internal = Encoding::UTF_8
 
 require 'lib/middleman_patches'
 
-::Middleman::Extensions.register(:auto_blank_links) do
+Middleman::Extensions.register(:auto_blank_links) do
   require 'lib/auto_blank_links_extension'
-  ::AutoBlankLinksExtension
+  AutoBlankLinksExtension
 end
 
 ###

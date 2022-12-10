@@ -3,7 +3,7 @@
 require 'nokogiri'
 require 'addressable/uri'
 
-class AutoBlankLinksExtension < ::Middleman::Extension
+class AutoBlankLinksExtension < Middleman::Extension
 
   option :ignore_hostnames, [], 'Website internal hostnames'
   option :ignore_pages, [], 'Patterns to avoid target blanks for pages'
