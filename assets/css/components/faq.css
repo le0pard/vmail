@@ -29,14 +29,14 @@
 }
 
 .faq-header-github {
-  fill: var(--mutedButtonColor);
+  fill: var(--octocatColor);
   width: 2rem;
   height: 2rem;
   padding-top: 3px;
 }
 
 .faq-header-github-link:hover .faq-header-github {
-  fill: var(--mutedButtonHoverColor);
+  fill: var(--octocatHoverColor);
 }
 
 .faq-header-link {
