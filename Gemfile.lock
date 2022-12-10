@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/middleman/middleman
-  revision: 70374b0b17f2d379a2d9ad8aad52bb944b726772
+  revision: 50f76c2984c4f82b243b0a5e3f860aeaf63e07d5
   specs:
     middleman (5.0.0.rc.2)
       coffee-script (~> 2.4)
@@ -108,7 +108,7 @@ GEM
       faraday (~> 1.0)
     fastimage (2.2.6)
     ffi (1.15.5)
-    haml (6.0.10)
+    haml (6.1.1)
       temple (>= 0.8.2)
       thor
       tilt
@@ -118,10 +118,10 @@ GEM
     htmlcompressor (0.4.0)
     i18n (1.12.0)
       concurrent-ruby (~> 1.0)
-    json (2.6.2)
+    json (2.6.3)
     kramdown (2.4.0)
       rexml
-    lefthook (1.2.1)
+    lefthook (1.2.4)
     listen (3.7.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
@@ -144,10 +144,10 @@ GEM
     padrino-support (0.15.1)
     pairing_heap (1.0.0)
     parallel (1.22.1)
-    parser (3.1.2.1)
+    parser (3.1.3.0)
       ast (~> 2.4.1)
     parslet (2.0.0)
-    public_suffix (5.0.0)
+    public_suffix (5.0.1)
     racc (1.6.1)
     rack (2.2.4)
     rack-test (2.0.2)
@@ -168,7 +168,7 @@ GEM
       pairing_heap (>= 0.3.0)
       rexml (~> 3.2, >= 3.2.4)
       stream (~> 0.5.3)
-    rubocop (1.39.0)
+    rubocop (1.40.0)
       json (~> 2.3)
       parallel (~> 1.10)
       parser (>= 3.1.2.1)
@@ -178,7 +178,7 @@ GEM
       rubocop-ast (>= 1.23.0, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 3.0)
-    rubocop-ast (1.23.0)
+    rubocop-ast (1.24.0)
       parser (>= 3.1.1.0)
     rubocop-performance (1.15.1)
       rubocop (>= 1.7.0, < 2.0)
@@ -192,7 +192,7 @@ GEM
     servolux (0.13.0)
     stream (0.5.5)
     temple (0.9.1)
-    terser (1.1.12)
+    terser (1.1.13)
       execjs (>= 0.3.0, < 3)
     thor (1.2.1)
     tilt (2.0.11)
