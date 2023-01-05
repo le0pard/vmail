@@ -145,7 +145,10 @@ class CaniuseGenerator # rubocop:disable Metrics/ClassLength
     'css-float' => [['float', '']],
     'css-font-weight' => [['font-weight', '']],
     'css-font' => [['font', '']],
-    'css-sytem-ui' => [%w[font-family system-ui]],
+    'css-sytem-ui' => [
+      %w[font-family system-ui], %w[font-family ui-serif], %w[font-family ui-sans-serif],
+      %w[font-family ui-monospace], %w[font-family ui-rounded]
+    ],
     'css-font-kerning' => [['font-kerning', '']],
     'css-gap' => [['gap', '']],
     'css-height' => [['height', '']],
