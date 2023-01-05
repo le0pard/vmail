@@ -116,6 +116,7 @@ class CaniuseGenerator # rubocop:disable Metrics/ClassLength
     'css-background-repeat' => [['background-repeat', '']],
     'css-background-size' => [['background-size', '']],
     'css-background' => [['background', '']],
+    'css-conic-gradient' => [['background', 'conic-gradient']],
     'css-border-radius-logical' => [['border-start-start-radius', ''], ['border-start-end-radius', ''],
                                     ['border-end-start-radius', ''], ['border-end-end-radius', '']],
     'css-border-image' => [['border-image', '']],
@@ -144,7 +145,9 @@ class CaniuseGenerator # rubocop:disable Metrics/ClassLength
     'css-float' => [['float', '']],
     'css-font-weight' => [['font-weight', '']],
     'css-font' => [['font', '']],
+    'css-sytem-ui' => [['font-family', 'system-ui']],
     'css-font-kerning' => [['font-kerning', '']],
+    'css-gap' => [['gap', '']],
     'css-height' => [['height', '']],
     'css-hyphens' => [['hyphens', '']],
     'css-inline-size' => [['inline-size', '']],
@@ -155,6 +158,17 @@ class CaniuseGenerator # rubocop:disable Metrics/ClassLength
     'css-list-style-image' => [['list-style-image', '']],
     'css-list-style-position' => [['list-style-position', '']],
     'css-list-style-type' => [['list-style-type', '']],
+    'css-intrinsic-size' => [
+      ['width', 'fit-content'], ['height', 'fit-content'], ['min-width', 'fit-content'],
+      ['min-height', 'fit-content'], ['max-width', 'fit-content'], ['max-height', 'fit-content'],
+      ['inline-size', 'fit-content'], ['block-size', 'fit-content'],
+      ['width', 'min-content'], ['height', 'min-content'], ['min-width', 'min-content'],
+      ['min-height', 'min-content'], ['max-width', 'min-content'], ['max-height', 'min-content'],
+      ['inline-size', 'min-content'], ['block-size', 'min-content'],
+      ['width', 'max-content'], ['height', 'max-content'], ['min-width', 'max-content'],
+      ['min-height', 'max-content'], ['max-width', 'max-content'], ['max-height', 'max-content'],
+      ['inline-size', 'max-content'], ['block-size', 'max-content']
+    ],
     'css-list-style' => [['list-style', '']],
     'css-margin' => [['margin', '']],
     'css-margin-block-start-end' => [['margin-block-start', ''], ['margin-block-end', '']],
@@ -172,6 +186,7 @@ class CaniuseGenerator # rubocop:disable Metrics/ClassLength
     'css-object-position' => [['object-position', '']],
     'css-opacity' => [['opacity', '']],
     'css-outline' => [['outline', '']],
+    'css-outline-offset' => [['outline-offset', '']],
     'css-overflow' => [['overflow', '']],
     'css-overflow-wrap' => [['overflow-wrap', '']],
     'css-padding' => [['padding', '']],
@@ -258,7 +273,8 @@ class CaniuseGenerator # rubocop:disable Metrics/ClassLength
     'css-pseudo-element-before' => 'before',
     'css-pseudo-element-first-letter' => 'first-letter',
     'css-pseudo-element-first-line' => 'first-line',
-    'css-pseudo-element-placeholder' => 'placeholder'
+    'css-pseudo-element-placeholder' => 'placeholder',
+    'css-pseudo-element-marker' => 'marker'
   }.freeze
 
   AT_RULE_CSS_STATEMENTS_MAPS = {
@@ -350,7 +366,8 @@ class CaniuseGenerator # rubocop:disable Metrics/ClassLength
         !CSS_PSEUDO_SELECTORS_MAPS.key?(r['slug']) &&
         !AT_RULE_CSS_STATEMENTS_MAPS.key?(r['slug']) &&
         !IMG_FORMATS_MAPS.key?(r['slug']) &&
-        !LINK_TYPES_MAP.key?(r['slug'])
+        !LINK_TYPES_MAP.key?(r['slug']) &&
+        !['bimi'].include?(r['slug']) # skip some rules
     end
 
     return if rules_without_apply.size.zero?
