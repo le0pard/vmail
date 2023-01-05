@@ -501,6 +501,11 @@ func (prs *ParserEngine) checkCssPropertyStyle(propertyKey, propertyVal string, 
 		if cssValData, ok := cssKeyData[propertyVal]; ok {
 			prs.saveToReportCssProperty(propertyKey, propertyVal, position, cssValData)
 		}
+		for prKey, prVal := range cssKeyData {
+			if strings.Contains(propertyVal, prKey) {
+				prs.saveToReportCssProperty(propertyKey, prKey, position, prVal)
+			}
+		}
 	}
 }
 

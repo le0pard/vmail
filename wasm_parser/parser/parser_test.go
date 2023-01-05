@@ -677,6 +677,41 @@ func TestReportFromHTMLHasPseudoSelector(t *testing.T) {
 	}
 }
 
+func TestReportWorkWithContainCssRule(t *testing.T) {
+	html := `<html><body>
+<style>
+	div {
+		background: conic-gradient(red, orange, yellow, green, blue);
+		font-family: "Gill Sans", system-ui;
+	}
+</style>
+</body></html>`
+	report, err := ReportFromHTML([]byte(html))
+	if err != nil {
+		t.Fatalf(`ReportFromHTML("%s"), %v`, html, err)
+	}
+
+	// log.Printf("report: %v\n", report)
+
+	var tests = []struct {
+		checkType string
+		got       map[int]bool
+		want      map[int]bool
+	}{
+		{"CssProperties background conic-gradient", report.CssProperties["background"]["conic-gradient"].Lines, map[int]bool{4: true}},
+		{"CssProperties font-family system-ui", report.CssProperties["font-family"]["system-ui"].Lines, map[int]bool{5: true}},
+	}
+
+	for _, tt := range tests {
+		testname := tt.checkType
+		t.Run(testname, func(t *testing.T) {
+			if !reflect.DeepEqual(tt.got, tt.want) {
+				t.Errorf("%s: got %v, want %v", tt.checkType, tt.got, tt.want)
+			}
+		})
+	}
+}
+
 func BenchmarkReportFromHTML(b *testing.B) {
 	html, err := os.ReadFile("./bench.html")
 	if err != nil {
