@@ -116,7 +116,7 @@ class CaniuseGenerator # rubocop:disable Metrics/ClassLength
     'css-background-repeat' => [['background-repeat', '']],
     'css-background-size' => [['background-size', '']],
     'css-background' => [['background', '']],
-    'css-conic-gradient' => [['background', 'conic-gradient']],
+    'css-conic-gradient' => [%w[background conic-gradient]],
     'css-border-radius-logical' => [['border-start-start-radius', ''], ['border-start-end-radius', ''],
                                     ['border-end-start-radius', ''], ['border-end-end-radius', '']],
     'css-border-image' => [['border-image', '']],
@@ -145,7 +145,7 @@ class CaniuseGenerator # rubocop:disable Metrics/ClassLength
     'css-float' => [['float', '']],
     'css-font-weight' => [['font-weight', '']],
     'css-font' => [['font', '']],
-    'css-sytem-ui' => [['font-family', 'system-ui']],
+    'css-sytem-ui' => [%w[font-family system-ui]],
     'css-font-kerning' => [['font-kerning', '']],
     'css-gap' => [['gap', '']],
     'css-height' => [['height', '']],
@@ -159,15 +159,15 @@ class CaniuseGenerator # rubocop:disable Metrics/ClassLength
     'css-list-style-position' => [['list-style-position', '']],
     'css-list-style-type' => [['list-style-type', '']],
     'css-intrinsic-size' => [
-      ['width', 'fit-content'], ['height', 'fit-content'], ['min-width', 'fit-content'],
-      ['min-height', 'fit-content'], ['max-width', 'fit-content'], ['max-height', 'fit-content'],
-      ['inline-size', 'fit-content'], ['block-size', 'fit-content'],
-      ['width', 'min-content'], ['height', 'min-content'], ['min-width', 'min-content'],
-      ['min-height', 'min-content'], ['max-width', 'min-content'], ['max-height', 'min-content'],
-      ['inline-size', 'min-content'], ['block-size', 'min-content'],
-      ['width', 'max-content'], ['height', 'max-content'], ['min-width', 'max-content'],
-      ['min-height', 'max-content'], ['max-width', 'max-content'], ['max-height', 'max-content'],
-      ['inline-size', 'max-content'], ['block-size', 'max-content']
+      %w[width fit-content], %w[height fit-content], %w[min-width fit-content],
+      %w[min-height fit-content], %w[max-width fit-content], %w[max-height fit-content],
+      %w[inline-size fit-content], %w[block-size fit-content],
+      %w[width min-content], %w[height min-content], %w[min-width min-content],
+      %w[min-height min-content], %w[max-width min-content], %w[max-height min-content],
+      %w[inline-size min-content], %w[block-size min-content],
+      %w[width max-content], %w[height max-content], %w[min-width max-content],
+      %w[min-height max-content], %w[max-width max-content], %w[max-height max-content],
+      %w[inline-size max-content], %w[block-size max-content]
     ],
     'css-list-style' => [['list-style', '']],
     'css-margin' => [['margin', '']],
@@ -355,6 +355,8 @@ class CaniuseGenerator # rubocop:disable Metrics/ClassLength
   private
 
   def warn_about_now_covered_rules # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
+    skipped_rules = ['bimi']
+
     rules_without_apply = data.filter do |r|
       !SINGLE_KEY_MAP.include?(r['slug']) &&
         !HTML_TAGS_MAPS.key?(r['slug']) &&
@@ -367,10 +369,10 @@ class CaniuseGenerator # rubocop:disable Metrics/ClassLength
         !AT_RULE_CSS_STATEMENTS_MAPS.key?(r['slug']) &&
         !IMG_FORMATS_MAPS.key?(r['slug']) &&
         !LINK_TYPES_MAP.key?(r['slug']) &&
-        !['bimi'].include?(r['slug']) # skip some rules
+        !skipped_rules.include?(r['slug']) # skip some rules
     end
 
-    return if rules_without_apply.size.zero?
+    return if rules_without_apply.empty?
 
     $stdout.puts "WARN, This rules was skipped: #{rules_without_apply.map { |r| r['slug'] }.join(', ')}"
   end
