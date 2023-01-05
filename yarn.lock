@@ -7321,6 +7321,7 @@ __metadata:
     eslint-plugin-svelte3: ^4.0.0
     file-loader: 6.2.0
     focus-visible: ^5.2.0
+    has: ^1.0.3
     lodash: 4.17.21
     mini-css-extract-plugin: 2.7.2
     normalize.css: 8.0.1
