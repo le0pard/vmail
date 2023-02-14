@@ -151,6 +151,8 @@ class CaniuseGenerator # rubocop:disable Metrics/ClassLength
     ],
     'css-font-kerning' => [['font-kerning', '']],
     'css-gap' => [['gap', '']],
+    'css-grid-template' => [['grid-template', ''], ['grid-template-areas', ''], ['grid-template-columns', ''],
+                            ['grid-template-rows', '']],
     'css-height' => [['height', '']],
     'css-hyphens' => [['hyphens', '']],
     'css-inline-size' => [['inline-size', '']],
@@ -241,14 +243,15 @@ class CaniuseGenerator # rubocop:disable Metrics/ClassLength
   }.freeze
 
   CSS_FUNCTIONS_MAPS = {
-    'css-linear-gradient' => 'linear-gradient',
-    'css-radial-gradient' => 'radial-gradient',
-    'css-rgb' => 'rgb',
-    'css-rgba' => 'rgba',
-    'css-unit-calc' => 'calc',
-    'css-function-clamp' => 'clamp',
-    'css-function-max' => 'max',
-    'css-function-min' => 'min'
+    'css-modern-color' => %w[lch oklch lab oklab],
+    'css-linear-gradient' => ['linear-gradient'],
+    'css-radial-gradient' => ['radial-gradient'],
+    'css-rgb' => ['rgb'],
+    'css-rgba' => ['rgba'],
+    'css-unit-calc' => ['calc'],
+    'css-function-clamp' => ['clamp'],
+    'css-function-max' => ['max'],
+    'css-function-min' => ['min']
   }.freeze
 
   CSS_PSEUDO_SELECTORS_MAPS = {
@@ -334,7 +337,8 @@ class CaniuseGenerator # rubocop:disable Metrics/ClassLength
     @data = conn.get('https://www.caniemail.com/api/data.json').body['data']
   end
 
-  def generate(file) # rubocop:disable Metrics/MethodLength Metrics/AbcSize
+  # Metrics/AbcSize
+  def generate(file)
     rules = {
       html_tags: generate_html_tags,
       html_attributes: generate_html_attributes,
@@ -357,7 +361,7 @@ class CaniuseGenerator # rubocop:disable Metrics/ClassLength
 
   private
 
-  def warn_about_now_covered_rules # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
+  def warn_about_now_covered_rules # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     skipped_rules = ['bimi']
 
     rules_without_apply = data.filter do |r|
@@ -440,12 +444,24 @@ class CaniuseGenerator # rubocop:disable Metrics/ClassLength
 
       next if count_not_support(rule['stats']).zero? # supported in all clients
 
-      agg[v] = {
-        notes: rule['notes_by_num'] || [],
-        stats: normalize_support(rule['stats']),
-        url: rule['url'] || '',
-        description: rule['description'] || ''
-      }
+      if v.is_a?(Array)
+        v.each do |vk|
+          agg[vk] = {
+            notes: rule['notes_by_num'] || [],
+            stats: normalize_support(rule['stats']),
+            url: rule['url'] || '',
+            description: rule['description'] || ''
+          }
+        end
+      else
+        agg[v] = {
+          notes: rule['notes_by_num'] || [],
+          stats: normalize_support(rule['stats']),
+          url: rule['url'] || '',
+          description: rule['description'] || ''
+        }
+      end
+
     end
   end
 
