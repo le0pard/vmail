@@ -4,5 +4,5 @@ go 1.17
 
 require (
 	github.com/tdewolff/parse/v2 v2.6.5
-	golang.org/x/net v0.5.0
+	golang.org/x/net v0.7.0
 )
