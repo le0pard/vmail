@@ -12,14 +12,14 @@ VMail collect the data on support for particular HTML & CSS rules from [Caniemai
 
 ## Development
 
-Web app build on top of [middleman](http://middlemanapp.com/). To start it in development mode, you need install ruby, node.js, golang and run in terminal:
+To start it in development mode, you need install ruby, node.js, golang and run in terminal:
 
 ```bash
 $ bundle # get all ruby deps
 $ yarn # get all node.js deps
 $ bundle exec rake wasm:parser # build wasm parser module
 $ bundle exec rake wasm:inliner # build wasm inliner module
-$ bundle exec middleman server # start server on 4567 port
+$ yarn dev # start server on 3000 port
 ```
 
 ### Build wasm files from Go files
