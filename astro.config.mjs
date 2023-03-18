@@ -52,7 +52,8 @@ export default defineConfig({
     html: true,
     js: true,
     img: false,
-    svg: false
+    svg: false,
+    exclude: ['email_sample.html']
   })],
   markdown: {
     extendDefaultPlugins: true,
