@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 
 git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 
-gem 'middleman', github: 'middleman/middleman'
+gem 'middleman', github: 'middleman/middleman', branch: '5.x'
 # EXTENSIONS
 gem 'middleman-minify-html', github: 'middleman/middleman-minify-html' # min html
 # UTILS
