@@ -66,12 +66,6 @@ const sortClientsByUrlFun = (a, b) => searchCollator.compare(a.url, b.url)
 sha256(JSON.stringify(cachedAssets.sort(sortClientsByUrlFun))).then((rev) => {
   const revision = `${rev}-v1`
   precacheAndRoute([
-    // favicons
-    { url: '/icon-192x192.png', revision },
-    { url: '/icon-512x512.png', revision },
-    { url: '/maskable_icon.png', revision },
-    { url: '/favicon.svg', revision },
-    { url: '/favicon.ico', revision },
     // root page
     { url: '/index.html', revision },
     // faq page
