@@ -313,7 +313,7 @@
       return
     }
 
-    const htmlContent = editorView.state.doc.toString()
+    const htmlContent = editorView?.state?.doc?.toString() || ''
     destroyEditor()
     createEditor(htmlContent)
     applyErrorGutters($linesAndSelectors)
