@@ -9,8 +9,6 @@
   let inlinerButtonText = 'Inline CSS in HTML'
   let sampleButtonText = 'Sample HTML/CSS'
 
-  const screenSizeMediumMedia = window.matchMedia('(max-width: 1000px)')
-
   const genAndSubmitSample = () => {
     window.dispatchEvent(new window.CustomEvent(EVENT_SUBMIT_EXAMPLE, { detail: {} }))
   }
@@ -36,11 +34,14 @@
   })
 
   onMount(() => {
+    const eventAbortController = new AbortController()
+    const { signal } = eventAbortController
     // init
+    const screenSizeMediumMedia = window.matchMedia('(max-width: 1000px)')
     onScreenSizeMediumMediaChange(screenSizeMediumMedia)
     // listeners
-    screenSizeMediumMedia.addEventListener('change', onScreenSizeMediumMediaChange)
-    return () => screenSizeMediumMedia.removeEventListener('change', onScreenSizeMediumMediaChange)
+    screenSizeMediumMedia.addEventListener('change', onScreenSizeMediumMediaChange, { signal })
+    return () => eventAbortController?.abort()
   })
 
   onDestroy(unsubscribeInlinerError)

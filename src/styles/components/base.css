@@ -126,10 +126,3 @@ a:hover, a:active {
   color: var(--linkHoverColor);
 }
 
-.parser-controller {
-  height: 100%;
-}
-
-.parser-container {
-  height: 100%;
-}

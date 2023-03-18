@@ -50,8 +50,11 @@
   }
 
   onMount(() => {
-    window.addEventListener(EVENT_LINE_TO_REPORT, handleEditorLineClickEvent)
-    return () => window.removeEventListener(EVENT_LINE_TO_REPORT, handleEditorLineClickEvent)
+    const eventAbortController = new AbortController()
+    const { signal } = eventAbortController
+
+    window.addEventListener(EVENT_LINE_TO_REPORT, handleEditorLineClickEvent, { signal })
+    return () => eventAbortController?.abort()
   })
 </script>
 

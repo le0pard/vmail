@@ -16,12 +16,14 @@
     getWebWorker: () => webWorkerObject
   })
 
-  onDestroy(() => {
+  const resetAllStates = () => {
     report.reset()
     reportLoading.reset()
     reportError.reset()
     splitState.reset()
-  })
+  }
+
+  onDestroy(resetAllStates)
 </script>
 
 <style>

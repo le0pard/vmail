@@ -325,14 +325,13 @@
   })
 
   onMount(() => {
-    window.addEventListener(EVENT_LINE_TO_EDITOR, handleReportLineClickEvent)
-    window.addEventListener(EVENT_INLINE_CSS, handleInlineCss)
-    window.addEventListener(EVENT_SUBMIT_EXAMPLE, handleLoadSample)
-    return () => {
-      window.removeEventListener(EVENT_LINE_TO_EDITOR, handleReportLineClickEvent)
-      window.removeEventListener(EVENT_INLINE_CSS, handleInlineCss)
-      window.removeEventListener(EVENT_SUBMIT_EXAMPLE, handleLoadSample)
-    }
+    const eventAbortController = new AbortController()
+    const { signal } = eventAbortController
+
+    window.addEventListener(EVENT_LINE_TO_EDITOR, handleReportLineClickEvent, { signal })
+    window.addEventListener(EVENT_INLINE_CSS, handleInlineCss, { signal })
+    window.addEventListener(EVENT_SUBMIT_EXAMPLE, handleLoadSample, { signal })
+    return () => eventAbortController?.abort()
   })
 
   onDestroy(unsubscribeLinesReport)

@@ -37,9 +37,13 @@
   }
 
   onMount(() => {
+    const eventAbortController = new AbortController()
+    const { signal } = eventAbortController
+    // init
     onScreenSizeMinMediaChange(screenSizeMinMedia())
-    screenSizeMinMedia().addEventListener('change', onScreenSizeMinMediaChange)
-    return () => screenSizeMinMedia().removeEventListener('change', onScreenSizeMinMediaChange)
+    // subscribe
+    screenSizeMinMedia().addEventListener('change', onScreenSizeMinMediaChange, { signal })
+    return () => eventAbortController?.abort()
   })
 </script>
 

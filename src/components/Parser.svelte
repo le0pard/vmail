@@ -1,6 +1,7 @@
 <svelte:options immutable="{true}" />
 
 <script>
+  import { onMount } from 'svelte'
   import { wrap } from 'comlink'
   import { memoize } from '@utils/memoize'
   import AppComponent from '@components/App.svelte'
@@ -12,6 +13,22 @@
       return wrap(webWorker)
     })
   )
+
+  let isRendered = false
+
+  const resetState = () => {
+    isRendered = false
+  }
+
+  onMount(() => {
+    isRendered = true
+
+    const eventAbortController = new AbortController()
+    const { signal } = eventAbortController
+
+    document.addEventListener('turbo:before-cache', resetState, { signal })
+    return () => eventAbortController?.abort()
+  })
 </script>
 
 {#if !window.WebAssembly}
@@ -22,9 +39,11 @@
   {#await getWebWorker()}
     <div>loading...</div>
   {:then webWorkerObject}
-    <AppComponent webWorkerObject={webWorkerObject}>
-      <slot slot="githubIcon" name="githubIcon" />
-    </AppComponent>
+    {#if isRendered}
+      <AppComponent webWorkerObject={webWorkerObject}>
+        <slot slot="githubIcon" name="githubIcon" />
+      </AppComponent>
+    {/if}
   {:catch error}
      <ErrorComponent title="Error to load web worker" message={error.toString()} />
   {/await}
