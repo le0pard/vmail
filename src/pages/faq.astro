@@ -1,23 +1,21 @@
 ---
+/* eslint-disable astro/no-unused-css-selector */
 import AppLayout from '@layouts/app.astro'
 import SvgIcon from '@components/SvgIcon.astro'
-
-const linkCampaignQuery = '?utm_source=vmail&utm_medium=referral'
 ---
+<style>
+  html.dark .faq-svg-path1 { fill: #282c34 }
+  html.dark .faq-svg-path2 { fill: #29b784 }
+  html.dark .faq-svg-path3 { fill: #fff }
+  #mainLogo {
+    height: 100%;
+  }
+</style>
 
 <AppLayout title="FAQ">
   <div class="faq-header">
     <div class="faq-header-logo-container">
       <a class="faq-header-logo-link" href="/">
-        <style>
-          html.dark .faq-svg-path1 { fill: #282c34 }
-          html.dark .faq-svg-path2 { fill: #29b784 }
-          html.dark .faq-svg-path3 { fill: #fff }
-          #mainLogo {
-            height: 100%;
-          }
-        </style>
-
         <svg id="mainLogo" height="216" viewBox="0 0 216 216" width="216" xmlns="http://www.w3.org/2000/svg">
           <g fill="none">
             <path class="faq-svg-path1" d="m201.762971 52.3911204-87.778865 67.4119626c-3.83279 2.929223-9.134542 2.929223-12.967332 0l-87.7788648-67.4119626c-3.64815718-2.7895226-5.13309463-7.6041582-3.69590617-11.9832934 1.43718847-4.3791352 5.47903447-7.355439 10.05987387-7.4078133h175.6574781c4.606437-.0073449 8.702846 2.9479684 10.176472 7.3417127 1.473625 4.3937444-.004837 9.2440751-3.672856 12.049394z" fill="#bfe3d5" stroke="#48494d" stroke-width="9.43" />
@@ -59,7 +57,7 @@ const linkCampaignQuery = '?utm_source=vmail&utm_medium=referral'
           <p class="faq-answer">Nope, VMail cannot do this. It is using database with email clients limitations about different HTML and CSS rules. Based on this database it parse your HTML template and provide report for it</p>
 
           <h4 class="faq-question">Where VMail get informations about email clients limitations?</h4>
-          <p class="faq-answer">VMail collect the data on support for particular HTML & CSS rules from <a href="https://www.caniemail.com/{linkCampaignQuery}">Caniemail.com</a></p>
+          <p class="faq-answer">VMail collect the data on support for particular HTML & CSS rules from <a href="https://www.caniemail.com/">Caniemail.com</a></p>
 
           <h4 class="faq-question">What does the "Inline CSS in HTML"/"Inline CSS" button do?</h4>
           <p class="faq-answer-middle">There are three ways to include styles within an email: using external stylesheets, embedded styles, or inline styles. While external stylesheets are a great option for web design, they aren't the best option for email design—many webmail clients block links to external stylesheets</p>
@@ -67,16 +65,16 @@ const linkCampaignQuery = '?utm_source=vmail&utm_medium=referral'
           <p class="faq-answer-middle">Inline styles are applied directly to HTML elements in each line of HTML—and are generally the safest way to ensure rendering compatibility across various email clients. However, inline styles can be time-consuming to write and a bit challenging to manage</p>
           <p class="faq-answer-middle">While it's entirely possible to hand code inlined CSS from the start, it's time consuming and difficult to maintain. By clicking button "Inline CSS in HTML"/"Inline CSS" application will try to load all your external stylesheets and with embedded styles inline its properties in HTML tags. This solution is not 100% error prone and can lead to broken HTML email template. For more control, you can use alternative services (they contain additional settings, which can be tunned for your HTML email template):</p>
           <ul>
-            <li><a href="https://alter.email/{linkCampaignQuery}">Alter.Email</a></li>
-            <li><a href="https://app.postdrop.io/{linkCampaignQuery}">Postdrop</a></li>
-            <li><a href="http://premailer.dialect.ca/{linkCampaignQuery}">Premailer</a></li>
-            <li><a href="https://premailer.io/{linkCampaignQuery}">Premailer.io</a></li>
-            <li><a href="https://putsmail.com/inliner{linkCampaignQuery}">PutsMail CSS Inliner</a></li>
-            <li><a href="https://templates.mailchimp.com/resources/inline-css/{linkCampaignQuery}">MailChimp's CSS Inliner</a></li>
-            <li><a href="https://www.campaignmonitor.com/resources/tools/css-inliner/{linkCampaignQuery}">Campaign Monitor's CSS Inliner</a></li>
-            <li><a href="https://get.foundation/emails/inliner.html{linkCampaignQuery}">Zurb's Responsive Email Inliner</a></li>
+            <li><a href="https://alter.email/">Alter.Email</a></li>
+            <li><a href="https://app.postdrop.io/">Postdrop</a></li>
+            <li><a href="http://premailer.dialect.ca/">Premailer</a></li>
+            <li><a href="https://premailer.io/">Premailer.io</a></li>
+            <li><a href="https://putsmail.com/inliner">PutsMail CSS Inliner</a></li>
+            <li><a href="https://templates.mailchimp.com/resources/inline-css/">MailChimp's CSS Inliner</a></li>
+            <li><a href="https://www.campaignmonitor.com/resources/tools/css-inliner/">Campaign Monitor's CSS Inliner</a></li>
+            <li><a href="https://get.foundation/emails/inliner.html">Zurb's Responsive Email Inliner</a></li>
           </ul>
-          <p class="faq-answer">More info how to build email template you can get from <a href="https://www.smashingmagazine.com/2021/04/complete-guide-html-email-templates-tools/{linkCampaignQuery}">this article</a></p>
+          <p class="faq-answer">More info how to build email template you can get from <a href="https://www.smashingmagazine.com/2021/04/complete-guide-html-email-templates-tools/">this article</a></p>
 
           <h4 class="faq-question">Does VMail have API?</h4>
           <p class="faq-answer">Nope, it doesn't. VMail fully work in your browser and do not have any backend/server to process your API requests</p>
@@ -92,4 +90,3 @@ const linkCampaignQuery = '?utm_source=vmail&utm_medium=referral'
     </div>
   </div>
 </AppLayout>
-

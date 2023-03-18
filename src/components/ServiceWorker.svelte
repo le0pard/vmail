@@ -4,7 +4,7 @@
   const { needRefresh, updateServiceWorker } = useRegisterSW({
     immediate: true,
     onRegisterError: (error) => {
-      console.error('SW registration error', error)
+      console.error('SW registration error', error) // eslint-disable-line no-console
     }
   })
 

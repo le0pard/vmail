@@ -7,10 +7,6 @@ import rehypeExternalLinks from 'rehype-external-links'
 
 const SITE = 'https://vmail.leopard.in.ua/'
 
-const pageRoute = path => (
-  path === SITE ? path : `${path}.html`
-)
-
 // https://astro.build/config
 export default defineConfig({
   site: SITE,

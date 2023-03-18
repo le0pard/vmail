@@ -9,8 +9,8 @@
     activateTheme($theme)
   })
 
-  const unsubscribe = theme.subscribe(v => activateTheme(v))
+  const themeUnsubscribe = theme.subscribe(v => activateTheme(v))
 
-	onDestroy(unsubscribe)
+	onDestroy(themeUnsubscribe)
 </script>
 
