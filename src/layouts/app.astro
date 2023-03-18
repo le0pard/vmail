@@ -1,0 +1,29 @@
+---
+import { pwaInfo } from 'virtual:pwa-info'
+import { Sprite } from 'astro-icon'
+import Head from '@components/Head.astro'
+import HeadAnalytic from '@components/HeadAnalytic.astro'
+import DomInit from '@components/DomInit.astro'
+import Hotwire from '@components/Hotwire.astro'
+import ServiceWorker from '@components/ServiceWorker.astro'
+
+const { title } = Astro.props
+---
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><![endif]-->
+    <Head title={title} />
+    <slot name="head"/>
+    { pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} /> }
+    <HeadAnalytic />
+  </head>
+  <body>
+    <Sprite.Provider>
+      <DomInit />
+      <Hotwire />
+      <ServiceWorker />
+      <slot />
+    </Sprite.Provider>
+  </body>
+</html>

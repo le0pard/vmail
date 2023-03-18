@@ -7,13 +7,11 @@
 # Ignore bundler config
 /.bundle
 
-# Ignore the build directory
-/build
-/.assets-build
-/tmp
-
 # ignore wasm
 *.wasm
+
+# Ignore the build directory
+/dist
 
 # Ignore Sass' cache
 /.sass-cache

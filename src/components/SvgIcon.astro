@@ -1,0 +1,25 @@
+---
+import { Sprite } from 'astro-icon'
+const { name, class: className, size = '1rem' } = Astro.props
+---
+<style define:vars={{ size }}>
+  .svg-icon {
+    fill: currentColor;
+    display: inline-block;
+    height: var(--size);
+    overflow: hidden;
+    position: relative;
+    width: var(--size);
+  }
+  .svg-icon-cnt {
+    fill: inherit;
+    background: inherit;
+    height: 100%;
+    pointer-events: none;
+    width: 100%;
+  }
+</style>
+
+<div class:list={['svg-icon', className]}>
+  <Sprite pack="mdi" name={name} class="svg-icon-cnt" />
+</div>

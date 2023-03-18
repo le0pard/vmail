@@ -1,0 +1,128 @@
+.faq-header {
+  position: fixed;
+  display: flex;
+  background-color: var(--headBgColor);
+  flex-shrink: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  min-width: 0;
+  width: 100vw;
+  box-shadow: 0 10px 30px 0 rgba(82, 63, 105, 0.08);
+  border-bottom: 1px solid var(--headBorderColor);
+  z-index: 2;
+}
+
+.faq-header-item {
+  display: flex;
+  align-items: stretch;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.faq-header-item-full {
+  flex-grow: 1;
+}
+
+.faq-header-github-link {
+  color: var(--mutedButtonColor);
+  margin: 0 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.faq-header-github {
+  fill: var(--octocatColor);
+  width: 2rem;
+  height: 2rem;
+  padding-top: 3px;
+}
+
+.faq-header-github-link:hover .faq-header-github {
+  fill: var(--octocatHoverColor);
+}
+
+.faq-header-link {
+  color: var(--headColor);
+  background-color: transparent;
+  border-bottom: 2px solid transparent;
+  transition: color 0.2s ease, background-color 0.2s ease;
+  padding: 0.5rem 0;
+  margin: 0 1rem;
+  text-decoration: none;
+}
+
+.faq-header-link-active {
+  border-bottom: 2px solid var(--headHoverColor);
+  color: var(--headHoverColor);
+}
+
+.faq-header-link:hover, .faq-header-link:active {
+  border-bottom: 2px solid var(--headHoverColor);
+}
+
+.faq-header-logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.faq-header-logo-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  margin: 0 0.5rem;
+}
+
+.faq-center-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  padding-top: 3rem;
+}
+
+.faq-container {
+  border: 0;
+  box-shadow: 0 10px 35px 0 rgba(56, 71, 109, 0.08);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  max-width: 1200px;
+  background-color: var(--cardBgColor);
+  border-radius: 0.4rem;
+  margin: 1rem;
+}
+
+.faq-body {
+  flex: 1 1 auto;
+  padding: 2rem;
+}
+
+.faq-text {
+  color: var(--cardBaseColor);
+}
+
+.faq-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.faq-question {
+  flex: 1;
+  margin-bottom: 0.3rem;
+}
+
+.faq-answer {
+  flex: 1;
+  color: var(--cardBaseColor);
+}
+
+.faq-answer-middle {
+  flex: 1;
+  color: var(--cardBaseColor);
+  margin-bottom: 0;
+}

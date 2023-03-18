@@ -71,12 +71,12 @@ jobs:
         run: bundle exec rake wasm:inliner
 
       - name: Build website
-        run: bundle exec middleman build
+        run: yarn build
 
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          path: "build/"
+          path: "dist/"
 
   deploy:
     needs: build

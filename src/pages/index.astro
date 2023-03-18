@@ -1,0 +1,17 @@
+---
+import AppLayout from '@layouts/app.astro'
+import Parser from '@components/Parser.svelte'
+import SvgIcon from '@components/SvgIcon.astro'
+---
+
+<AppLayout>
+  <meta slot="head" name="turbo-cache-control" content="no-cache" />
+
+  <div class="parser-controller">
+    <div class="parser-container">
+      <Parser client:only="svelte">
+        <SvgIcon slot="githubIcon" name="github" size="2rem" />
+      </Parser>
+    </div>
+  </div>
+</AppLayout>
