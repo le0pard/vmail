@@ -2,31 +2,22 @@
 
 <script>
   import { onMount } from 'svelte'
-  import { wrap } from 'comlink'
-  import { memoize } from '@utils/memoize'
+  import { getWebWorker } from '@utils/worker'
   import AppComponent from '@components/App.svelte'
   import ErrorComponent from '@components/Error.svelte'
 
-  const getWebWorker = memoize(
-    () => import('@utils/ww.js?worker').then(({ default: WWorker }) => {
-      const webWorker = new WWorker({ name: 'Parser Worker' })
-      return wrap(webWorker)
-    })
-  )
-
-  let isRendered = false
-
-  const resetState = () => {
-    isRendered = false
-  }
+  let isPageRendered = false // trigger destroy for nested components, if turbo change page
 
   onMount(() => {
-    isRendered = true
+    isPageRendered = true
 
     const eventAbortController = new AbortController()
     const { signal } = eventAbortController
 
-    document.addEventListener('turbo:before-cache', resetState, { signal })
+    document.addEventListener('turbo:before-cache', () => {
+      isPageRendered = false
+      eventAbortController?.abort()
+    }, { signal, once: true })
     return () => eventAbortController?.abort()
   })
 </script>
@@ -39,7 +30,7 @@
   {#await getWebWorker()}
     <div>loading...</div>
   {:then webWorkerObject}
-    {#if isRendered}
+    {#if isPageRendered}
       <AppComponent webWorkerObject={webWorkerObject}>
         <slot slot="githubIcon" name="githubIcon" />
       </AppComponent>
