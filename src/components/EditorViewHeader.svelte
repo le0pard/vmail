@@ -233,7 +233,7 @@
     <a class="editor-header-link editor-header-link-active" href="/"> VMail </a>
   </div>
   <div class="editor-header-item">
-    <a class="editor-header-link" href="/faq.html">FAQ</a>
+    <a class="editor-header-link" href="/faq">FAQ</a>
   </div>
   <div class="editor-header-item-full"></div>
   <div class="editor-header-item">

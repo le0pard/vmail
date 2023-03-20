@@ -40,6 +40,4 @@ registerRoute(
   })
 )
 
-const cachedAssets = self.__WB_MANIFEST
-
-precacheAndRoute(cachedAssets)
+precacheAndRoute(self.__WB_MANIFEST)
