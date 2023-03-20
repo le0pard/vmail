@@ -6,20 +6,6 @@ import { BackgroundSyncPlugin } from 'workbox-background-sync'
 import { ExpirationPlugin } from 'workbox-expiration'
 import { cleanupOutdatedCaches } from 'workbox-precaching/cleanupOutdatedCaches'
 
-const sha256 = (message) => {
-  // encode as UTF-8
-  const msgBuffer = new TextEncoder().encode(message)
-
-  // hash the message
-  return crypto.subtle.digest('SHA-256', msgBuffer).then((hashBuffer) => {
-    // convert ArrayBuffer to Array
-    const hashArray = Array.from(new Uint8Array(hashBuffer))
-    // convert bytes to hex string
-    const hashHex = hashArray.map((b) => ('00' + b.toString(16)).slice(-2)).join('')
-    return hashHex
-  })
-}
-
 self.addEventListener('message', (event) => {
   if (event.data?.type === 'SKIP_WAITING') {
     self.skipWaiting()
@@ -55,22 +41,5 @@ registerRoute(
 )
 
 const cachedAssets = self.__WB_MANIFEST
-
-const searchCollator = new Intl.Collator('en', {
-  usage: 'sort',
-  sensitivity: 'base',
-  numeric: true
-})
-const sortClientsByUrlFun = (a, b) => searchCollator.compare(a.url, b.url)
-
-sha256(JSON.stringify(cachedAssets.sort(sortClientsByUrlFun))).then((rev) => {
-  const revision = `${rev}-v1`
-  precacheAndRoute([
-    // root page
-    { url: '/index.html', revision },
-    // faq page
-    { url: '/faq.html', revision }
-  ])
-})
 
 precacheAndRoute(cachedAssets)

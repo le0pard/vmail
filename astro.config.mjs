@@ -21,7 +21,7 @@ export default defineConfig({
     scope: '/',
     includeAssets: ['favicon.svg', 'favicon.ico', 'icon-192x192.png', 'icon-512x512.png', 'maskable_icon.png'],
     injectManifest: {
-      globPatterns: ['**/*.{css,js}']
+      globPatterns: ['**/*.{css,js,html}']
     },
     devOptions: {
       enabled: true,
