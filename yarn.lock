@@ -35,10 +35,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@astrojs/compiler@npm:^1.0.0, @astrojs/compiler@npm:^1.3.0":
+"@astrojs/compiler@npm:^1.0.0":
   version: 1.3.0
   resolution: "@astrojs/compiler@npm:1.3.0"
   checksum: d2eb523499289c567d2197b4d6b3106cab3449627dfd0017652cbf3829c73684bd5db8a2c011a3a96f058be3fdfbed2a46d23b6f04aece62b77808f6ee752e06
+  languageName: node
+  linkType: hard
+
+"@astrojs/compiler@npm:^1.3.1":
+  version: 1.3.1
+  resolution: "@astrojs/compiler@npm:1.3.1"
+  checksum: fcf0df0729f20656f7a504c14ca85e06c0ab26a236c3d76d6f1b7835372c996f796da1cb5b8942d6b9bc7ae8e570d4e3500d354ceabe7e6041243d8b9f6b9c07
   languageName: node
   linkType: hard
 
@@ -64,9 +71,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@astrojs/markdown-remark@npm:^2.1.2":
-  version: 2.1.2
-  resolution: "@astrojs/markdown-remark@npm:2.1.2"
+"@astrojs/markdown-remark@npm:^2.1.3":
+  version: 2.1.3
+  resolution: "@astrojs/markdown-remark@npm:2.1.3"
   dependencies:
     "@astrojs/prism": ^2.1.0
     github-slugger: ^1.4.0
@@ -82,8 +89,8 @@ __metadata:
     unist-util-visit: ^4.1.0
     vfile: ^5.3.2
   peerDependencies:
-    astro: ^2.1.5
-  checksum: 4adfeec4fa526cf189dd7760d551a83abe23361f3c7b3a89f17ef1894f531e635804bdef87bab8d6884678449f61de828a00cfc98ce87aa6ee4db89745b4081b
+    astro: ^2.2.0
+  checksum: cf8cfabf2ad3f88b786ed38a71b662a973ce82a3f834cdc74d54c92191e870c35ad70ed29d1c8cfcc9499d8f4368aed4119236fa17d2cea2d03edff4fe9aefd3
   languageName: node
   linkType: hard
 
@@ -2085,10 +2092,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/js@npm:8.37.0":
-  version: 8.37.0
-  resolution: "@eslint/js@npm:8.37.0"
-  checksum: 7a07fb085c94ce1538949012c292fd3a6cd734f149bc03af6157dfbd8a7477678899ef57b4a27e15b36470a997389ad79a0533d5880c71e67720ae1a7de7c62d
+"@eslint/js@npm:8.38.0":
+  version: 8.38.0
+  resolution: "@eslint/js@npm:8.38.0"
+  checksum: 1f28987aa8c9cd93e23384e16c7220863b39b5dc4b66e46d7cdbccce868040f455a98d24cd8b567a884f26545a0555b761f7328d4a00c051e7ef689cbea5fce1
   languageName: node
   linkType: hard
 
@@ -2916,7 +2923,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"astro-eslint-parser@npm:^0.13.1, astro-eslint-parser@npm:^0.13.2":
+"astro-eslint-parser@npm:^0.13.1":
   version: 0.13.2
   resolution: "astro-eslint-parser@npm:0.13.2"
   dependencies:
@@ -2932,6 +2939,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"astro-eslint-parser@npm:^0.13.3":
+  version: 0.13.3
+  resolution: "astro-eslint-parser@npm:0.13.3"
+  dependencies:
+    "@astrojs/compiler": ^1.0.0
+    "@typescript-eslint/scope-manager": ^5.48.2
+    "@typescript-eslint/types": ^5.25.0
+    astrojs-compiler-sync: ^0.3.0
+    debug: ^4.3.4
+    eslint-visitor-keys: ^3.0.0
+    espree: ^9.0.0
+    semver: ^7.3.8
+  checksum: 5400c86f1bda5ea942ad200bbb6ce084496115dcdceb2df77630c00166a5181f459bcd39ab78f8953825be6ad97d572dd4fe5cc79a69ddda6a74f224442e0e43
+  languageName: node
+  linkType: hard
+
 "astro-icon@npm:0.8.0":
   version: 0.8.0
   resolution: "astro-icon@npm:0.8.0"
@@ -2943,13 +2966,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"astro@npm:^2.1.9":
-  version: 2.1.9
-  resolution: "astro@npm:2.1.9"
+"astro@npm:^2.2.1":
+  version: 2.2.1
+  resolution: "astro@npm:2.2.1"
   dependencies:
-    "@astrojs/compiler": ^1.3.0
+    "@astrojs/compiler": ^1.3.1
     "@astrojs/language-server": ^0.28.3
-    "@astrojs/markdown-remark": ^2.1.2
+    "@astrojs/markdown-remark": ^2.1.3
     "@astrojs/telemetry": ^2.1.0
     "@astrojs/webapi": ^2.1.0
     "@babel/core": ^7.18.2
@@ -2996,7 +3019,7 @@ __metadata:
     typescript: "*"
     unist-util-visit: ^4.1.0
     vfile: ^5.3.2
-    vite: ^4.1.2
+    vite: ^4.2.1
     vitefu: ^0.2.4
     yargs-parser: ^21.0.1
     zod: ^3.17.3
@@ -3007,7 +3030,7 @@ __metadata:
       optional: true
   bin:
     astro: astro.js
-  checksum: 42fdebd3c54b2c3339ef391970b9c23a49a22f703ff0d1d446e02adea14a8959c27a19dc0d2931d18f8154fc9655eefbe667d77281c344255d66889400a64ff8
+  checksum: d3c9c8b4b21d3f0abeae325cb8d914bd4d67949dd92678151b8913e3ed5daad782890ae7f775509bb8cccbf4499e2d216075977d85adbd658f3f1f4f044a4ebf
   languageName: node
   linkType: hard
 
@@ -4355,14 +4378,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:8.37.0":
-  version: 8.37.0
-  resolution: "eslint@npm:8.37.0"
+"eslint@npm:8.38.0":
+  version: 8.38.0
+  resolution: "eslint@npm:8.38.0"
   dependencies:
     "@eslint-community/eslint-utils": ^4.2.0
     "@eslint-community/regexpp": ^4.4.0
     "@eslint/eslintrc": ^2.0.2
-    "@eslint/js": 8.37.0
+    "@eslint/js": 8.38.0
     "@humanwhocodes/config-array": ^0.11.8
     "@humanwhocodes/module-importer": ^1.0.1
     "@nodelib/fs.walk": ^1.2.8
@@ -4401,7 +4424,7 @@ __metadata:
     text-table: ^0.2.0
   bin:
     eslint: bin/eslint.js
-  checksum: 80f3d5cdce2d671f4794e392d234a78d039c347673defb0596268bd481e8f30a53d93c01ff4f66a546c87d97ab4122c0e9cafe1371f87cb03cee6b7d5aa97595
+  checksum: 73b6d9b650d0434aa7c07d0a1802f099b086ee70a8d8ba7be730439a26572a5eb71def12125c82942be2ec8ee5be38a6f1b42a13e40d4b67f11a148ec9e263eb
   languageName: node
   linkType: hard
 
@@ -9384,7 +9407,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:^4.1.2, vite@npm:^4.2.1":
+"vite@npm:^4.2.1":
   version: 4.2.1
   resolution: "vite@npm:4.2.1"
   dependencies:
@@ -9449,12 +9472,12 @@ __metadata:
     "@lezer/highlight": ^1.1.4
     "@rollup/plugin-yaml": ^4.0.1
     "@vite-pwa/astro": ^0.0.5
-    astro: ^2.1.9
+    astro: ^2.2.1
     astro-compress: ^1.1.35
-    astro-eslint-parser: ^0.13.2
+    astro-eslint-parser: ^0.13.3
     astro-icon: 0.8.0
     comlink: ^4.4.1
-    eslint: 8.37.0
+    eslint: 8.38.0
     eslint-plugin-astro: ^0.26.1
     eslint-plugin-svelte3: ^4.0.0
     lodash: 4.17.21

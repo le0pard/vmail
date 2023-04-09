@@ -26,7 +26,7 @@
     "@lezer/highlight": "^1.1.4",
     "@rollup/plugin-yaml": "^4.0.1",
     "@vite-pwa/astro": "^0.0.5",
-    "astro": "^2.1.9",
+    "astro": "^2.2.1",
     "astro-compress": "^1.1.35",
     "astro-icon": "0.8.0",
     "comlink": "^4.4.1",
@@ -52,8 +52,8 @@
     "workbox-window": "6.5.4"
   },
   "devDependencies": {
-    "astro-eslint-parser": "^0.13.2",
-    "eslint": "8.37.0",
+    "astro-eslint-parser": "^0.13.3",
+    "eslint": "8.38.0",
     "eslint-plugin-astro": "^0.26.1",
     "eslint-plugin-svelte3": "^4.0.0",
     "prettier": "^2.8.7",
