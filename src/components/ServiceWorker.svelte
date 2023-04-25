@@ -91,8 +91,9 @@
   .sw-notification__icon--success {
     color: hsl(137deg 55% 51%);
   }
-  .sw-notification__icon--success:after, .sw-notification__icon--success:before {
-    content: "";
+  .sw-notification__icon--success:after,
+  .sw-notification__icon--success:before {
+    content: '';
     background: currentColor;
     display: block;
     position: absolute;
@@ -192,8 +193,9 @@
     height: 100%;
     width: 100%;
   }
-  .sw-notification__dismiss-btn:after, .sw-notification__dismiss-btn:before {
-    content: "";
+  .sw-notification__dismiss-btn:after,
+  .sw-notification__dismiss-btn:before {
+    content: '';
     background: #fff;
     height: 12px;
     width: 2px;
@@ -261,16 +263,21 @@
 
 {#if $needRefresh}
   <div class="sw-notification" style="justify-content: flex-start; align-items: flex-end;">
-    <div class="sw-notification__toast sw-notification__toast--dismissible sw-notification__toast--upper sw-notification__toast--success">
+    <div
+      class="sw-notification__toast sw-notification__toast--dismissible sw-notification__toast--upper sw-notification__toast--success"
+    >
       <div class="sw-notification__wrapper">
         <div class="sw-notification__icon">
           <i class="sw-notification__icon--success"></i>
         </div>
-        <button on:click={update} class="sw-notification__message">
+        <button on:click="{update}" class="sw-notification__message">
           New version available. Click to update
         </button>
         <div class="sw-notification__dismiss">
-          <button on:click={close} class="sw-notification__dismiss-btn" aria-label="Close update notification"></button>
+          <button
+            on:click="{close}"
+            class="sw-notification__dismiss-btn"
+            aria-label="Close update notification"></button>
         </div>
       </div>
       <div class="sw-notification__ripple"></div>

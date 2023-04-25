@@ -14,28 +14,38 @@
     const eventAbortController = new AbortController()
     const { signal } = eventAbortController
 
-    document.addEventListener('turbo:before-cache', () => {
-      isPageRendered = false
-      eventAbortController?.abort()
-    }, { signal, once: true })
+    document.addEventListener(
+      'turbo:before-cache',
+      () => {
+        isPageRendered = false
+        eventAbortController?.abort()
+      },
+      { signal, once: true }
+    )
     return () => eventAbortController?.abort()
   })
 </script>
 
 {#if !window.WebAssembly}
-  <ErrorComponent title="Your browser do not support WebAssembly" message="Your browser do not support WebAssembly" />
+  <ErrorComponent
+    title="Your browser do not support WebAssembly"
+    message="Your browser do not support WebAssembly"
+  />
 {:else if !window.Worker}
-  <ErrorComponent title="Your browser do not support Web Workers" message="Your browser do not support Web Workers" />
+  <ErrorComponent
+    title="Your browser do not support Web Workers"
+    message="Your browser do not support Web Workers"
+  />
 {:else}
   {#await getWebWorker()}
     <div>loading...</div>
   {:then webWorkerObject}
     {#if isPageRendered}
-      <AppComponent webWorkerObject={webWorkerObject}>
+      <AppComponent webWorkerObject="{webWorkerObject}">
         <slot slot="githubIcon" name="githubIcon" />
       </AppComponent>
     {/if}
   {:catch error}
-     <ErrorComponent title="Error to load web worker" message={error.toString()} />
+    <ErrorComponent title="Error to load web worker" message="{error.toString()}" />
   {/await}
 {/if}

@@ -11,10 +11,7 @@
   }
 
   const handleHideLeftKey = (e) => {
-    if (e.key === ' ' ||
-      e.code === 'Space' ||
-      e.keyCode === 32
-    ) {
+    if (e.key === ' ' || e.code === 'Space' || e.keyCode === 32) {
       splitState.hideLeft()
     }
   }
@@ -24,10 +21,7 @@
   }
 
   const handleHideRightKey = (e) => {
-    if (e.key === ' ' ||
-      e.code === 'Space' ||
-      e.keyCode === 32
-    ) {
+    if (e.key === ' ' || e.code === 'Space' || e.keyCode === 32) {
       splitState.hideRight()
     }
   }
