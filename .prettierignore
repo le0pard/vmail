@@ -1,2 +1,2 @@
 # Ignore vendor js files
-webpack/vendors
+src/vendors

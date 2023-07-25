@@ -6,9 +6,11 @@ export const loadSampleContent = memoize(() => {
 
   return fetch('/samples/email_sample.html', {
     signal: fetchController.signal
-  }).then((r) => r.text()).finally(() => {
-    if (timeoutId) {
-      clearTimeout(timeoutId)
-    }
   })
+    .then((r) => r.text())
+    .finally(() => {
+      if (timeoutId) {
+        clearTimeout(timeoutId)
+      }
+    })
 })

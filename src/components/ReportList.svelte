@@ -58,14 +58,6 @@
   })
 </script>
 
-<style>
-  .report-list {
-    list-style-type: none;
-    padding: 0;
-    margin: 0.5rem 0.5rem 1rem 0.5rem;
-  }
-</style>
-
 <ul class="report-list">
   {#if $report[REPORT_HTML5_DOCTYPE.key] && $report[REPORT_HTML5_DOCTYPE.key].lines.length > 0}
     <ReportItemComponent
@@ -132,3 +124,11 @@
     {/if}
   {/each}
 </ul>
+
+<style>
+  .report-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0.5rem 0.5rem 1rem 0.5rem;
+  }
+</style>

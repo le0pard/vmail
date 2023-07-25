@@ -335,6 +335,19 @@
   onDestroy(unsubscribeIsDarkTheme)
 </script>
 
+<div class="editor-area">
+  <div class="editor-area-edit" bind:this="{editorElement}"></div>
+</div>
+<div class="editor-footer">
+  <button class="editor-area-btn" on:click|preventDefault="{onSubmitHtml}"
+    >Check email HTML and CSS</button
+  >
+</div>
+<!-- tooltip -->
+<div class="editor-tooltip" bind:this="{tooltipElement}">
+  <div class="editor-tooltip-message" bind:this="{tooltipTextElement}"></div>
+</div>
+
 <style>
   .editor-area {
     flex-grow: 1;
@@ -406,16 +419,3 @@
     background-repeat: no-repeat;
   }
 </style>
-
-<div class="editor-area">
-  <div class="editor-area-edit" bind:this="{editorElement}"></div>
-</div>
-<div class="editor-footer">
-  <button class="editor-area-btn" on:click|preventDefault="{onSubmitHtml}"
-    >Check email HTML and CSS</button
-  >
-</div>
-<!-- tooltip -->
-<div class="editor-tooltip" bind:this="{tooltipElement}">
-  <div class="editor-tooltip-message" bind:this="{tooltipTextElement}"></div>
-</div>

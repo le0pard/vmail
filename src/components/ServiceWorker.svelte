@@ -12,6 +12,31 @@
   const close = () => needRefresh.set(false)
 </script>
 
+{#if $needRefresh}
+  <div class="sw-notification" style="justify-content: flex-start; align-items: flex-end;">
+    <div
+      class="sw-notification__toast sw-notification__toast--dismissible sw-notification__toast--upper sw-notification__toast--success"
+    >
+      <div class="sw-notification__wrapper">
+        <div class="sw-notification__icon">
+          <i class="sw-notification__icon--success"></i>
+        </div>
+        <button on:click="{update}" class="sw-notification__message">
+          New version available. Click to update
+        </button>
+        <div class="sw-notification__dismiss">
+          <button
+            on:click="{close}"
+            class="sw-notification__dismiss-btn"
+            aria-label="Close update notification"
+          ></button>
+        </div>
+      </div>
+      <div class="sw-notification__ripple"></div>
+    </div>
+  </div>
+{/if}
+
 <style>
   @keyframes sw-notification-fadeinup {
     0% {
@@ -187,7 +212,9 @@
     background-color: hsl(0deg 0% 0% / 25%);
     border: none;
     cursor: pointer;
-    transition: opacity 0.2s ease, background-color 0.2s ease;
+    transition:
+      opacity 0.2s ease,
+      background-color 0.2s ease;
     outline: none;
     opacity: 0.35;
     height: 100%;
@@ -260,27 +287,3 @@
     }
   }
 </style>
-
-{#if $needRefresh}
-  <div class="sw-notification" style="justify-content: flex-start; align-items: flex-end;">
-    <div
-      class="sw-notification__toast sw-notification__toast--dismissible sw-notification__toast--upper sw-notification__toast--success"
-    >
-      <div class="sw-notification__wrapper">
-        <div class="sw-notification__icon">
-          <i class="sw-notification__icon--success"></i>
-        </div>
-        <button on:click="{update}" class="sw-notification__message">
-          New version available. Click to update
-        </button>
-        <div class="sw-notification__dismiss">
-          <button
-            on:click="{close}"
-            class="sw-notification__dismiss-btn"
-            aria-label="Close update notification"></button>
-        </div>
-      </div>
-      <div class="sw-notification__ripple"></div>
-    </div>
-  </div>
-{/if}

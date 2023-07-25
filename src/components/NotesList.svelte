@@ -5,6 +5,31 @@
   export let notesStore
 </script>
 
+<div class="notes-list-title">Notes:</div>
+{#each Object.keys(notes).sort() as noteKey}
+  <div
+    class="notes-list-item"
+    tabindex="0"
+    role="button"
+    on:focus="{() => notesStore.setLine(noteKey)}"
+    on:mouseover="{() => notesStore.setLine(noteKey)}"
+    on:blur="{() => notesStore.reset()}"
+    on:mouseout="{() => notesStore.reset()}"
+  >
+    <button
+      class="notes-list-button"
+      class:notes-list-button-active="{$notesStore.line === noteKey}"
+      on:focus="{() => notesStore.setLine(noteKey)}"
+      on:mouseover="{() => notesStore.setLine(noteKey)}"
+      on:blur="{() => notesStore.reset()}"
+      on:mouseout="{() => notesStore.reset()}"
+    >
+      {noteKey}
+    </button>
+    <div>{notes[noteKey]}</div>
+  </div>
+{/each}
+
 <style>
   .notes-list-title {
     font-size: 1rem;
@@ -51,28 +76,3 @@
     background-color: var(--mutedButtonHoverBgColor);
   }
 </style>
-
-<div class="notes-list-title">Notes:</div>
-{#each Object.keys(notes).sort() as noteKey}
-  <div
-    class="notes-list-item"
-    tabindex="0"
-    role="button"
-    on:focus="{() => notesStore.setLine(noteKey)}"
-    on:mouseover="{() => notesStore.setLine(noteKey)}"
-    on:blur="{() => notesStore.reset()}"
-    on:mouseout="{() => notesStore.reset()}"
-  >
-    <button
-      class="notes-list-button"
-      class:notes-list-button-active="{$notesStore.line === noteKey}"
-      on:focus="{() => notesStore.setLine(noteKey)}"
-      on:mouseover="{() => notesStore.setLine(noteKey)}"
-      on:blur="{() => notesStore.reset()}"
-      on:mouseout="{() => notesStore.reset()}"
-    >
-      {noteKey}
-    </button>
-    <div>{notes[noteKey]}</div>
-  </div>
-{/each}

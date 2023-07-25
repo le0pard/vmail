@@ -47,6 +47,42 @@
   onDestroy(unsubscribeInlinerError)
 </script>
 
+<div class="editor-header">
+  <div class="editor-header-logo-container">
+    <a class="editor-header-logo-link" href="/">
+      <IconComponent />
+    </a>
+  </div>
+  <div class="editor-header-item">
+    <a class="editor-header-link editor-header-link-active" href="/"> VMail </a>
+  </div>
+  <div class="editor-header-item">
+    <a class="editor-header-link" href="/faq">FAQ</a>
+  </div>
+  <div class="editor-header-item-full"></div>
+  <div class="editor-header-item">
+    <button
+      class="editor-header-inline-button"
+      class:editor-header-inline-button-hidden="{$inlinerLoading === true}"
+      class:editor-header-inline-button-error="{$inlinerError !== null}"
+      on:click|preventDefault="{inlineCssInHTML}"
+    >
+      {$inlinerError ? 'Inlining error' : inlinerButtonText}
+    </button>
+    <div
+      class="editor-header-inline-loader"
+      class:editor-header-inline-loader-show="{$inlinerLoading === true}"
+    >
+      Loading...
+    </div>
+  </div>
+  <div class="editor-header-item">
+    <button class="editor-header-sample-button" on:click|preventDefault="{genAndSubmitSample}">
+      {sampleButtonText}
+    </button>
+  </div>
+</div>
+
 <style>
   .editor-header {
     display: flex;
@@ -74,7 +110,9 @@
     color: var(--headColor);
     background-color: transparent;
     border-bottom: 2px solid transparent;
-    transition: color 0.2s ease, background-color 0.2s ease;
+    transition:
+      color 0.2s ease,
+      background-color 0.2s ease;
     padding: 0.5rem 0;
     margin: 0 1rem;
     text-decoration: none;
@@ -222,39 +260,3 @@
     box-shadow: inset 0 -10rem 0 rgb(158 158 158 / 15%);
   }
 </style>
-
-<div class="editor-header">
-  <div class="editor-header-logo-container">
-    <a class="editor-header-logo-link" href="/">
-      <IconComponent />
-    </a>
-  </div>
-  <div class="editor-header-item">
-    <a class="editor-header-link editor-header-link-active" href="/"> VMail </a>
-  </div>
-  <div class="editor-header-item">
-    <a class="editor-header-link" href="/faq">FAQ</a>
-  </div>
-  <div class="editor-header-item-full"></div>
-  <div class="editor-header-item">
-    <button
-      class="editor-header-inline-button"
-      class:editor-header-inline-button-hidden="{$inlinerLoading === true}"
-      class:editor-header-inline-button-error="{$inlinerError !== null}"
-      on:click|preventDefault="{inlineCssInHTML}"
-    >
-      {$inlinerError ? 'Inlining error' : inlinerButtonText}
-    </button>
-    <div
-      class="editor-header-inline-loader"
-      class:editor-header-inline-loader-show="{$inlinerLoading === true}"
-    >
-      Loading...
-    </div>
-  </div>
-  <div class="editor-header-item">
-    <button class="editor-header-sample-button" on:click|preventDefault="{genAndSubmitSample}">
-      {sampleButtonText}
-    </button>
-  </div>
-</div>

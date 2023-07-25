@@ -41,6 +41,29 @@
   })
 </script>
 
+<div class="split-container">
+  <div
+    on:click|preventDefault="{handleHideLeft}"
+    on:keypress|preventDefault="{handleHideLeftKey}"
+    tabindex="0"
+    role="button"
+    class="split-left"
+    class:split-hidden="{$splitState.visible === 'right'}"
+  >
+    <i class="arrow-left"></i>
+  </div>
+  <div
+    on:click|preventDefault="{handleHideRight}"
+    on:keypress|preventDefault="{handleHideRightKey}"
+    tabindex="0"
+    role="button"
+    class="split-right"
+    class:split-hidden="{$splitState.visible === 'left'}"
+  >
+    <i class="arrow-right"></i>
+  </div>
+</div>
+
 <style>
   .split-container {
     display: flex;
@@ -104,26 +127,3 @@
     display: none;
   }
 </style>
-
-<div class="split-container">
-  <div
-    on:click|preventDefault="{handleHideLeft}"
-    on:keypress|preventDefault="{handleHideLeftKey}"
-    tabindex="0"
-    role="button"
-    class="split-left"
-    class:split-hidden="{$splitState.visible === 'right'}"
-  >
-    <i class="arrow-left"></i>
-  </div>
-  <div
-    on:click|preventDefault="{handleHideRight}"
-    on:keypress|preventDefault="{handleHideRightKey}"
-    tabindex="0"
-    role="button"
-    class="split-right"
-    class:split-hidden="{$splitState.visible === 'left'}"
-  >
-    <i class="arrow-right"></i>
-  </div>
-</div>

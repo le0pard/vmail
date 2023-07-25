@@ -5,6 +5,15 @@
   export let message
 </script>
 
+<div class="error-container">
+  <div class="error-msg">
+    <div class="error-msg-body">
+      <h3>{title}</h3>
+      <div class="error-msg-text">{message}</div>
+    </div>
+  </div>
+</div>
+
 <style>
   .error-container {
     display: flex;
@@ -33,12 +42,3 @@
     font-weight: 500;
   }
 </style>
-
-<div class="error-container">
-  <div class="error-msg">
-    <div class="error-msg-body">
-      <h3>{title}</h3>
-      <div class="error-msg-text">{message}</div>
-    </div>
-  </div>
-</div>

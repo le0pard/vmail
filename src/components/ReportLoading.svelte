@@ -4,6 +4,22 @@
   const items = [...Array(5).keys()]
 </script>
 
+{#each items as _item}
+  <li class="loader-item">
+    <div class="loader-item-container">
+      <div class="loader-item-header">
+        <div class="loader-item-header-info">
+          <div class="loader-item-header-type loader-block"></div>
+          <div class="loader-item-header-name loader-block"></div>
+          <div class="loader-item-header-link loader-block"></div>
+        </div>
+        <div class="loader-item-header-description loader-block"></div>
+        <div class="loader-header-main-lines loader-block"></div>
+      </div>
+    </div>
+  </li>
+{/each}
+
 <style>
   @keyframes gradient-animation {
     from {
@@ -115,19 +131,3 @@
     padding-bottom: 0.3rem;
   }
 </style>
-
-{#each items as _item}
-  <li class="loader-item">
-    <div class="loader-item-container">
-      <div class="loader-item-header">
-        <div class="loader-item-header-info">
-          <div class="loader-item-header-type loader-block"></div>
-          <div class="loader-item-header-name loader-block"></div>
-          <div class="loader-item-header-link loader-block"></div>
-        </div>
-        <div class="loader-item-header-description loader-block"></div>
-        <div class="loader-header-main-lines loader-block"></div>
-      </div>
-    </div>
-  </li>
-{/each}

@@ -26,6 +26,20 @@
   onDestroy(resetAllStates)
 </script>
 
+<div class="parser-view">
+  <div class="parser-editor" class:parser-editor-hidden="{$splitState.visible === 'right'}">
+    <EditorHeaderComponent />
+    <EditorViewComponent />
+  </div>
+  <SplitViewComponent />
+  <div class="parser-report" class:parser-report-hidden="{$splitState.visible === 'left'}">
+    <ReportHeaderComponent>
+      <slot slot="githubIcon" name="githubIcon" />
+    </ReportHeaderComponent>
+    <ReportViewComponent />
+  </div>
+</div>
+
 <style>
   .parser-view {
     display: flex;
@@ -57,17 +71,3 @@
     display: none;
   }
 </style>
-
-<div class="parser-view">
-  <div class="parser-editor" class:parser-editor-hidden="{$splitState.visible === 'right'}">
-    <EditorHeaderComponent />
-    <EditorViewComponent />
-  </div>
-  <SplitViewComponent />
-  <div class="parser-report" class:parser-report-hidden="{$splitState.visible === 'left'}">
-    <ReportHeaderComponent>
-      <slot slot="githubIcon" name="githubIcon" />
-    </ReportHeaderComponent>
-    <ReportViewComponent />
-  </div>
-</div>

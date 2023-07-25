@@ -31,6 +31,98 @@
   })
 </script>
 
+<li id="{elementID}" class="report-item">
+  <div class="report-item-container">
+    <div class="report-item-header">
+      <div class="report-item-header-info">
+        <div class="report-item-header-type">
+          {reportInfo.title}
+        </div>
+        {#if itemName}
+          <div class="report-item-header-name">
+            {normalizeItemName(reportInfo.key, itemName)}
+            {#if itemVal.length > 0}
+              {normalizeItemVal(itemVal)}
+            {/if}
+          </div>
+        {/if}
+        {#if report.rules?.url}
+          <div class="report-item-header-link">
+            <a
+              class="report-item-header-more-link"
+              href="{report.rules.url}"
+              target="_blank"
+              rel="noopener noreferrer">More info</a
+            >
+          </div>
+        {/if}
+      </div>
+      {#if report.rules?.description}
+        <div class="report-item-header-description">
+          {report.rules?.description}
+        </div>
+      {/if}
+      <div class="report-header-main-lines">
+        <div class="report-header-main-lines-title">Found on lines:</div>
+        {#each report.lines as line, i}
+          <button
+            on:click|preventDefault="{() => handleLineClick(line)}"
+            class="report-line-button"
+          >
+            {line}
+          </button>
+        {/each}
+        {#if report.more_lines}<div>and more...</div>{/if}
+      </div>
+    </div>
+    {#if clientsWithStats}
+      {#if clientsWithStats.unknown.length > 0}
+        <ClientListComponent
+          title="Support unknown"
+          bullet="unknown"
+          clients="{clientsWithStats.unknown}"
+          count="{clientsWithStats.unknownCount}"
+          percentage="{clientsWithStats.unknownPercentage}"
+          notesStore="{notesStore}"
+        />
+      {/if}
+      {#if clientsWithStats.unsupported.length > 0}
+        <ClientListComponent
+          title="Unsupported clients"
+          bullet="error"
+          clients="{clientsWithStats.unsupported}"
+          count="{clientsWithStats.unsupportedCount}"
+          percentage="{clientsWithStats.unsupportedPercentage}"
+          notesStore="{notesStore}"
+        />
+      {/if}
+      {#if clientsWithStats.mitigated.length > 0}
+        <ClientListComponent
+          title="Partially supported clients"
+          bullet="warning"
+          clients="{clientsWithStats.mitigated}"
+          count="{clientsWithStats.mitigatedCount}"
+          percentage="{clientsWithStats.mitigatedPercentage}"
+          notesStore="{notesStore}"
+        />
+      {/if}
+      {#if clientsWithStats.supported.length > 0}
+        <ClientListComponent
+          title="Supported clients"
+          bullet="success"
+          clients="{clientsWithStats.supported}"
+          count="{clientsWithStats.supportedCount}"
+          percentage="{clientsWithStats.supportedPercentage}"
+          notesStore="{notesStore}"
+        />
+      {/if}
+    {/if}
+    {#if report.rules?.notes && Object.keys(report.rules.notes || {}).length > 0}
+      <NotesListComponent notes="{report.rules.notes}" notesStore="{notesStore}" />
+    {/if}
+  </div>
+</li>
+
 <style>
   .report-item {
     border: 0;
@@ -156,95 +248,3 @@
     background-color: var(--mutedButtonHoverBgColor);
   }
 </style>
-
-<li id="{elementID}" class="report-item">
-  <div class="report-item-container">
-    <div class="report-item-header">
-      <div class="report-item-header-info">
-        <div class="report-item-header-type">
-          {reportInfo.title}
-        </div>
-        {#if itemName}
-          <div class="report-item-header-name">
-            {normalizeItemName(reportInfo.key, itemName)}
-            {#if itemVal.length > 0}
-              {normalizeItemVal(itemVal)}
-            {/if}
-          </div>
-        {/if}
-        {#if report.rules?.url}
-          <div class="report-item-header-link">
-            <a
-              class="report-item-header-more-link"
-              href="{report.rules.url}"
-              target="_blank"
-              rel="noopener noreferrer">More info</a
-            >
-          </div>
-        {/if}
-      </div>
-      {#if report.rules?.description}
-        <div class="report-item-header-description">
-          {report.rules?.description}
-        </div>
-      {/if}
-      <div class="report-header-main-lines">
-        <div class="report-header-main-lines-title">Found on lines:</div>
-        {#each report.lines as line, i}
-          <button
-            on:click|preventDefault="{() => handleLineClick(line)}"
-            class="report-line-button"
-          >
-            {line}
-          </button>
-        {/each}
-        {#if report.more_lines}<div>and more...</div>{/if}
-      </div>
-    </div>
-    {#if clientsWithStats}
-      {#if clientsWithStats.unknown.length > 0}
-        <ClientListComponent
-          title="Support unknown"
-          bullet="unknown"
-          clients="{clientsWithStats.unknown}"
-          count="{clientsWithStats.unknownCount}"
-          percentage="{clientsWithStats.unknownPercentage}"
-          notesStore="{notesStore}"
-        />
-      {/if}
-      {#if clientsWithStats.unsupported.length > 0}
-        <ClientListComponent
-          title="Unsupported clients"
-          bullet="error"
-          clients="{clientsWithStats.unsupported}"
-          count="{clientsWithStats.unsupportedCount}"
-          percentage="{clientsWithStats.unsupportedPercentage}"
-          notesStore="{notesStore}"
-        />
-      {/if}
-      {#if clientsWithStats.mitigated.length > 0}
-        <ClientListComponent
-          title="Partially supported clients"
-          bullet="warning"
-          clients="{clientsWithStats.mitigated}"
-          count="{clientsWithStats.mitigatedCount}"
-          percentage="{clientsWithStats.mitigatedPercentage}"
-          notesStore="{notesStore}"
-        />
-      {/if}
-      {#if clientsWithStats.supported.length > 0}
-        <ClientListComponent
-          title="Supported clients"
-          bullet="success"
-          clients="{clientsWithStats.supported}"
-          count="{clientsWithStats.supportedCount}"
-          percentage="{clientsWithStats.supportedPercentage}"
-          notesStore="{notesStore}"
-        />
-      {/if}
-    {/if}
-    {#if report.rules?.notes && Object.keys(report.rules.notes || {}).length > 0}
-      <NotesListComponent notes="{report.rules.notes}" notesStore="{notesStore}" />
-    {/if}
-  </div>
-</li>

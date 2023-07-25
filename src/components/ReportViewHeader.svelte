@@ -4,6 +4,24 @@
   import ThemeSwitcherComponent from '@components/ThemeSwitcher.svelte'
 </script>
 
+<div class="report-header">
+  <div class="report-header-item">
+    <ThemeSwitcherComponent />
+  </div>
+  <div class="report-header-item">
+    <a
+      class="report-header-github-link"
+      href="https://github.com/le0pard/vmail"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <div class="report-header-github">
+        <slot name="githubIcon" />
+      </div>
+    </a>
+  </div>
+</div>
+
 <style>
   .report-header {
     display: flex;
@@ -44,21 +62,3 @@
     color: var(--octocatHoverColor);
   }
 </style>
-
-<div class="report-header">
-  <div class="report-header-item">
-    <ThemeSwitcherComponent />
-  </div>
-  <div class="report-header-item">
-    <a
-      class="report-header-github-link"
-      href="https://github.com/le0pard/vmail"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      <div class="report-header-github">
-        <slot name="githubIcon" />
-      </div>
-    </a>
-  </div>
-</div>

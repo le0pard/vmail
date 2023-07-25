@@ -4,6 +4,15 @@
   export let error
 </script>
 
+<div class="error-report">
+  <div class="error-report-body">
+    <h3 class="error-report-title">Error to parse HTML</h3>
+    <div class="error-report-text">
+      {error.toString()}
+    </div>
+  </div>
+</div>
+
 <style>
   .error-report {
     border: 0;
@@ -29,12 +38,3 @@
     color: var(--cardBaseColor);
   }
 </style>
-
-<div class="error-report">
-  <div class="error-report-body">
-    <h3 class="error-report-title">Error to parse HTML</h3>
-    <div class="error-report-text">
-      {error.toString()}
-    </div>
-  </div>
-</div>

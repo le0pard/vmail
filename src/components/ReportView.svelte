@@ -8,15 +8,6 @@
   import ReportErrorComponent from '@components/ReportError.svelte'
 </script>
 
-<style>
-  .parser-report-area {
-    flex-grow: 1;
-    position: relative;
-    overflow: scroll;
-    padding: 1rem;
-  }
-</style>
-
 <div class="parser-report-area">
   {#if $reportError}
     <ReportErrorComponent error="{$reportError}" />
@@ -28,3 +19,12 @@
     <ReportEmptyComponent />
   {/if}
 </div>
+
+<style>
+  .parser-report-area {
+    flex-grow: 1;
+    position: relative;
+    overflow: scroll;
+    padding: 1rem;
+  }
+</style>
