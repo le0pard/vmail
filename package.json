@@ -12,8 +12,8 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "lint": "prettier --plugin prettier-plugin-svelte --check src && eslint src/**/*.{js,mjs,astro,svelte} astro.config.mjs postcss.config.js browserslist.config.js",
-    "format": "prettier --plugin prettier-plugin-svelte --write src"
+    "lint": "pnpify run prettier --plugin prettier-plugin-svelte --check src && eslint src/**/*.{js,mjs,astro,svelte} astro.config.mjs postcss.config.js browserslist.config.js",
+    "format": "pnpify run prettier --plugin prettier-plugin-svelte --write src"
   },
   "dependencies": {
     "@astrojs/svelte": "^3.1.0",
@@ -53,6 +53,7 @@
     "workbox-window": "7.0.0"
   },
   "devDependencies": {
+    "@yarnpkg/pnpify": "^4.0.0-rc.48",
     "astro-eslint-parser": "^0.14.0",
     "eslint": "8.45.0",
     "eslint-plugin-astro": "^0.27.2",
