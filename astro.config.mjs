@@ -1,7 +1,6 @@
 import { defineConfig } from 'astro/config'
 import svelte from '@astrojs/svelte'
 import yaml from '@rollup/plugin-yaml'
-import compress from 'astro-compress'
 import AstroPWA from '@vite-pwa/astro'
 import rehypeExternalLinks from 'rehype-external-links'
 
@@ -47,13 +46,6 @@ export default defineConfig({
         'purpose': 'maskable'
       }]
     }
-  }), compress({
-    css: true,
-    html: true,
-    js: true,
-    img: false,
-    svg: false,
-    exclude: ['email_sample.html']
   })],
   markdown: {
     extendDefaultPlugins: true,
@@ -62,8 +54,11 @@ export default defineConfig({
       rel: 'noopener noreferrer'
     }]]
   },
+  compressHTML: true,
   build: {
-    format: 'file'
+    assets: 'assets',
+    format: 'file',
+    inlineStylesheets: 'never'
   },
   vite: {
     plugins: [yaml()],
