@@ -10,6 +10,7 @@ class CaniuseGenerator # rubocop:disable Metrics/ClassLength
     css-variables
     css-important
     html-doctype
+    css-nesting
   ].freeze
 
   HTML_TAGS_MAPS = {
