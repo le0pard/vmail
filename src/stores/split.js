@@ -13,8 +13,8 @@ const createBasicStore = () => {
       visible: screenSizeMinMedia().matches
         ? state
         : currentVal.visible === initialVisibility
-        ? state
-        : initialVisibility
+          ? state
+          : initialVisibility
     }))
   const toggleForMobileFn = (state) => () =>
     set({
