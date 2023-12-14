@@ -15,6 +15,7 @@ class CaniuseGenerator # rubocop:disable Metrics/ClassLength
 
   HTML_TAGS_MAPS = {
     'amp' => [['html', '⚡4email'], %w[html amp4email]],
+    'html-abbr' => [['abbr', '']],
     'html-address' => [['address', '']],
     'html-audio' => [['audio', '']],
     'html-base' => [['base', '']],
@@ -24,11 +25,13 @@ class CaniuseGenerator # rubocop:disable Metrics/ClassLength
     'html-button-reset' => [['button', 'type||reset']],
     'html-button-submit' => [['button', 'type||submit']],
     'html-code' => [['code', '']],
+    'html-dfn' => [['dfn', '']],
     'html-del' => [['del', '']],
     'html-dialog' => [['dialog', '']],
     'html-dir' => [['dir', '']],
     'html-div' => [['div', '']],
     'html-form' => [['form', '']],
+    'html-hr' => [['hr', '']],
     'html-h1-h6' => [['h1', ''], ['h2', ''], ['h3', ''], ['h4', ''], ['h5', ''], ['h6', '']],
     'html-image-maps' => [%w[img usemap]],
     'html-input-checkbox' => [['input', 'type||checkbox']],
