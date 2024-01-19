@@ -1,5 +1,6 @@
 import { defineConfig } from 'astro/config'
 import svelte from '@astrojs/svelte'
+import icon from 'astro-icon'
 import yaml from '@rollup/plugin-yaml'
 import AstroPWA from '@vite-pwa/astro'
 import rehypeExternalLinks from 'rehype-external-links'
@@ -10,7 +11,7 @@ const SITE = 'https://vmail.leopard.in.ua/'
 export default defineConfig({
   site: SITE,
   base: '/',
-  integrations: [svelte(), AstroPWA({
+  integrations: [icon(), svelte(), AstroPWA({
     injectRegister: null,
     strategies: 'injectManifest',
     registerType: 'prompt',

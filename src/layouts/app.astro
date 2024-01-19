@@ -1,6 +1,5 @@
 ---
 import { pwaInfo } from 'virtual:pwa-info'
-import { Sprite } from 'astro-icon'
 import Head from '@components/Head.astro'
 import HeadAnalytic from '@components/HeadAnalytic.astro'
 import DomInit from '@components/DomInit.astro'
@@ -19,11 +18,9 @@ const { title } = Astro.props
     <HeadAnalytic />
   </head>
   <body>
-    <Sprite.Provider>
-      <DomInit />
-      <Hotwire />
-      <ServiceWorker />
-      <slot />
-    </Sprite.Provider>
+    <DomInit />
+    <Hotwire />
+    <ServiceWorker />
+    <slot />
   </body>
 </html>
