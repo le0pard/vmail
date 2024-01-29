@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           persist-credentials: false
 
@@ -27,14 +27,14 @@ jobs:
           bundler-cache: true
 
       - name: Install Node.JS
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           check-latest: true
           cache: 'yarn'
           node-version-file: '.tool-versions'
 
       - name: Set up Go
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@v5
         with:
           go-version: '1.21.1'
 
@@ -74,7 +74,7 @@ jobs:
         run: yarn build
 
       - name: Upload Pages Artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v3
         with:
           path: "dist/"
 
@@ -88,4 +88,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages 🚀
         id: deployment
-        uses: actions/deploy-pages@v2
+        uses: actions/deploy-pages@v4
