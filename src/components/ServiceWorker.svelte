@@ -147,7 +147,7 @@
     position: relative;
     padding: 0 15px;
     border-radius: 2px;
-    max-width: 400px;
+    max-width: 425px;
     transform: translateY(25%);
     box-sizing: border-box;
     flex-shrink: 0;
