@@ -1,6 +1,6 @@
 module github.com/le0pard/vmail/wasm_inliner
 
-go 1.22
+go 1.22.0
 
 require github.com/le0pard/vmail/wasm_inliner/inliner v0.0.0-20240403175846-8a4d1f8710e5
 

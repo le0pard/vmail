@@ -1,6 +1,6 @@
 module github.com/le0pard/vmail/wasm_inliner/inliner
 
-go 1.22
+go 1.22.0
 
 require golang.org/x/net v0.24.0
 
