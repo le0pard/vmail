@@ -1,6 +1,6 @@
 module github.com/le0pard/vmail/wasm_parser
 
-go 1.17
+go 1.22
 
 require github.com/le0pard/vmail/wasm_parser/parser v0.0.0-20240403175846-8a4d1f8710e5
 
