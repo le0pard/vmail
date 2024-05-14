@@ -10,7 +10,6 @@ group :development do
   gem 'addressable', '>= 2.7.0'
   gem 'faraday', '~> 1'
   gem 'faraday_middleware'
-  gem 'lefthook', require: false
   gem 'multi_json', '>= 1.15.0'
   gem 'nokogiri', '>= 1.11.0.rc4'
   gem 'oj', '>= 2.10.4' # faster JSON

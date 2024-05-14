@@ -49,7 +49,6 @@ GEM
       concurrent-ruby (~> 1.0)
     json (2.7.1)
     language_server-protocol (3.17.0.3)
-    lefthook (1.6.1)
     mini_portile2 (2.8.6)
     minitest (5.21.2)
     multi_json (1.15.0)
@@ -108,7 +107,6 @@ DEPENDENCIES
   addressable (>= 2.7.0)
   faraday (~> 1)
   faraday_middleware
-  lefthook
   multi_json (>= 1.15.0)
   nokogiri (>= 1.11.0.rc4)
   oj (>= 2.10.4)
