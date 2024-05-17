@@ -37,6 +37,11 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: '1.22.1'
+          cache-dependency-path: |
+            wasm_inliner/go.sum
+            wasm_inliner/inliner/go.sum
+            wasm_parser/go.sum
+            wasm_parser/parser/go.sum
 
       - name: Install Javascript dependencies
         run: yarn install --immutable
