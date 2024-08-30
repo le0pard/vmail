@@ -10051,9 +10051,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte@npm:4.2.17":
-  version: 4.2.17
-  resolution: "svelte@npm:4.2.17"
+"svelte@npm:4.2.19":
+  version: 4.2.19
+  resolution: "svelte@npm:4.2.19"
   dependencies:
     "@ampproject/remapping": "npm:^2.2.1"
     "@jridgewell/sourcemap-codec": "npm:^1.4.15"
@@ -10069,7 +10069,7 @@ __metadata:
     locate-character: "npm:^3.0.0"
     magic-string: "npm:^0.30.4"
     periscopic: "npm:^3.1.0"
-  checksum: 1d5f406c7dd3977dcceef639070972a5503be3c7acb0be3abf77b708b114dd1d2010f756912fc7c199d776ccc3c00e1f63a216d1eda3da7dadd87fbb8ba069ec
+  checksum: 6da99f43ccc0de5879925becc6e53b49fbaffffbd7c9bac018f24a9e76e6d95826ee9564daa205cb17037ffb776fe0d93a3098c148bfe84bc88c918937be6f23
   languageName: node
   linkType: hard
 
@@ -10799,7 +10799,7 @@ __metadata:
     prettier-plugin-svelte: "npm:^3.2.3"
     rehype-external-links: "npm:^3.0.0"
     shikiji-core: "npm:^0.10.2"
-    svelte: "npm:4.2.17"
+    svelte: "npm:4.2.19"
     vite: "npm:^5.2.11"
     vite-plugin-pwa: "npm:^0.20.0"
     workbox-background-sync: "npm:^7.1.0"
