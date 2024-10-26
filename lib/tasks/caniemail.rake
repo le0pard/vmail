@@ -154,6 +154,7 @@ class CaniuseGenerator # rubocop:disable Metrics/ClassLength
     'css-display-flex' => [%w[display flex]],
     'css-display-grid' => [%w[display grid]],
     'css-display-none' => [%w[display none]],
+    'css-empty-cells' => [['empty-cells', '']],
     'css-filter' => [['filter', '']],
     'css-flex-direction' => [['flex-direction', '']],
     'css-flex-wrap' => [['flex-wrap', '']],
@@ -172,7 +173,10 @@ class CaniuseGenerator # rubocop:disable Metrics/ClassLength
                             ['grid-template-rows', '']],
     'css-height' => [['height', '']],
     'css-hyphens' => [['hyphens', '']],
+    'css-hyphenate-character' => [['hyphenate-character', '']],
+    'css-hyphenate-limit-chars' => [['hyphenate-limit-chars', '']],
     'css-inline-size' => [['inline-size', '']],
+    'css-inset' => [['inset', '']],
     'css-justify-content' => [['justify-content', '']],
     'css-left-right-top-bottom' => [['left', ''], ['right', ''], ['top', ''], ['bottom', '']],
     'css-letter-spacing' => [['letter-spacing', '']],
@@ -197,15 +201,18 @@ class CaniuseGenerator # rubocop:disable Metrics/ClassLength
     'css-margin-inline' => [['margin-block', ''], ['margin-inline', '']],
     'css-margin-inline-block' => [['margin-block', ''], ['margin-inline', '']],
     'css-margin-inline-start-end' => [['margin-inline-start', ''], ['margin-inline-end', '']],
+    'css-max-inline-size' => [['max-inline-size', '']],
     'css-max-height' => [['max-height', '']],
     'css-max-width' => [['max-width', '']],
     'css-max-block-size' => [['max-block-size', '']],
+    'css-min-block-size' => [['min-block-size', '']],
     'css-min-height' => [['min-height', '']],
     'css-min-width' => [['min-width', '']],
     'css-min-inline-size' => [['min-inline-size', '']],
     'css-mix-blend-mode' => [['mix-blend-mode', '']],
     'css-object-fit' => [['object-fit', '']],
     'css-object-position' => [['object-position', '']],
+    'css-orphans' => [['orphans', '']],
     'css-opacity' => [['opacity', '']],
     'css-outline' => [['outline', '']],
     'css-outline-offset' => [['outline-offset', '']],
@@ -233,6 +240,7 @@ class CaniuseGenerator # rubocop:disable Metrics/ClassLength
     'css-text-emphasis-position' => [['text-emphasis-position', '']],
     'css-text-emphasis' => [['text-emphasis', '']],
     'css-text-indent' => [['text-indent', '']],
+    'css-text-justify' => [['text-justify', '']],
     'css-text-orientation' => [['text-orientation', '']],
     'css-text-overflow' => [['text-overflow', '']],
     'css-text-shadow' => [['text-shadow', '']],
@@ -246,8 +254,10 @@ class CaniuseGenerator # rubocop:disable Metrics/ClassLength
     'css-vertical-align' => [['vertical-align', '']],
     'css-visibility' => [['visibility', '']],
     'css-white-space' => [['white-space', '']],
+    'css-white-space-collapse' => [['white-space-collapse', '']],
     'css-word-break' => [['word-break', '']],
     'css-word-spacing' => [['word-spacing', '']],
+    'css-widows' => [['word-widows', '']],
     'css-width' => [['width', '']],
     'css-writing-mode' => [['writing-mode', '']],
     'css-z-index' => [['z-index', '']]
@@ -280,6 +290,7 @@ class CaniuseGenerator # rubocop:disable Metrics/ClassLength
     'css-rgba' => ['rgba'],
     'css-unit-calc' => ['calc'],
     'css-function-clamp' => ['clamp'],
+    'css-function-light-dark' => ['light-dark'],
     'css-function-max' => ['max'],
     'css-function-min' => ['min']
   }.freeze
@@ -392,7 +403,13 @@ class CaniuseGenerator # rubocop:disable Metrics/ClassLength
   private
 
   def warn_about_now_covered_rules # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
-    skipped_rules = ['bimi']
+    skipped_rules = [
+      'bimi',
+      'css-comments',
+      'html-cellpadding',
+      'html-cellspacing',
+      'html-comments'
+    ]
 
     rules_without_apply = data.filter do |r|
       !SINGLE_KEY_MAP.include?(r['slug']) &&
