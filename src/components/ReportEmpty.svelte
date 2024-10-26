@@ -1,5 +1,3 @@
-<svelte:options immutable="{true}" />
-
 <div class="empty-report">
   <div class="empty-report-body">
     <h3>

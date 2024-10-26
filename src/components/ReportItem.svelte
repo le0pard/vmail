@@ -1,5 +1,3 @@
-<svelte:options immutable="{true}" />
-
 <script>
   import { onMount, getContext } from 'svelte'
   import { createNotesStore } from '@stores/notes'
@@ -7,15 +5,10 @@
   import NotesListComponent from '@components/NotesList.svelte'
   import { normalizeItemName, normalizeItemVal, clientsListWithStats } from '@lib/reportHelpers'
 
-  export let elementID
-  export let reportInfo
-  export let itemName
-  export let itemVal
-  export let report
-  export let handleLineClick
+  let { elementID, reportInfo, itemName, itemVal, report, handleLineClick } = $props()
 
   let notesStore = createNotesStore()
-  let clientsWithStats = null
+  let clientsWithStats = $state(null)
 
   const { getWebWorker } = getContext('ww')
 
@@ -31,7 +24,7 @@
   })
 </script>
 
-<li id="{elementID}" class="report-item">
+<li id={elementID} class="report-item">
   <div class="report-item-container">
     <div class="report-item-header">
       <div class="report-item-header-info">
@@ -50,7 +43,7 @@
           <div class="report-item-header-link">
             <a
               class="report-item-header-more-link"
-              href="{report.rules.url}"
+              href={report.rules.url}
               target="_blank"
               rel="noopener noreferrer">More info</a
             >
@@ -66,7 +59,10 @@
         <div class="report-header-main-lines-title">Found on lines:</div>
         {#each report.lines as line, i}
           <button
-            on:click|preventDefault="{() => handleLineClick(line)}"
+            onclick={(e) => {
+              e.preventDefault()
+              handleLineClick(line)
+            }}
             class="report-line-button"
           >
             {line}
@@ -80,45 +76,45 @@
         <ClientListComponent
           title="Support unknown"
           bullet="unknown"
-          clients="{clientsWithStats.unknown}"
-          count="{clientsWithStats.unknownCount}"
-          percentage="{clientsWithStats.unknownPercentage}"
-          notesStore="{notesStore}"
+          clients={clientsWithStats.unknown}
+          count={clientsWithStats.unknownCount}
+          percentage={clientsWithStats.unknownPercentage}
+          notesStore={notesStore}
         />
       {/if}
       {#if clientsWithStats.unsupported.length > 0}
         <ClientListComponent
           title="Unsupported clients"
           bullet="error"
-          clients="{clientsWithStats.unsupported}"
-          count="{clientsWithStats.unsupportedCount}"
-          percentage="{clientsWithStats.unsupportedPercentage}"
-          notesStore="{notesStore}"
+          clients={clientsWithStats.unsupported}
+          count={clientsWithStats.unsupportedCount}
+          percentage={clientsWithStats.unsupportedPercentage}
+          notesStore={notesStore}
         />
       {/if}
       {#if clientsWithStats.mitigated.length > 0}
         <ClientListComponent
           title="Partially supported clients"
           bullet="warning"
-          clients="{clientsWithStats.mitigated}"
-          count="{clientsWithStats.mitigatedCount}"
-          percentage="{clientsWithStats.mitigatedPercentage}"
-          notesStore="{notesStore}"
+          clients={clientsWithStats.mitigated}
+          count={clientsWithStats.mitigatedCount}
+          percentage={clientsWithStats.mitigatedPercentage}
+          notesStore={notesStore}
         />
       {/if}
       {#if clientsWithStats.supported.length > 0}
         <ClientListComponent
           title="Supported clients"
           bullet="success"
-          clients="{clientsWithStats.supported}"
-          count="{clientsWithStats.supportedCount}"
-          percentage="{clientsWithStats.supportedPercentage}"
-          notesStore="{notesStore}"
+          clients={clientsWithStats.supported}
+          count={clientsWithStats.supportedCount}
+          percentage={clientsWithStats.supportedPercentage}
+          notesStore={notesStore}
         />
       {/if}
     {/if}
     {#if report.rules?.notes && Object.keys(report.rules.notes || {}).length > 0}
-      <NotesListComponent notes="{report.rules.notes}" notesStore="{notesStore}" />
+      <NotesListComponent notes={report.rules.notes} notesStore={notesStore} />
     {/if}
   </div>
 </li>

@@ -1,8 +1,5 @@
-<svelte:options immutable="{true}" />
-
 <script>
-  export let title
-  export let message
+  let { title, message } = $props()
 </script>
 
 <div class="error-container">

@@ -1,5 +1,3 @@
-<svelte:options immutable="{true}" />
-
 <script>
   import { onMount } from 'svelte'
   import { getWebWorker } from '@utils/worker'
@@ -41,11 +39,11 @@
     <div>loading...</div>
   {:then webWorkerObject}
     {#if isPageRendered}
-      <AppComponent webWorkerObject="{webWorkerObject}">
+      <AppComponent webWorkerObject={webWorkerObject}>
         <slot slot="githubIcon" name="githubIcon" />
       </AppComponent>
     {/if}
   {:catch error}
-    <ErrorComponent title="Error to load web worker" message="{error.toString()}" />
+    <ErrorComponent title="Error to load web worker" message={error.toString()} />
   {/await}
 {/if}

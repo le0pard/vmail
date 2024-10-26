@@ -1,7 +1,5 @@
-<svelte:options immutable="{true}" />
-
 <script>
-  export let error
+  let { error } = $props()
 </script>
 
 <div class="error-report">

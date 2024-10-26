@@ -9,14 +9,15 @@
   ],
   "extends": [
     "eslint:recommended",
-    "plugin:astro/recommended"
+    "plugin:astro/recommended",
+    "plugin:svelte/recommended"
   ],
   "overrides": [
     {
       "files": [
         "*.svelte"
       ],
-      "processor": "svelte3/svelte3"
+      "parser": "svelte-eslint-parser"
     },
     {
       "files": [
@@ -280,7 +281,6 @@
     "es2022": true
   },
   "plugins": [
-    "astro",
-    "svelte3"
+    "astro"
   ]
 }

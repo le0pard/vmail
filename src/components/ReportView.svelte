@@ -1,5 +1,3 @@
-<svelte:options immutable="{true}" />
-
 <script>
   import { isReportReady, reportLoading, reportError } from '@stores/report'
   import ReportListComponent from '@components/ReportList.svelte'
@@ -10,7 +8,7 @@
 
 <div class="parser-report-area">
   {#if $reportError}
-    <ReportErrorComponent error="{$reportError}" />
+    <ReportErrorComponent error={$reportError} />
   {:else if $reportLoading}
     <ReportLoadingComponent />
   {:else if $isReportReady}

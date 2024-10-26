@@ -1,5 +1,3 @@
-<svelte:options immutable="{true}" />
-
 <script>
   import { onMount, onDestroy } from 'svelte'
   import { theme } from '@stores/theme'

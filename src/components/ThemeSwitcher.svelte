@@ -1,5 +1,3 @@
-<svelte:options immutable="{true}" />
-
 <script>
   import { theme, isDarkThemeON } from '@stores/theme'
 
@@ -9,7 +7,7 @@
 </script>
 
 <label class="toggle-wrapper" for="theme-toggle">
-  <div class="toggle" class:toggle__dark="{$isDarkThemeON}">
+  <div class="toggle" class:toggle__dark={$isDarkThemeON}>
     <span class="toggle-hidden-block">
       {$isDarkThemeON ? 'Enable Light Mode' : 'Enable Dark Mode'}
     </span>
@@ -50,8 +48,8 @@
       id="theme-toggle"
       name="theme-toggle"
       type="checkbox"
-      checked="{$isDarkThemeON}"
-      on:change="{handleThemeChange}"
+      checked={$isDarkThemeON}
+      onchange={handleThemeChange}
     />
   </div>
 </label>

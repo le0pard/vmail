@@ -21,12 +21,12 @@
         <div class="sw-notification__icon">
           <i class="sw-notification__icon--success"></i>
         </div>
-        <button on:click="{update}" class="sw-notification__message">
+        <button on:click={update} class="sw-notification__message">
           New version available. Click to update
         </button>
         <div class="sw-notification__dismiss">
           <button
-            on:click="{close}"
+            on:click={close}
             class="sw-notification__dismiss-btn"
             aria-label="Close update notification"
           ></button>

@@ -1,5 +1,3 @@
-<svelte:options immutable="{true}" />
-
 <script>
   import { onMount } from 'svelte'
   import { splitState, screenSizeMinMedia } from '@stores/split'
@@ -11,22 +9,26 @@
   }
 
   const handleHideLeftKey = (e) => {
+    e.preventDefault()
     if (e.key === ' ' || e.code === 'Space' || e.keyCode === 32) {
       splitState.hideLeft()
     }
   }
 
-  const handleHideLeft = () => {
+  const handleHideLeft = (e) => {
+    e.preventDefault()
     splitState.hideLeft()
   }
 
   const handleHideRightKey = (e) => {
+    e.preventDefault()
     if (e.key === ' ' || e.code === 'Space' || e.keyCode === 32) {
       splitState.hideRight()
     }
   }
 
-  const handleHideRight = () => {
+  const handleHideRight = (e) => {
+    e.preventDefault()
     splitState.hideRight()
   }
 
@@ -43,22 +45,22 @@
 
 <div class="split-container">
   <div
-    on:click|preventDefault="{handleHideLeft}"
-    on:keypress|preventDefault="{handleHideLeftKey}"
+    onclick={handleHideLeft}
+    onkeypress={handleHideLeftKey}
     tabindex="0"
     role="button"
     class="split-left"
-    class:split-hidden="{$splitState.visible === 'right'}"
+    class:split-hidden={$splitState.visible === 'right'}
   >
     <i class="arrow-left"></i>
   </div>
   <div
-    on:click|preventDefault="{handleHideRight}"
-    on:keypress|preventDefault="{handleHideRightKey}"
+    onclick={handleHideRight}
+    onkeypress={handleHideRightKey}
     tabindex="0"
     role="button"
     class="split-right"
-    class:split-hidden="{$splitState.visible === 'left'}"
+    class:split-hidden={$splitState.visible === 'left'}
   >
     <i class="arrow-right"></i>
   </div>

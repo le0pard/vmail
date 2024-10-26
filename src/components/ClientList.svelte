@@ -1,21 +1,14 @@
-<svelte:options immutable="{true}" />
-
 <script>
-  export let title
-  export let clients
-  export let count = 0
-  export let percentage = '0.00'
-  export let bullet = 'success'
-  export let notesStore
+  let { title, clients, count = 0, percentage = '0.00', bullet = 'success', notesStore } = $props()
 </script>
 
 <div class="client-list">
   <span
     class="client-bullet"
-    class:client-bullet-error="{bullet === 'error'}"
-    class:client-bullet-warning="{bullet === 'warning'}"
-    class:client-bullet-success="{bullet === 'success'}"
-    class:client-bullet-unknown="{bullet === 'unknown'}"
+    class:client-bullet-error={bullet === 'error'}
+    class:client-bullet-warning={bullet === 'warning'}
+    class:client-bullet-success={bullet === 'success'}
+    class:client-bullet-unknown={bullet === 'unknown'}
   ></span>
 
   <div class="client-list-body">
@@ -28,11 +21,11 @@
             {#each client.notes as noteKey}
               <button
                 class="client-list-line"
-                class:client-list-line-active="{$notesStore.line === noteKey}"
-                on:focus="{() => notesStore.setLine(noteKey)}"
-                on:mouseover="{() => notesStore.setLine(noteKey)}"
-                on:blur="{() => notesStore.reset()}"
-                on:mouseout="{() => notesStore.reset()}"
+                class:client-list-line-active={$notesStore.line === noteKey}
+                onfocus={() => notesStore.setLine(noteKey)}
+                onmouseover={() => notesStore.setLine(noteKey)}
+                onblur={() => notesStore.reset()}
+                onmouseout={() => notesStore.reset()}
               >
                 {noteKey}
               </button>
@@ -45,10 +38,10 @@
 
   <div
     class="client-list-percentage"
-    class:client-list-percentage-error="{bullet === 'error'}"
-    class:client-list-percentage-warning="{bullet === 'warning'}"
-    class:client-list-percentage-success="{bullet === 'success'}"
-    class:client-list-percentage-unknown="{bullet === 'unknown'}"
+    class:client-list-percentage-error={bullet === 'error'}
+    class:client-list-percentage-warning={bullet === 'warning'}
+    class:client-list-percentage-success={bullet === 'success'}
+    class:client-list-percentage-unknown={bullet === 'unknown'}
   >
     {percentage}&#37;
   </div>

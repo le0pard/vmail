@@ -1,7 +1,6 @@
-<svelte:options immutable="{true}" />
-
 <script>
   import { onMount } from 'svelte'
+
   onMount(() => {
     const eventAbortController = new AbortController()
     const { signal } = eventAbortController
@@ -24,6 +23,7 @@
     //   }
     // }, { signal })
     import('@hotwired/turbo')
+
     return () => eventAbortController?.abort()
   })
 </script>

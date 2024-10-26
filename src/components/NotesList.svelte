@@ -1,8 +1,5 @@
-<svelte:options immutable="{true}" />
-
 <script>
-  export let notes
-  export let notesStore
+  let { notes, notesStore } = $props()
 </script>
 
 <div class="notes-list-title">Notes:</div>
@@ -11,18 +8,18 @@
     class="notes-list-item"
     tabindex="0"
     role="button"
-    on:focus="{() => notesStore.setLine(noteKey)}"
-    on:mouseover="{() => notesStore.setLine(noteKey)}"
-    on:blur="{() => notesStore.reset()}"
-    on:mouseout="{() => notesStore.reset()}"
+    onfocus={() => notesStore.setLine(noteKey)}
+    onmouseover={() => notesStore.setLine(noteKey)}
+    onblur={() => notesStore.reset()}
+    onmouseout={() => notesStore.reset()}
   >
     <button
       class="notes-list-button"
-      class:notes-list-button-active="{$notesStore.line === noteKey}"
-      on:focus="{() => notesStore.setLine(noteKey)}"
-      on:mouseover="{() => notesStore.setLine(noteKey)}"
-      on:blur="{() => notesStore.reset()}"
-      on:mouseout="{() => notesStore.reset()}"
+      class:notes-list-button-active={$notesStore.line === noteKey}
+      onfocus={() => notesStore.setLine(noteKey)}
+      onmouseover={() => notesStore.setLine(noteKey)}
+      onblur={() => notesStore.reset()}
+      onmouseout={() => notesStore.reset()}
     >
       {noteKey}
     </button>

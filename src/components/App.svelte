@@ -1,5 +1,3 @@
-<svelte:options immutable="{true}" />
-
 <script>
   import { onDestroy, setContext } from 'svelte'
   import { report, reportLoading, reportError } from '@stores/report'
@@ -27,12 +25,12 @@
 </script>
 
 <div class="parser-view">
-  <div class="parser-editor" class:parser-editor-hidden="{$splitState.visible === 'right'}">
+  <div class="parser-editor" class:parser-editor-hidden={$splitState.visible === 'right'}>
     <EditorHeaderComponent />
     <EditorViewComponent />
   </div>
   <SplitViewComponent />
-  <div class="parser-report" class:parser-report-hidden="{$splitState.visible === 'left'}">
+  <div class="parser-report" class:parser-report-hidden={$splitState.visible === 'left'}>
     <ReportHeaderComponent>
       <slot slot="githubIcon" name="githubIcon" />
     </ReportHeaderComponent>

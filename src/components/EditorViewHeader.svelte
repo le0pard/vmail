@@ -1,19 +1,19 @@
-<svelte:options immutable="{true}" />
-
 <script>
   import { onMount, onDestroy } from 'svelte'
   import { EVENT_SUBMIT_EXAMPLE, EVENT_INLINE_CSS } from '@lib/constants'
   import { inlinerLoading, inlinerError } from '@stores/inliner'
   import IconComponent from '@components/Icon.svelte'
 
-  let inlinerButtonText = 'Inline CSS in HTML'
-  let sampleButtonText = 'Sample HTML/CSS'
+  let inlinerButtonText = $state('Inline CSS in HTML')
+  let sampleButtonText = $state('Sample HTML/CSS')
 
-  const genAndSubmitSample = () => {
+  const genAndSubmitSample = (e) => {
+    e.preventDefault()
     window.dispatchEvent(new window.CustomEvent(EVENT_SUBMIT_EXAMPLE, { detail: {} }))
   }
 
-  const inlineCssInHTML = () => {
+  const inlineCssInHTML = (e) => {
+    e.preventDefault()
     window.dispatchEvent(new window.CustomEvent(EVENT_INLINE_CSS, { detail: {} }))
   }
 
@@ -63,21 +63,21 @@
   <div class="editor-header-item">
     <button
       class="editor-header-inline-button"
-      class:editor-header-inline-button-hidden="{$inlinerLoading === true}"
-      class:editor-header-inline-button-error="{$inlinerError !== null}"
-      on:click|preventDefault="{inlineCssInHTML}"
+      class:editor-header-inline-button-hidden={$inlinerLoading === true}
+      class:editor-header-inline-button-error={$inlinerError !== null}
+      onclick={inlineCssInHTML}
     >
       {$inlinerError ? 'Inlining error' : inlinerButtonText}
     </button>
     <div
       class="editor-header-inline-loader"
-      class:editor-header-inline-loader-show="{$inlinerLoading === true}"
+      class:editor-header-inline-loader-show={$inlinerLoading === true}
     >
       Loading...
     </div>
   </div>
   <div class="editor-header-item">
-    <button class="editor-header-sample-button" on:click|preventDefault="{genAndSubmitSample}">
+    <button class="editor-header-sample-button" onclick={genAndSubmitSample}>
       {sampleButtonText}
     </button>
   </div>
