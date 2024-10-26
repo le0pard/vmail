@@ -402,13 +402,13 @@ class CaniuseGenerator # rubocop:disable Metrics/ClassLength
 
   private
 
-  def warn_about_now_covered_rules # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
-    skipped_rules = [
-      'bimi',
-      'css-comments',
-      'html-cellpadding',
-      'html-cellspacing',
-      'html-comments'
+  def warn_about_now_covered_rules # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+    skipped_rules = %w[
+      bimi
+      css-comments
+      html-cellpadding
+      html-cellspacing
+      html-comments
     ]
 
     rules_without_apply = data.filter do |r|

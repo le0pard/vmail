@@ -57,7 +57,7 @@
       {/if}
       <div class="report-header-main-lines">
         <div class="report-header-main-lines-title">Found on lines:</div>
-        {#each report.lines as line, i}
+        {#each report.lines as line, _i}
           <button
             onclick={(e) => {
               e.preventDefault()

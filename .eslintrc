@@ -183,7 +183,8 @@
       2,
       {
         "vars": "all",
-        "args": "after-used"
+        "args": "after-used",
+        "argsIgnorePattern": "^_"
       }
     ],
     "no-use-before-define": [
