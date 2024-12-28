@@ -1,5 +1,7 @@
 <script>
   import ThemeSwitcherComponent from '@components/ThemeSwitcher.svelte'
+
+  let { githubIcon } = $props()
 </script>
 
 <div class="report-header">
@@ -14,7 +16,7 @@
       rel="noopener noreferrer"
     >
       <div class="report-header-github">
-        <slot name="githubIcon" />
+        {@render githubIcon()}
       </div>
     </a>
   </div>

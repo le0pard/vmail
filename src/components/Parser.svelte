@@ -4,7 +4,9 @@
   import AppComponent from '@components/App.svelte'
   import ErrorComponent from '@components/Error.svelte'
 
-  let isPageRendered = false // trigger destroy for nested components, if turbo change page
+  let { githubIcon } = $props()
+
+  let isPageRendered = $state(false) // trigger destroy for nested components, if turbo change page
 
   onMount(() => {
     isPageRendered = true
@@ -40,7 +42,9 @@
   {:then webWorkerObject}
     {#if isPageRendered}
       <AppComponent webWorkerObject={webWorkerObject}>
-        <slot slot="githubIcon" name="githubIcon" />
+        {#snippet githubIcon()}
+          {@render githubIcon()}
+        {/snippet}
       </AppComponent>
     {/if}
   {:catch error}
