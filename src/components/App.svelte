@@ -8,7 +8,7 @@
   import ReportHeaderComponent from '@components/ReportViewHeader.svelte'
   import ReportViewComponent from '@components/ReportView.svelte'
 
-  let { webWorkerObject, githubIcon } = $props()
+  let { webWorkerObject, githubSvgIcon } = $props()
 
   setContext('ww', {
     getWebWorker: () => webWorkerObject
@@ -33,7 +33,7 @@
   <div class="parser-report" class:parser-report-hidden={$splitState.visible === 'left'}>
     <ReportHeaderComponent>
       {#snippet githubIcon()}
-        {@render githubIcon()}
+        {@render githubSvgIcon()}
       {/snippet}
     </ReportHeaderComponent>
     <ReportViewComponent />

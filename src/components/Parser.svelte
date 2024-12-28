@@ -42,7 +42,7 @@
   {:then webWorkerObject}
     {#if isPageRendered}
       <AppComponent webWorkerObject={webWorkerObject}>
-        {#snippet githubIcon()}
+        {#snippet githubSvgIcon()}
           {@render githubIcon()}
         {/snippet}
       </AppComponent>
