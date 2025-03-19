@@ -1,13 +1,15 @@
 module github.com/le0pard/vmail/wasm_inliner
 
-go 1.22.0
+go 1.23.0
 
-require github.com/le0pard/vmail/wasm_inliner/inliner v0.0.0-20241228224109-0ee97081d19f
+toolchain go1.24.1
+
+require github.com/le0pard/vmail/wasm_inliner/inliner v0.0.0-20250319212121-46c4e83b7f81
 
 require (
 	github.com/andybalholm/cascadia v1.3.3 // indirect
-	github.com/tdewolff/parse/v2 v2.7.19 // indirect
-	golang.org/x/net v0.34.0 // indirect
+	github.com/tdewolff/parse/v2 v2.7.21 // indirect
+	golang.org/x/net v0.37.0 // indirect
 )
 
 replace github.com/le0pard/vmail/wasm_inliner/inliner => ./inliner
