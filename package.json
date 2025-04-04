@@ -41,7 +41,7 @@
     "postcss-reporter": "7.1.0",
     "rehype-external-links": "^3.0.0",
     "svelte": "5.23.2",
-    "vite": "^6.2.4",
+    "vite": "^6.2.5",
     "vite-plugin-pwa": "^0.21.1",
     "workbox-background-sync": "^7.3.0",
     "workbox-core": "^7.3.0",
