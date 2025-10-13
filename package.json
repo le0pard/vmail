@@ -28,7 +28,7 @@
     "@lezer/highlight": "^1.2.1",
     "@rollup/plugin-yaml": "^4.1.2",
     "@vite-pwa/astro": "^1.1.0",
-    "astro": "^5.13.8",
+    "astro": "^5.14.3",
     "astro-icon": "1.1.5",
     "comlink": "^4.4.2",
     "lodash": "4.17.21",
