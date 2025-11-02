@@ -271,6 +271,8 @@ func (inlr *InlineEngine) inlineRulesetToTags(doc *html.Node, cssStore CSSSelect
 			continue
 		}
 
+		// log.Printf("[selectorGroup]: %v\n", selectorGroup)
+
 		selector, err := cascadia.ParseGroup(selectorGroup.Key)
 		if err != nil {
 			continue
@@ -416,7 +418,16 @@ func (inlr *InlineEngine) inlineStyleSheetContent(doc *html.Node, sheetContent s
 			qselector := string(data)
 			notApply := false
 			for _, val := range p.Values() {
-				qselector += string(val.Data)
+				if val.TokenType == css.CommaToken {
+					cssStore.Selectors = append(cssStore.Selectors, CSSGroupSelectors{
+						Key:      qselector,
+						NotApply: notApply,
+					})
+					qselector = string(data)
+					notApply = false
+				} else {
+					qselector += string(val.Data)
+				}
 				if val.TokenType == css.ColonToken {
 					notApply = true
 				}
