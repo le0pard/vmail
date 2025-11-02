@@ -147,7 +147,7 @@ Lint/AmbiguousBlockAssociation:
   Exclude:
     - 'spec/**/*'
 
-Naming/PredicateName:
+Naming/PredicatePrefix:
   Exclude:
     - 'spec/**/*'
 
