@@ -576,6 +576,11 @@ func (prs *ParserEngine) checkCssParsedToken(p *css.Parser, gt css.GrammarType, 
 		chainingSelectorsCount := 0
 		typeSelector := false
 		for _, val := range p.Values() {
+			if val.TokenType == css.CommaToken {
+				prs.checkCssSelectorType(GROUPING_SELECTORS_TYPE, position)
+				chainingSelectorsCount = 0
+				typeSelector = false
+			}
 			if val.TokenType == css.LeftBracketToken {
 				prs.checkCssSelectorType(ATTRIBUTE_SELECTOR_TYPE, position)
 			}
