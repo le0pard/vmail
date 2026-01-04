@@ -73,18 +73,11 @@
 }
 
 :root {
-  font-size: 14px;
-}
-
-@media (min-width: 420px) and (max-width: 1440px) {
-  :root {
-    font-size: calc(14px + (18 - 14) * ((100vw - 420px) / (1440 - 420)));
-  }
-}
-@media (min-width: 1440px) {
-  :root {
-    font-size: 18px;
-  }
+  font-size: clamp(
+    14px,
+    14px + (18 - 14) * ((100vw - 420px) / (1440 - 420)),
+    18px
+  );
 }
 
 body {
