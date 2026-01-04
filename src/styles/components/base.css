@@ -73,11 +73,7 @@
 }
 
 :root {
-  font-size: clamp(
-    14px,
-    14px + (18 - 14) * ((100vw - 420px) / (1440 - 420)),
-    18px
-  );
+  font-size: clamp(14px, 14px + (18 - 14) * ((100vw - 420px) / (1440 - 420)), 18px);
 }
 
 body {
