@@ -3905,9 +3905,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"astro@npm:^5.16.11":
-  version: 5.16.11
-  resolution: "astro@npm:5.16.11"
+"astro@npm:^5.16.13":
+  version: 5.16.13
+  resolution: "astro@npm:5.16.13"
   dependencies:
     "@astrojs/compiler": "npm:^2.13.0"
     "@astrojs/internal-helpers": "npm:0.7.5"
@@ -3954,16 +3954,16 @@ __metadata:
     rehype: "npm:^13.0.2"
     semver: "npm:^7.7.3"
     sharp: "npm:^0.34.0"
-    shiki: "npm:^3.20.0"
+    shiki: "npm:^3.21.0"
     smol-toml: "npm:^1.6.0"
     svgo: "npm:^4.0.0"
     tinyexec: "npm:^1.0.2"
     tinyglobby: "npm:^0.2.15"
     tsconfck: "npm:^3.1.6"
     ultrahtml: "npm:^1.6.0"
-    unifont: "npm:~0.7.1"
+    unifont: "npm:~0.7.3"
     unist-util-visit: "npm:^5.0.0"
-    unstorage: "npm:^1.17.3"
+    unstorage: "npm:^1.17.4"
     vfile: "npm:^6.0.3"
     vite: "npm:^6.4.1"
     vitefu: "npm:^1.1.1"
@@ -3978,7 +3978,7 @@ __metadata:
       optional: true
   bin:
     astro: astro.js
-  checksum: 10/3bebfd5b98eda04279acba15bdca5039ca50b2436613cd665bf043507dcd15750096f7d7add29b38d46c5689bd0dc34a517dc4aa02c669bd8e6937d349013b40
+  checksum: 10/afbee3c787a461a4aa4420e5c3f095718816e10b9e07796b23971de081c37951451cd29ec3d25fea80010f75e5aabc6f7d2cf000d41c44ddd911c20e962be8d8
   languageName: node
   linkType: hard
 
@@ -9009,12 +9009,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:^3.8.0":
-  version: 3.8.0
-  resolution: "prettier@npm:3.8.0"
+"prettier@npm:^3.8.1":
+  version: 3.8.1
+  resolution: "prettier@npm:3.8.1"
   bin:
     prettier: bin/prettier.cjs
-  checksum: 10/a643c62f095c2987a34cea4fceddce8dea12cc3ee024494aff690cfac22ef20be835e212b39b718c833014fd22890ae156be67b75a26e2bc9b7acde9a34d31fa
+  checksum: 10/3da1cf8c1ef9bea828aa618553696c312e951f810bee368f6887109b203f18ee869fe88f66e65f9cf60b7cb1f2eae859892c860a300c062ff8ec69c381fc8dbd
   languageName: node
   linkType: hard
 
@@ -9832,7 +9832,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"shiki@npm:^3.19.0, shiki@npm:^3.20.0":
+"shiki@npm:^3.19.0, shiki@npm:^3.21.0":
   version: 3.21.0
   resolution: "shiki@npm:3.21.0"
   dependencies:
@@ -10238,9 +10238,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte@npm:5.46.4":
-  version: 5.46.4
-  resolution: "svelte@npm:5.46.4"
+"svelte@npm:5.48.0":
+  version: 5.48.0
+  resolution: "svelte@npm:5.48.0"
   dependencies:
     "@jridgewell/remapping": "npm:^2.3.4"
     "@jridgewell/sourcemap-codec": "npm:^1.5.0"
@@ -10257,7 +10257,7 @@ __metadata:
     locate-character: "npm:^3.0.0"
     magic-string: "npm:^0.30.11"
     zimmerframe: "npm:^1.1.2"
-  checksum: 10/03a655492dd407df5916bddadd239e9a7389bd175928fa904c67fe1ea23c7800d4db97a93eaf1a53fcd02fb2381209cf22633e94cd558f1d68381dcce142cc25
+  checksum: 10/5fe48df8b29984536baac2803c49a311b468646eb6e9f3c156f5c2600b5c2219b635a46ce721f6fc4bf042e5a4f47ac25b86a452b4f001dad33f62812e957aa0
   languageName: node
   linkType: hard
 
@@ -10696,7 +10696,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"unifont@npm:~0.7.1":
+"unifont@npm:~0.7.3":
   version: 0.7.3
   resolution: "unifont@npm:0.7.3"
   dependencies:
@@ -10828,7 +10828,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"unstorage@npm:^1.17.3":
+"unstorage@npm:^1.17.4":
   version: 1.17.4
   resolution: "unstorage@npm:1.17.4"
   dependencies:
@@ -11130,7 +11130,7 @@ __metadata:
     "@rollup/plugin-yaml": "npm:^4.1.2"
     "@vite-pwa/astro": "npm:^1.2.0"
     "@yarnpkg/pnpify": "npm:^4.1.6"
-    astro: "npm:^5.16.11"
+    astro: "npm:^5.16.13"
     astro-eslint-parser: "npm:^1.2.2"
     astro-icon: "npm:1.1.5"
     comlink: "npm:^4.4.2"
@@ -11145,11 +11145,11 @@ __metadata:
     postcss-loader: "npm:8.2.0"
     postcss-preset-env: "npm:11.1.1"
     postcss-reporter: "npm:7.1.0"
-    prettier: "npm:^3.8.0"
+    prettier: "npm:^3.8.1"
     prettier-plugin-svelte: "npm:^3.4.1"
     rehype-external-links: "npm:^3.0.0"
     shikiji-core: "npm:^0.10.2"
-    svelte: "npm:5.46.4"
+    svelte: "npm:5.48.0"
     typescript: "npm:^5.9.3"
     vite: "npm:^7.3.1"
     vite-plugin-pwa: "npm:^1.2.0"
