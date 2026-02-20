@@ -3477,7 +3477,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/trusted-types@npm:^2.0.2":
+"@types/trusted-types@npm:^2.0.2, @types/trusted-types@npm:^2.0.7":
   version: 2.0.7
   resolution: "@types/trusted-types@npm:2.0.7"
   checksum: 10/8e4202766a65877efcf5d5a41b7dd458480b36195e580a3b1085ad21e948bc417d55d6f8af1fd2a7ad008015d4117d5fdfe432731157da3c68678487174e4ba3
@@ -4886,6 +4886,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"devalue@npm:^5.6.3":
+  version: 5.6.3
+  resolution: "devalue@npm:5.6.3"
+  checksum: 10/fba14656bdbd3c23bd850906a504ca2dc94e3dc199c84e6e51c327a425b19d4f431dd7e2a4d9ee51ff49458ef6d10f59f781166bc2d9d8ce1182e863e58d9449
+  languageName: node
+  linkType: hard
+
 "devlop@npm:^1.0.0, devlop@npm:^1.1.0":
   version: 1.1.0
   resolution: "devlop@npm:1.1.0"
@@ -5609,12 +5616,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esrap@npm:^2.2.1":
-  version: 2.2.1
-  resolution: "esrap@npm:2.2.1"
+"esrap@npm:^2.2.2":
+  version: 2.2.3
+  resolution: "esrap@npm:2.2.3"
   dependencies:
     "@jridgewell/sourcemap-codec": "npm:^1.4.15"
-  checksum: 10/2b97a645717b910ada5a9b4368012d836f62060ec958d659520c161d1f3f8d0f9288f716df32cd4d589008c166a936e3a9f1e2ae4002f83692d19175535fa7bc
+  checksum: 10/a6cb7613ef6303daff29ee30e36e725f0b50d6ded4e64e1f80d0048228c85c708bd136cc97c8b358096c1c77cdd0f2651aab87dc70eab588bb8fc5217221a426
   languageName: node
   linkType: hard
 
@@ -10238,26 +10245,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte@npm:5.48.0":
-  version: 5.48.0
-  resolution: "svelte@npm:5.48.0"
+"svelte@npm:5.51.5":
+  version: 5.51.5
+  resolution: "svelte@npm:5.51.5"
   dependencies:
     "@jridgewell/remapping": "npm:^2.3.4"
     "@jridgewell/sourcemap-codec": "npm:^1.5.0"
     "@sveltejs/acorn-typescript": "npm:^1.0.5"
     "@types/estree": "npm:^1.0.5"
+    "@types/trusted-types": "npm:^2.0.7"
     acorn: "npm:^8.12.1"
     aria-query: "npm:^5.3.1"
     axobject-query: "npm:^4.1.0"
     clsx: "npm:^2.1.1"
-    devalue: "npm:^5.6.2"
+    devalue: "npm:^5.6.3"
     esm-env: "npm:^1.2.1"
-    esrap: "npm:^2.2.1"
+    esrap: "npm:^2.2.2"
     is-reference: "npm:^3.0.3"
     locate-character: "npm:^3.0.0"
     magic-string: "npm:^0.30.11"
     zimmerframe: "npm:^1.1.2"
-  checksum: 10/5fe48df8b29984536baac2803c49a311b468646eb6e9f3c156f5c2600b5c2219b635a46ce721f6fc4bf042e5a4f47ac25b86a452b4f001dad33f62812e957aa0
+  checksum: 10/f909b8c0136f858aff944103726350baf38173aa0a4d64c1d100c6eaf076a9cf18bbdf4e1d5ccce76f206992abc4fd0f8ac358fe74c59405de3372dc3bc200e1
   languageName: node
   linkType: hard
 
@@ -11149,7 +11157,7 @@ __metadata:
     prettier-plugin-svelte: "npm:^3.4.1"
     rehype-external-links: "npm:^3.0.0"
     shikiji-core: "npm:^0.10.2"
-    svelte: "npm:5.48.0"
+    svelte: "npm:5.51.5"
     typescript: "npm:^5.9.3"
     vite: "npm:^7.3.1"
     vite-plugin-pwa: "npm:^1.2.0"

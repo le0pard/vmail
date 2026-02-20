@@ -40,7 +40,7 @@
     "postcss-preset-env": "11.1.1",
     "postcss-reporter": "7.1.0",
     "rehype-external-links": "^3.0.0",
-    "svelte": "5.48.0",
+    "svelte": "5.51.5",
     "vite": "^7.3.1",
     "vite-plugin-pwa": "^1.2.0",
     "workbox-background-sync": "^7.4.0",
