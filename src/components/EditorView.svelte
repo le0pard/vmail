@@ -1,6 +1,6 @@
 <script>
   import { onMount, onDestroy, getContext } from 'svelte'
-  import { EditorState, EditorSelection } from '@codemirror/state'
+  import { EditorState, EditorSelection, Compartment } from '@codemirror/state'
   import {
     EditorView,
     keymap,
@@ -39,23 +39,25 @@
 
   const { getWebWorker } = getContext('ww')
 
+  const themeConfig = new Compartment()
+
+  const getThemeExtensions = (isDark) => {
+    if (isDark) {
+      return [oneDarkTheme, syntaxHighlighting(oneDarkHighlightStyle, { fallback: true })]
+    }
+
+    return [
+      EditorView.baseTheme({
+        '&.cm-editor': {
+          fontSize: '0.9rem',
+          height: '100%'
+        }
+      }),
+      syntaxHighlighting(defaultHighlightStyle, { fallback: true })
+    ]
+  }
+
   const getEditorState = (doc = '') => {
-    const [eTheme, eThemeHighLight] = (() => {
-      if ($isDarkThemeON) {
-        return [oneDarkTheme, syntaxHighlighting(oneDarkHighlightStyle, { fallback: true })]
-      }
-
-      return [
-        EditorView.baseTheme({
-          '&.cm-editor': {
-            fontSize: '0.9rem',
-            height: '100%'
-          }
-        }),
-        syntaxHighlighting(defaultHighlightStyle, { fallback: true })
-      ]
-    })()
-
     const showTooltip = (view, edLine, event) => {
       if (!tooltipElement || !tooltipTextElement) {
         return
@@ -144,8 +146,7 @@
         history(),
         keymap.of([...defaultKeymap, ...historyKeymap]),
         html(),
-        eThemeHighLight,
-        eTheme
+        themeConfig.of(getThemeExtensions($isDarkThemeON))
       ]
     })
   }
@@ -304,15 +305,14 @@
     applyErrorGutters(linesSelector)
   })
 
-  const unsubscribeIsDarkTheme = isDarkThemeON.subscribe(() => {
+  const unsubscribeIsDarkTheme = isDarkThemeON.subscribe((isDark) => {
     if (!editorView) {
       return
     }
 
-    const htmlContent = editorView?.state?.doc?.toString() || ''
-    destroyEditor()
-    createEditor(htmlContent)
-    applyErrorGutters($linesAndSelectors)
+    editorView.dispatch({
+      effects: themeConfig.reconfigure(getThemeExtensions(isDark))
+    })
   })
 
   onMount(() => {
