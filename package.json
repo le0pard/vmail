@@ -21,14 +21,14 @@
     "@codemirror/lang-html": "6.4.11",
     "@codemirror/language": "6.12.3",
     "@codemirror/state": "6.6.0",
-    "@codemirror/view": "^6.41.0",
+    "@codemirror/view": "^6.41.1",
     "@hotwired/turbo": "8.0.23",
     "@iconify-json/mdi": "^1.2.3",
     "@lezer/common": "^1.5.2",
     "@lezer/highlight": "^1.2.3",
     "@rollup/plugin-yaml": "^4.1.2",
     "@vite-pwa/astro": "^1.2.0",
-    "astro": "^6.1.7",
+    "astro": "^6.1.8",
     "astro-icon": "1.1.5",
     "comlink": "^4.4.2",
     "lodash": "4.18.1",
@@ -63,5 +63,5 @@
     "shikiji-core": "^0.10.2",
     "typescript": "^6.0.3"
   },
-  "packageManager": "yarn@4.12.0"
+  "packageManager": "yarn@4.14.1"
 }
