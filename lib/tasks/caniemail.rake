@@ -302,6 +302,7 @@ class CaniuseGenerator # rubocop:disable Metrics/ClassLength
   CSS_PSEUDO_SELECTORS_MAPS = {
     'css-pseudo-class-active' => 'active',
     'css-pseudo-class-checked' => 'checked',
+    'css-pseudo-class-default' => 'default',
     'css-pseudo-class-first-child' => 'first-child',
     'css-pseudo-class-first-of-type' => 'first-of-type',
     'css-pseudo-class-focus' => 'focus',
