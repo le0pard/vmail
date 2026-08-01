@@ -43,84 +43,84 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@astrojs/compiler-binding-darwin-arm64@npm:0.3.1":
-  version: 0.3.1
-  resolution: "@astrojs/compiler-binding-darwin-arm64@npm:0.3.1"
+"@astrojs/compiler-binding-darwin-arm64@npm:0.3.2":
+  version: 0.3.2
+  resolution: "@astrojs/compiler-binding-darwin-arm64@npm:0.3.2"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"@astrojs/compiler-binding-darwin-x64@npm:0.3.1":
-  version: 0.3.1
-  resolution: "@astrojs/compiler-binding-darwin-x64@npm:0.3.1"
+"@astrojs/compiler-binding-darwin-x64@npm:0.3.2":
+  version: 0.3.2
+  resolution: "@astrojs/compiler-binding-darwin-x64@npm:0.3.2"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"@astrojs/compiler-binding-linux-arm64-gnu@npm:0.3.1":
-  version: 0.3.1
-  resolution: "@astrojs/compiler-binding-linux-arm64-gnu@npm:0.3.1"
+"@astrojs/compiler-binding-linux-arm64-gnu@npm:0.3.2":
+  version: 0.3.2
+  resolution: "@astrojs/compiler-binding-linux-arm64-gnu@npm:0.3.2"
   conditions: os=linux & cpu=arm64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@astrojs/compiler-binding-linux-arm64-musl@npm:0.3.1":
-  version: 0.3.1
-  resolution: "@astrojs/compiler-binding-linux-arm64-musl@npm:0.3.1"
+"@astrojs/compiler-binding-linux-arm64-musl@npm:0.3.2":
+  version: 0.3.2
+  resolution: "@astrojs/compiler-binding-linux-arm64-musl@npm:0.3.2"
   conditions: os=linux & cpu=arm64 & libc=musl
   languageName: node
   linkType: hard
 
-"@astrojs/compiler-binding-linux-x64-gnu@npm:0.3.1":
-  version: 0.3.1
-  resolution: "@astrojs/compiler-binding-linux-x64-gnu@npm:0.3.1"
+"@astrojs/compiler-binding-linux-x64-gnu@npm:0.3.2":
+  version: 0.3.2
+  resolution: "@astrojs/compiler-binding-linux-x64-gnu@npm:0.3.2"
   conditions: os=linux & cpu=x64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@astrojs/compiler-binding-linux-x64-musl@npm:0.3.1":
-  version: 0.3.1
-  resolution: "@astrojs/compiler-binding-linux-x64-musl@npm:0.3.1"
+"@astrojs/compiler-binding-linux-x64-musl@npm:0.3.2":
+  version: 0.3.2
+  resolution: "@astrojs/compiler-binding-linux-x64-musl@npm:0.3.2"
   conditions: os=linux & cpu=x64 & libc=musl
   languageName: node
   linkType: hard
 
-"@astrojs/compiler-binding-wasm32-wasi@npm:0.3.1":
-  version: 0.3.1
-  resolution: "@astrojs/compiler-binding-wasm32-wasi@npm:0.3.1"
+"@astrojs/compiler-binding-wasm32-wasi@npm:0.3.2":
+  version: 0.3.2
+  resolution: "@astrojs/compiler-binding-wasm32-wasi@npm:0.3.2"
   dependencies:
-    "@napi-rs/wasm-runtime": "npm:^1.1.6"
+    "@napi-rs/wasm-runtime": "npm:^1.2.0"
   conditions: cpu=wasm32
   languageName: node
   linkType: hard
 
-"@astrojs/compiler-binding-win32-arm64-msvc@npm:0.3.1":
-  version: 0.3.1
-  resolution: "@astrojs/compiler-binding-win32-arm64-msvc@npm:0.3.1"
+"@astrojs/compiler-binding-win32-arm64-msvc@npm:0.3.2":
+  version: 0.3.2
+  resolution: "@astrojs/compiler-binding-win32-arm64-msvc@npm:0.3.2"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"@astrojs/compiler-binding-win32-x64-msvc@npm:0.3.1":
-  version: 0.3.1
-  resolution: "@astrojs/compiler-binding-win32-x64-msvc@npm:0.3.1"
+"@astrojs/compiler-binding-win32-x64-msvc@npm:0.3.2":
+  version: 0.3.2
+  resolution: "@astrojs/compiler-binding-win32-x64-msvc@npm:0.3.2"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
 
-"@astrojs/compiler-binding@npm:0.3.1":
-  version: 0.3.1
-  resolution: "@astrojs/compiler-binding@npm:0.3.1"
+"@astrojs/compiler-binding@npm:0.3.2":
+  version: 0.3.2
+  resolution: "@astrojs/compiler-binding@npm:0.3.2"
   dependencies:
-    "@astrojs/compiler-binding-darwin-arm64": "npm:0.3.1"
-    "@astrojs/compiler-binding-darwin-x64": "npm:0.3.1"
-    "@astrojs/compiler-binding-linux-arm64-gnu": "npm:0.3.1"
-    "@astrojs/compiler-binding-linux-arm64-musl": "npm:0.3.1"
-    "@astrojs/compiler-binding-linux-x64-gnu": "npm:0.3.1"
-    "@astrojs/compiler-binding-linux-x64-musl": "npm:0.3.1"
-    "@astrojs/compiler-binding-wasm32-wasi": "npm:0.3.1"
-    "@astrojs/compiler-binding-win32-arm64-msvc": "npm:0.3.1"
-    "@astrojs/compiler-binding-win32-x64-msvc": "npm:0.3.1"
+    "@astrojs/compiler-binding-darwin-arm64": "npm:0.3.2"
+    "@astrojs/compiler-binding-darwin-x64": "npm:0.3.2"
+    "@astrojs/compiler-binding-linux-arm64-gnu": "npm:0.3.2"
+    "@astrojs/compiler-binding-linux-arm64-musl": "npm:0.3.2"
+    "@astrojs/compiler-binding-linux-x64-gnu": "npm:0.3.2"
+    "@astrojs/compiler-binding-linux-x64-musl": "npm:0.3.2"
+    "@astrojs/compiler-binding-wasm32-wasi": "npm:0.3.2"
+    "@astrojs/compiler-binding-win32-arm64-msvc": "npm:0.3.2"
+    "@astrojs/compiler-binding-win32-x64-msvc": "npm:0.3.2"
   dependenciesMeta:
     "@astrojs/compiler-binding-darwin-arm64":
       optional: true
@@ -140,16 +140,16 @@ __metadata:
       optional: true
     "@astrojs/compiler-binding-win32-x64-msvc":
       optional: true
-  checksum: 10/458dc11552fa950d1b1de37cd0d520378a78267193401369acf2bf09b27e14419a470906f7f52734ec7c5336519dc31ea2659cecf96573af3602a04c98b78796
+  checksum: 10/b7947f13265d09b46c05fe6080c3512843e2b5084a96cc23bad9b4d63b48b326e40d15b4317cba81049f9b591ed7d9063f582e51ff0d98de98d2fa10c31726dc
   languageName: node
   linkType: hard
 
 "@astrojs/compiler-rs@npm:^0.3.1":
-  version: 0.3.1
-  resolution: "@astrojs/compiler-rs@npm:0.3.1"
+  version: 0.3.2
+  resolution: "@astrojs/compiler-rs@npm:0.3.2"
   dependencies:
-    "@astrojs/compiler-binding": "npm:0.3.1"
-  checksum: 10/c9f8d44fce136a28d33d0d3fe6a01fa9593388e54fe28860c38bdf19632157bd4966921c339b920fc83097cdb316d44ed028dcf2448d6593b91e8c9d5df68dc4
+    "@astrojs/compiler-binding": "npm:0.3.2"
+  checksum: 10/b94470b955c99fc9b30fd5d26f94dcc999c834801a17f1109e45f6c4645c7492d03673424b0d35e58fa5d2d03259c646119617093fa821e693e831b9bc3294b5
   languageName: node
   linkType: hard
 
@@ -3123,6 +3123,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@napi-rs/wasm-runtime@npm:^1.2.0":
+  version: 1.2.2
+  resolution: "@napi-rs/wasm-runtime@npm:1.2.2"
+  dependencies:
+    "@tybys/wasm-util": "npm:^0.10.3"
+  peerDependencies:
+    "@emnapi/core": ^1.7.1 || ^2.0.0-alpha.3
+    "@emnapi/runtime": ^1.7.1 || ^2.0.0-alpha.3
+  checksum: 10/19b07c017845142b711e1515684d33c16a4c0c0d64a8876c30953f0e6975a3d018ce6e8bfb1721f25dc34df3bcc689cfb44e80fe8b8ee1b72b8429d5ff2eaf61
+  languageName: node
+  linkType: hard
+
 "@nodelib/fs.scandir@npm:2.1.5":
   version: 2.1.5
   resolution: "@nodelib/fs.scandir@npm:2.1.5"
@@ -4259,9 +4271,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"astro@npm:^7.1.0":
-  version: 7.1.0
-  resolution: "astro@npm:7.1.0"
+"astro@npm:^7.1.1":
+  version: 7.1.1
+  resolution: "astro@npm:7.1.1"
   dependencies:
     "@astrojs/compiler-rs": "npm:^0.3.1"
     "@astrojs/internal-helpers": "npm:0.10.1"
@@ -4327,7 +4339,7 @@ __metadata:
       optional: true
   bin:
     astro: ./bin/astro.mjs
-  checksum: 10/a6e6511ce9d8066eddf80104227732082be9514eede10c410d3cc6b1939cd02811c99384cb69519a1c1f7466515ee54929682f363e84067201c1ec7b14740310
+  checksum: 10/9ad92a55397c2c28e733464a7c38cfc80b1e8392ff90b849a1b987ddc2110f1fcea5077776d9efd6e8ab46bbf4055211fde16c28c6610358ee67ccaed417454f
   languageName: node
   linkType: hard
 
@@ -4488,12 +4500,12 @@ __metadata:
   linkType: hard
 
 "brace-expansion@npm:^1.1.7":
-  version: 1.1.17
-  resolution: "brace-expansion@npm:1.1.17"
+  version: 1.1.18
+  resolution: "brace-expansion@npm:1.1.18"
   dependencies:
     balanced-match: "npm:^1.0.0"
     concat-map: "npm:0.0.1"
-  checksum: 10/1e2f59433dee0a52dddb9632b15757131dcc17c7a361089ee367f92b4fd72e9417f5c383d23c000840b41fe87646923519d3ed9f1ccac92930afa1b75d88096f
+  checksum: 10/b55a3c03239b8d2127c7cbb3408c9ad3a556a8c303bf3064df78bfb7c093160fc8f6e0a32e42a850a78eba12f29ccf6ef997690b9acf945d242c56c61c4aa977
   languageName: node
   linkType: hard
 
@@ -7065,25 +7077,25 @@ __metadata:
   linkType: hard
 
 "js-yaml@npm:^3.10.0":
-  version: 3.15.0
-  resolution: "js-yaml@npm:3.15.0"
+  version: 3.15.1
+  resolution: "js-yaml@npm:3.15.1"
   dependencies:
     argparse: "npm:^1.0.7"
     esprima: "npm:^4.0.0"
   bin:
     js-yaml: bin/js-yaml.js
-  checksum: 10/2fdf3a1453ed93a8e06d6ca8054c0bec145cf40ab51f305d1071736a03668b95e40f47cfd0239d7d50019b4780a18cdaca3c935def935594c9876964c49f1185
+  checksum: 10/905842ce08c18b154ff2c187ff81bb41294cc5dda214331b5d9b8bcf395894e48b00fa37b9d4dd4c3ffec672b7496a94558e3876d3a8ad4d12b06248112e6d92
   languageName: node
   linkType: hard
 
 "js-yaml@npm:^4.1.0, js-yaml@npm:^4.1.1":
-  version: 4.2.0
-  resolution: "js-yaml@npm:4.2.0"
+  version: 4.3.1
+  resolution: "js-yaml@npm:4.3.1"
   dependencies:
     argparse: "npm:^2.0.1"
   bin:
     js-yaml: bin/js-yaml.js
-  checksum: 10/51de2067a2b44b07ba5206132e56005f8b568ff279bb4d2f645068958c56fa4827d40a6841c983234671fa0a134bf094d0b0717873c2a3d319185297af145a6d
+  checksum: 10/2ce71b5d632abbd77da80447bf860e8a0264e54bffe94840984887d58b023761495b523727547904517a6107a1ef189854b361e0fc44995ee13a84f222d7bd42
   languageName: node
   linkType: hard
 
@@ -8620,7 +8632,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:8.5.15, postcss@npm:^8.4.14, postcss@npm:^8.4.38, postcss@npm:^8.4.39, postcss@npm:^8.5.6":
+"postcss@npm:8.5.18":
+  version: 8.5.18
+  resolution: "postcss@npm:8.5.18"
+  dependencies:
+    nanoid: "npm:^3.3.12"
+    picocolors: "npm:^1.1.1"
+    source-map-js: "npm:^1.2.1"
+  checksum: 10/b43f2d2493d82dc43fa50d21cf184bf3b66229e7f53fa1dedc7b8a7c4cecd7ac8ee18fad099f47570da7f78bbf46997a4c6e6c87d8d8ece683dc1f32cda6db3b
+  languageName: node
+  linkType: hard
+
+"postcss@npm:^8.4.14, postcss@npm:^8.4.38, postcss@npm:^8.4.39, postcss@npm:^8.5.6":
   version: 8.5.15
   resolution: "postcss@npm:8.5.15"
   dependencies:
@@ -10549,7 +10572,7 @@ __metadata:
     "@rollup/plugin-yaml": "npm:^4.1.2"
     "@vite-pwa/astro": "npm:^1.2.0"
     "@yarnpkg/pnpify": "npm:^4.1.6"
-    astro: "npm:^7.1.0"
+    astro: "npm:^7.1.1"
     astro-eslint-parser: "npm:^1.4.0"
     astro-icon: "npm:1.1.5"
     comlink: "npm:^4.4.2"
@@ -10558,7 +10581,7 @@ __metadata:
     eslint-plugin-svelte: "npm:^2.46.1"
     lodash: "npm:4.18.1"
     normalize.css: "npm:8.0.1"
-    postcss: "npm:8.5.15"
+    postcss: "npm:8.5.18"
     postcss-import: "npm:16.1.1"
     postcss-load-config: "npm:^6.0.1"
     postcss-loader: "npm:8.2.1"
