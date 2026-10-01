@@ -15,6 +15,9 @@
     "lint": "pnpify run prettier --plugin prettier-plugin-svelte --check src && eslint src/**/*.{js,mjs,astro,svelte} astro.config.mjs postcss.config.js browserslist.config.js",
     "format": "pnpify run prettier --plugin prettier-plugin-svelte --write src"
   },
+  "resolutions": {
+    "got": "11.8.2"
+  },
   "dependencies": {
     "@astrojs/markdown-satteri": "^0.4.2",
     "@astrojs/svelte": "^9.0.1",
