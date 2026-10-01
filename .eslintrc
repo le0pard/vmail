@@ -18,20 +18,6 @@
         "*.svelte"
       ],
       "parser": "svelte-eslint-parser"
-    },
-    {
-      "files": [
-        "*.astro"
-      ],
-      "parser": "astro-eslint-parser",
-      "env": {
-        "node": true,
-        "astro/astro": true,
-        "es2022": true
-      },
-      "rules": {
-        "astro/no-unused-css-selector": 2
-      }
     }
   ],
   "rules": {
